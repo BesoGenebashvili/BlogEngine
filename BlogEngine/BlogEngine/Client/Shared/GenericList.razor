@@ -1,0 +1,59 @@
+﻿@typeparam TItem
+
+@if (Collection == null)
+{
+    @if (NullTemplateFragment != null)
+    {
+        @NullTemplateFragment
+    }
+    else
+    {
+        <p>Loading</p>
+    }
+}
+else if (Collection.Count == 0)
+{
+    if (EmptyTemplateFragment != null)
+    {
+        @EmptyTemplateFragment
+    }
+    else
+    {
+        <p>There are no records to show</p>
+    }
+}
+else
+{
+    if (ElementTemplate != null)
+    {
+        @foreach (var element in Collection)
+        {
+            @ElementTemplate(element)
+        }
+    }
+    else if (WholeCollectionTemplate != null)
+    {
+        @WholeCollectionTemplate
+    }
+    else
+    {
+        <p>Something went wrong</p>
+    }
+}
+
+@code{
+    [Parameter]
+    public List<TItem> Collection { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> ElementTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment WholeCollectionTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment NullTemplateFragment { get; set; }
+
+    [Parameter]
+    public RenderFragment EmptyTemplateFragment { get; set; }
+}

@@ -1,0 +1,31 @@
+﻿<div class="blog-entry">
+    <a href="" class="block-20"
+       style="background-image: url('https://icatcare.org/app/uploads/2018/06/Layer-1704-1920x840.jpg');"></a>
+    <div class="blog-text p-4 float-right d-block">
+
+        <div class="topper d-flex align-items-center">
+            <div class="day-wrapper py-2 pl-3 pr-1 align-self-stretch">
+                <span class="day">@Blog.DateCreated.Value.Day</span>
+            </div>
+            <div class="date-wrapper pl-0 pr-3 py-2 align-self-stretch">
+                <span class="date">@Blog.DateCreated.Value.ToString("yyyy")</span>
+                <span class="date">@Blog.DateCreated.Value.ToString("MMMM")</span>
+            </div>
+        </div>
+
+        <h3 class="blog-heading mb-3">
+            <a href="">@Blog.Title</a>
+        </h3>
+        <p>@Blog.ShortDescription</p>
+        <p>
+            <a href="" class="read-more-btn">
+                <span style="font-size: 20px;">→</span>
+                READ MORE
+            </a>
+        </p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Blog Blog { get; set; }
+}

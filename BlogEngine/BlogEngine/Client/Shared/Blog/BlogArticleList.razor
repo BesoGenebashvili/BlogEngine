@@ -1,0 +1,30 @@
+﻿<GenericList Collection="Blogs">
+    <EmptyTemplateFragment>
+        <div class="text-center">
+            <h1>Articles not available</h1>
+        </div>
+    </EmptyTemplateFragment>
+    <WholeCollectionTemplate>
+
+        <!-- blog articles -->
+        <div class="article-section">
+            <div class="container">
+                <div class="row d-flex">
+
+                    @foreach (var blog in Blogs)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <IndividualBlogArticle Blog="blog" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </WholeCollectionTemplate>
+</GenericList>
+
+@code {
+    [Parameter] public List<Blog> Blogs { get; set; }
+}

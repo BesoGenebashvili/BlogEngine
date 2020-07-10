@@ -1,0 +1,12 @@
+﻿@page "/blog/articles"
+
+<BlogArticleList Blogs="Blogs" />
+
+@code {
+    public List<Blog> Blogs { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+}
