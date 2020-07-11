@@ -1,0 +1,16 @@
+﻿@page "/blog/create"
+
+<div class="text-center">
+    <h3>Create Blog</h3>
+</div>
+
+<BlogForm ValidSubmit="OnValidSubmit" />
+
+@code{
+    private BlogModel _blog = new BlogModel();
+
+    private void OnValidSubmit()
+    {
+        // save blog in db
+    }
+}

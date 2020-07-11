@@ -1,4 +1,4 @@
-﻿namespace BlogEngine.Shared.Models.JoiningModels
+﻿namespace BlogEngine.Core.Data.Entities.JoiningEntities
 {
     public class BlogGenre
     {

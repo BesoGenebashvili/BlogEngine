@@ -1,7 +1,7 @@
-﻿using BlogEngine.Shared.Models.JoiningModels;
+﻿using BlogEngine.Core.Data.Entities.JoiningEntities;
 using System.Collections.Generic;
 
-namespace BlogEngine.Shared.Models
+namespace BlogEngine.Core.Data.Entities
 {
     public class Genre
     {
