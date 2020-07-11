@@ -9,11 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\BlogEngine.Client.csproj" />
-    <ProjectReference Include="..\Shared\BlogEngine.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
 

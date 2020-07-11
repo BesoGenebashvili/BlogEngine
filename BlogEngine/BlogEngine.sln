@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Server", "BlogEngine\Server\BlogEngine.Server.csproj", "{EC419993-9F7F-48AE-BF7B-C06EACBBF0D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Server", "BlogEngine.Server\BlogEngine.Server.csproj", "{EC419993-9F7F-48AE-BF7B-C06EACBBF0D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Client", "BlogEngine\Client\BlogEngine.Client.csproj", "{18BC5AF7-2D0D-4AE2-A3BC-3C307A01435C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Client", "BlogEngine.Client\BlogEngine.Client.csproj", "{18BC5AF7-2D0D-4AE2-A3BC-3C307A01435C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Shared", "BlogEngine\Shared\BlogEngine.Shared.csproj", "{97A62799-5627-4ECB-AC98-0A7FF0C26A3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Shared", "BlogEngine.Shared\BlogEngine.Shared.csproj", "{97A62799-5627-4ECB-AC98-0A7FF0C26A3F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Core", "BlogEngine.Core\BlogEngine.Core.csproj", "{94E20C61-1400-42E3-8C56-B6BAF38EA54F}"
 EndProject
