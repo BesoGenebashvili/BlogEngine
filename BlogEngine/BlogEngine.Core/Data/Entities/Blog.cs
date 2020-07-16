@@ -1,6 +1,6 @@
-﻿using BlogEngine.Core.Data.Entities.JoiningEntities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Core.Data.Entities
 {
@@ -18,6 +18,7 @@ namespace BlogEngine.Core.Data.Entities
         public byte[] Cover { get; set; }
 
         // TODO: add rate column
+        // TODO: add publish date column
 
         public List<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
         public List<BlogGenre> BlogGenres { get; set; } = new List<BlogGenre>();

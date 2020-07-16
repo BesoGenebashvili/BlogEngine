@@ -1,10 +1,8 @@
 ﻿@page "/blog/create"
 
-<div class="text-center">
-    <h3>Create Blog</h3>
-</div>
+<TextCenter Text="Create Blog"/>
 
-<BlogForm ValidSubmit="OnValidSubmit" />
+<BlogForm Blog="_blog" ValidSubmit="OnValidSubmit" />
 
 @code{
     private BlogModel _blog = new BlogModel();

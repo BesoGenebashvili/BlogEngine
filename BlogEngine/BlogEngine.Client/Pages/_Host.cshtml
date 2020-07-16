@@ -1,30 +1,47 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@page "/"
+@namespace BlogEngine.Client.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Blog Engine</title>
-    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog</title>
+    <base href="~/" />
+
+    <!-- favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
 
     <!-- bootstrap CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <!-- fontawesome -->
-    <link rel="stylesheet" href="css/fonts/poppins/stylesheet.css">
+    <link rel="stylesheet" href="css/fontawesome/css/all.min.css">
 
     <!-- poppins font -->
     <link rel="stylesheet" href="css/fonts/poppins/stylesheet.css">
 
+    <!-- syncfusion css -->
+    <link href="_content/Syncfusion.Blazor/styles/fabric.css" rel="stylesheet" />
+    @*<link href="_content/Syncfusion.Blazor/styles/material.css" rel="stylesheet" />*@
+
+    <!-- syncfusion js CDN -->
+    @*<script src="https://cdn.syncfusion.com/blazor/18.2.44/syncfusion-blazor.min.js"></script>*@
+
     <!-- custom css -->
     <link href="css/main.css" rel="stylesheet" />
 </head>
-
 <body>
-    <app>Loading...</app>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
 
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.server.js"></script>
 
     <!-- bootstrap CDN -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -37,5 +54,4 @@
             integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
             crossorigin="anonymous"></script>
 </body>
-
 </html>

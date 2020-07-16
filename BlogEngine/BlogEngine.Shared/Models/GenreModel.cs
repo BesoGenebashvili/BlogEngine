@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngine.Shared.Models
 {
-    class GenreModel
+    public class GenreModel
     {
         public int ID { get; set; }
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngine.Shared.Models
 {
-    class CommentModel
+    public class CommentModel
     {
         public int ID { get; set; }
 

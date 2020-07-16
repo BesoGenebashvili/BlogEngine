@@ -1,0 +1,50 @@
+﻿@inject IFileReaderService FileReaderService
+
+<div class="file-input-wrapper p-3 text-dark @WrapperCssClass">
+
+    <label class="d-block mb-0">@LabelText</label>
+
+    <input type="file"
+           @ref="_inputImageElement"
+           @onchange="ImageFileSelected"
+           accept=".jpg,.jpeg,.png"
+           class="file-input file-input-button">
+
+    @if (Image != null)
+    {
+        <img class="file-input-image" src="data:image/jpeg;base64,@(Convert.ToBase64String(Image))">
+        <i @onclick="(() => ImageFileRemoved())" class="delete-btn ml-2 far fa-trash-alt"></i>
+    }
+</div>
+
+@code{
+    [Parameter] public byte[] Image { get; set; }
+    [Parameter] public string LabelText { get; set; } = "Choose image";
+    [Parameter] public string WrapperCssClass { get; set; }
+    [Parameter] public EventCallback<byte[]> ImageSelected { get; set; }
+    [Parameter] public EventCallback ImageRemoved { get; set; }
+
+    private ElementReference _inputImageElement;
+
+    private async Task ImageFileSelected()
+    {
+        foreach (var file in await FileReaderService.CreateReference(_inputImageElement).EnumerateFilesAsync())
+        {
+            using (MemoryStream memoryStream = await file.CreateMemoryStreamAsync(4 * 1024))
+            {
+                byte[] imageBytes = new byte[memoryStream.Length];
+                memoryStream.Read(imageBytes, 0, (int)memoryStream.Length);
+                Image = imageBytes;
+
+                await ImageSelected.InvokeAsync(imageBytes);
+            }
+        }
+    }
+
+    private async Task ImageFileRemoved()
+    {
+        Image = null;
+        await FileReaderService.CreateReference(_inputImageElement).ClearValue();
+        await ImageRemoved.InvokeAsync(null);
+    }
+}

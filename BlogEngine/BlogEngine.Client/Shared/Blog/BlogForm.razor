@@ -1,7 +1,61 @@
-﻿
+﻿<div class="container">
+    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="Blog" OnValidSubmit="ValidSubmit">
+        <DataAnnotationsValidator />
 
+        <SfTextBox @bind-Value="Blog.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
+        <br />
+
+        <SfTextBox @bind-Value="Blog.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
+        <br />
+
+        <br />
+        <InputImage Image="Blog.Cover"
+                    LabelText="Choose Cover"
+                    ImageSelected="OnImageSelected"
+                    ImageRemoved="OnImageRemoved"
+                    WrapperCssClass="w-75 form-font-size form-border" />
+
+        <br />
+        <br />
+
+        <div class="control-section w-75">
+            <SfRichTextEditor @bind-Value="Blog.HTMLContent" ShowCharCount="true" MaxLength="2000">
+                <ChildContent>
+                    <RichTextEditorToolbarSettings Items="_richTextEditorTools" />
+                </ChildContent>
+            </SfRichTextEditor>
+        </div>
+
+        <br />
+        <SfButton CssClass="e-success">Submit</SfButton>
+        <br />
+    </EditForm>
+</div>
 
 @code{
     [Parameter] public BlogModel Blog { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
+
+    private object[] _richTextEditorTools = new object[] {
+        "Bold", "Italic", "Underline", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList", "|",
+        "CreateLink", "Image", "|","SourceCode", "|", "Undo", "Redo" };
+
+    private void OnImageSelected(byte[] imageBytes)
+    {
+        Blog.Cover = imageBytes;
+    }
+
+    private void OnImageRemoved()
+    {
+        Blog.Cover = null;
+    }
+
+    private object[] GetRichTextEditorTools()
+    {
+        return new object[] {
+        "Bold", "Italic", "Underline", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList", "|",
+        "CreateLink", "Image", "|","SourceCode", "|", "Undo", "Redo" };
+    }
 }
