@@ -1,4 +1,5 @@
 ﻿@page "/blog/create"
+@inject ReadingTimeEstimator ReadingTimeEstimator
 
 <TextCenter Text="Create Blog"/>
 
@@ -9,6 +10,9 @@
 
     private void OnValidSubmit()
     {
-        // save blog in db
+        _blog.DateCreated = DateTime.Now;
+        _blog.EstimatedReadingTimeInMinutes = ReadingTimeEstimator.GetEstimatedReadingTime(_blog.HTMLContent);
+
+        // TODO: then save in DB
     }
 }

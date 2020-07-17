@@ -14,7 +14,7 @@ namespace BlogEngine.Core.Data.Entities
         public DateTime? DateCreated { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public string LastUpdateBy { get; set; }
-        public TimeSpan? TimeToRead { get; set; }
+        public int EstimatedReadingTimeInMinutes { get; set; }
         public byte[] Cover { get; set; }
 
         // TODO: add rate column

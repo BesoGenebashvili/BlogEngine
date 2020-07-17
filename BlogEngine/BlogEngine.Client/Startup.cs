@@ -10,6 +10,7 @@ using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using System.IO;
 using Blazor.FileReader;
+using BlogEngine.ClientServices.Services.Implementations;
 
 namespace BlogEngine.Client
 {
@@ -38,6 +39,8 @@ namespace BlogEngine.Client
 
             // file reader service
             services.AddFileReaderService();
+
+            services.AddScoped<ReadingTimeEstimator, ReadingTimeEstimator>();
             //
         }
 

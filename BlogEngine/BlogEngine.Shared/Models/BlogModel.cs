@@ -23,7 +23,7 @@ namespace BlogEngine.Shared.Models
         public DateTime? DateCreated { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public string LastUpdateBy { get; set; }
-        public TimeSpan? TimeToRead { get; set; }
+        public int EstimatedReadingTimeInMinutes { get; set; }
         public byte[] Cover { get; set; }
 
         public List<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
