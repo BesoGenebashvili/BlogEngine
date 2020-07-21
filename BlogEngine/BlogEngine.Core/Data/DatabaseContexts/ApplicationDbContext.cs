@@ -1,7 +1,23 @@
-﻿namespace BlogEngine.Core.Data.DatabaseContexts
+﻿using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Data.Entities.JoiningEntities;
+using Microsoft.EntityFrameworkCore;
+
+namespace BlogEngine.Core.Data.DatabaseContexts
 {
-    public class ApplicationDbContext
+    public class ApplicationDbContext : DbContext
     {
-        //TODO: implement
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<BlogComment> BlogComments { get; set; }
+        public DbSet<BlogGenre> BlogGenres { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BlogGenre>().HasKey(b => new { b.BlogID, b.GenreID });
+            modelBuilder.Entity<BlogComment>().HasKey(b => new { b.BlogID, b.CommentID });
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

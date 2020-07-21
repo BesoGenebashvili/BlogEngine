@@ -1,5 +1,11 @@
-﻿@page "/blog/view/{id}/Name"
+﻿@page "/blog/view/{ID:int}"
+@page "/blog/view/{ID:int}/{Title}"
+
+<h1>You are in blog/view page</h1>
+<h1>ID : @ID</h1>
 
 @code{
+    [Parameter] public int ID { get; set; }
+    [Parameter] public string Title { get; set; }
     [Parameter] public BlogModel Blog { get; set; }
 }
