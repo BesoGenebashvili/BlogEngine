@@ -24,5 +24,23 @@ namespace BlogEngine.Core.Services.Implementations
                  .Include(b => b.BlogComments)
                  .AsEnumerable());
         }
+
+        public override Blog GetById(object id)
+        {
+            return _context.Blogs
+                .Where(b => b.ID.Equals(id))
+                .Include(b => b.BlogGenres)
+                .Include(b => b.BlogComments)
+                .FirstOrDefault();
+        }
+
+        public async override Task<Blog> GetByIdAsync(object id)
+        {
+            return await _context.Blogs
+                .Where(b => b.ID.Equals(id))
+                .Include(b => b.BlogGenres)
+                .Include(b => b.BlogComments)
+                .FirstOrDefaultAsync();
+        }
     }
 }
