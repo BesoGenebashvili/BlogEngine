@@ -8,8 +8,8 @@ namespace BlogEngine.Core.Services.Abstractions
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        TEntity GetById(object id);
-        Task<TEntity> GetByIdAsync(object id);
+        TEntity GetById(int id);
+        Task<TEntity> GetByIdAsync(int id);
         IEnumerable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();
         IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> filter = null,
@@ -22,7 +22,7 @@ namespace BlogEngine.Core.Services.Abstractions
         Task<TEntity> InsertAsync(TEntity entity);
         TEntity Update(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);
-        bool Delete(object id);
-        Task<bool> DeleteAsync(object id);
+        bool Delete(int id);
+        Task<bool> DeleteAsync(int id);
     }
 }

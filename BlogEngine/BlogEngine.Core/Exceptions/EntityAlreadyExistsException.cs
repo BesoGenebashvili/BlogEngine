@@ -2,7 +2,7 @@
 
 namespace BlogEngine.Core.Exceptions
 {
-    class EntityAlreadyExistsException : Exception
+    public class EntityAlreadyExistsException : Exception
     {
         public EntityAlreadyExistsException(object id)
             : base($"The entity with an ID = '{id}' already exists in the Database")

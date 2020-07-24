@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using BlogEngine.ClientServices.Extensions;
-using BlogEngine.ClientServices.Services.Abstractions;
+using System.Globalization;
+using BlogEngine.Core.Extensions;
+using BlogEngine.Core.Services.Abstractions;
 
-namespace BlogEngine.ClientServices.Services.Implementations
+namespace BlogEngine.Core.Services.Implementations
 {
     public class ReadingTimeEstimator : IReadingTimeEstimator
     {
@@ -32,12 +32,12 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
             return minutes + 1;
         }
-        
+
         private int GetWordsCount(string rawHtmlContent)
         {
             string content = rawHtmlContent.StripHtmlTagsWithRegex();
 
-            var contentArray =  content.Split(' ');
+            var contentArray = content.Split(' ');
 
             var count = contentArray.Count(a => a.Length > 1);
 

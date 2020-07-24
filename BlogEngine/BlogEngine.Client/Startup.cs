@@ -1,13 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 using System.Net.Http;
-using System;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
-using System.IO;
 using Blazor.FileReader;
 using BlogEngine.ClientServices.Services.Implementations;
 using BlogEngine.ClientServices.Services.Abstractions;
@@ -43,9 +43,8 @@ namespace BlogEngine.Client
             // http service for api calls
             services.AddScoped<IHttpService, HttpService>();
 
-            // reading time calculator service
-            services.AddScoped<ReadingTimeEstimator, ReadingTimeEstimator>();
-            //
+            // blog service for api calls
+            services.AddScoped<IBlogService, BlogService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

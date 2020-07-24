@@ -1,5 +1,6 @@
 ﻿@page "/blog/create"
-@inject ReadingTimeEstimator ReadingTimeEstimator
+@inject IBlogService BlogService
+@inject NavigationManager NavigationManager
 
 <TextCenter Text="Create Blog"/>
 
@@ -8,11 +9,9 @@
 @code{
     private BlogModel _blog = new BlogModel();
 
-    private void OnValidSubmit()
+    private async Task OnValidSubmit()
     {
-        _blog.DateCreated = DateTime.Now;
-        _blog.EstimatedReadingTimeInMinutes = ReadingTimeEstimator.GetEstimatedReadingTime(_blog.HTMLContent);
-
-        // TODO: then save in DB
+        int id = await BlogService.CreateBlogAsync(_blog);
+        NavigationManager.NavigateTo($"blog/view/{id}");
     }
 }

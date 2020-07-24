@@ -19,9 +19,25 @@ namespace BlogEngine.Core.Helpers
         {
             throw new EntityNotFoundException(entityName);
         }
+
         public static void ThrowEntityNotFoundException(string entityName, Exception innerException)
         {
             throw new EntityNotFoundException(entityName, innerException);
+        }
+
+        public static void ThrowEntityNullException(string entityName)
+        {
+            throw new EntityNullException(entityName);
+        }
+
+        public static void ThrowEntityNullException(string entityName, Exception innerException)
+        {
+            throw new EntityNullException(entityName, innerException);
+        }
+
+        public static void ThrowArgumentNullException(string paramName)
+        {
+            throw new ArgumentNullException(paramName);
         }
     }
 }

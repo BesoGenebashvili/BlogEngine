@@ -1,11 +1,30 @@
 ﻿@page "/blog/view/{ID:int}"
 @page "/blog/view/{ID:int}/{Title}"
+@inject IBlogService BlogService
 
-<h1>You are in blog/view page</h1>
-<h1>ID : @ID</h1>
+@if (Blog == null)
+{
+    <TextCenter Text="Loading..." />
+}
+else
+{
+    <TextCenter Text="@Blog.Title" />
+
+    <br />
+
+    <div class="container">
+        @((MarkupString)Blog.HTMLContent)
+    </div>
+}
+
 
 @code{
     [Parameter] public int ID { get; set; }
     [Parameter] public string Title { get; set; }
     [Parameter] public BlogModel Blog { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Blog = await BlogService.GetBlogAsync(ID);
+    }
 }

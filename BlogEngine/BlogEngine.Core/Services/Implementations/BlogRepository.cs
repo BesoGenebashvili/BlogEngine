@@ -1,10 +1,10 @@
-﻿using BlogEngine.Core.Data.DatabaseContexts;
-using BlogEngine.Core.Data.Entities;
-using BlogEngine.Core.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using BlogEngine.Core.Data.DatabaseContexts;
+using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Services.Abstractions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -25,7 +25,7 @@ namespace BlogEngine.Core.Services.Implementations
                  .AsEnumerable());
         }
 
-        public override Blog GetById(object id)
+        public override Blog GetById(int id)
         {
             return _context.Blogs
                 .Where(b => b.ID.Equals(id))
@@ -34,7 +34,7 @@ namespace BlogEngine.Core.Services.Implementations
                 .FirstOrDefault();
         }
 
-        public async override Task<Blog> GetByIdAsync(object id)
+        public async override Task<Blog> GetByIdAsync(int id)
         {
             return await _context.Blogs
                 .Where(b => b.ID.Equals(id))

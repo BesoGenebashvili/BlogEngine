@@ -21,13 +21,13 @@
         <div class="control-section w-75">
             <SfRichTextEditor @bind-Value="Blog.HTMLContent" ShowCharCount="true" MaxLength="2000">
                 <ChildContent>
-                    <RichTextEditorToolbarSettings Items="_richTextEditorTools" />
+                    <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
                 </ChildContent>
             </SfRichTextEditor>
         </div>
 
         <br />
-        <SfButton CssClass="e-success">Submit</SfButton>
+        <SfButton CssClass="e-success" Disabled="false">Submit</SfButton>
         <br />
     </EditForm>
 </div>
@@ -35,11 +35,6 @@
 @code{
     [Parameter] public BlogModel Blog { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
-
-    private object[] _richTextEditorTools = new object[] {
-        "Bold", "Italic", "Underline", "|",
-        "Formats", "Alignments", "OrderedList", "UnorderedList", "|",
-        "CreateLink", "Image", "|","SourceCode", "|", "Undo", "Redo" };
 
     private void OnImageSelected(byte[] imageBytes)
     {

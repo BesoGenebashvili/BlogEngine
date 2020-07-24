@@ -12,6 +12,10 @@ namespace BlogEngine.Core.Data.DatabaseContexts
         public DbSet<BlogComment> BlogComments { get; set; }
         public DbSet<BlogGenre> BlogGenres { get; set; }
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BlogGenre>().HasKey(b => new { b.BlogID, b.GenreID });

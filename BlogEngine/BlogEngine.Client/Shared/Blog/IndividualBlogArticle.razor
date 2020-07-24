@@ -1,6 +1,14 @@
 ﻿<div class="blog-entry">
-    <a href="blog/view/@Blog.ID/@Blog.Title" class="block-20"
-       style="background-image: url('https://icatcare.org/app/uploads/2018/06/Layer-1704-1920x840.jpg');"></a>
+    @if (Blog.Cover == null)
+    {
+        <a href="blog/view/@Blog.ID/@Blog.Title" class="block-20"
+           style="background-image: url('css/Images/blog-cover-template.png');"></a>
+    }
+    else
+    {
+        <a href="blog/view/@Blog.ID/@Blog.Title" class="block-20"
+           style="background-image: url('data:image/jpeg;base64,@(Convert.ToBase64String(Blog.Cover))');"></a>
+    }
     <div class="blog-text p-4 float-right d-block">
 
         <div class="topper d-flex align-items-center">

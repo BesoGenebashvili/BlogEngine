@@ -20,12 +20,12 @@ namespace BlogEngine.Core.Services.Implementations
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual TEntity GetById(object id)
+        public virtual TEntity GetById(int id)
         {
             return Find(id);
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(object id)
+        public virtual async Task<TEntity> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -64,6 +64,11 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual IEnumerable<TEntity> GetByRawSql(string query, params object[] parameters)
         {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                ThrowHelper.ThrowArgumentNullException(nameof(query));
+            }
+
             return _dbSet.FromSqlRaw(query, parameters);
         }
 
@@ -74,6 +79,8 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Insert(TEntity entity)
         {
+            NullCheckThrowEntityNullException(entity);
+
             _dbSet.Add(entity);
             _context.SaveChanges();
             return entity;
@@ -81,6 +88,8 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
+            NullCheckThrowEntityNullException(entity);
+
             await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -88,6 +97,8 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Update(TEntity entity)
         {
+            NullCheckThrowEntityNullException(entity);
+
             _dbSet.Update(entity);
             _context.SaveChanges();
             return entity;
@@ -95,12 +106,14 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
+            NullCheckThrowEntityNullException(entity);
+
             _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return entity;
         }
 
-        public virtual bool Delete(object id)
+        public virtual bool Delete(int id)
         {
             TEntity entityFromDb = _dbSet.Find(id);
 
@@ -110,7 +123,7 @@ namespace BlogEngine.Core.Services.Implementations
             return _context.SaveChanges() != 0;
         }
 
-        public virtual async Task<bool> DeleteAsync(object id)
+        public virtual async Task<bool> DeleteAsync(int id)
         {
             TEntity entityFromDb = await _dbSet.FindAsync(id);
 
@@ -120,15 +133,21 @@ namespace BlogEngine.Core.Services.Implementations
             return await _context.SaveChangesAsync() != 0;
         }
 
-        private bool IsNull(TEntity entity) => entity == null;
-
-        private TEntity Find(object id) => _dbSet.Find(id);
+        private TEntity Find(int id) => _dbSet.Find(id);
 
         private void NullCheckThrowNotFoundException(TEntity entity)
         {
-            if (IsNull(entity))
+            if (entity == null)
             {
                 ThrowHelper.ThrowEntityNotFoundException(nameof(TEntity));
+            }
+        }
+
+        private void NullCheckThrowEntityNullException(TEntity entity)
+        {
+            if (entity == null)
+            {
+                ThrowHelper.ThrowEntityNullException(nameof(TEntity));
             }
         }
     }

@@ -1,7 +1,13 @@
 ﻿@page "/blog/articles"
+@inject IBlogService BlogService
 
 <BlogArticleList Blogs="Blogs" />
 
 @code {
     public List<BlogModel> Blogs { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Blogs = await BlogService.GetBlogsAsync();
+    }
 }

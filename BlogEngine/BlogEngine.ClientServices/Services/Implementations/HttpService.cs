@@ -71,10 +71,43 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return new HttpResponseWrapper<object>(default, httpResponseMesssage, httpResponseMesssage.IsSuccessStatusCode);
         }
 
+        public async Task<HttpResponseWrapper<TResponse>> Put<TData, TResponse>(string url, TData data)
+        {
+            var jsonData = JsonSerializer.Serialize(data);
+            var jsonDataStringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            var httpResponseMessage = await _httpClient.PutAsync(url, jsonDataStringContent);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var deserializedResponse = await Deserialize<TResponse>(httpResponseMessage, DefaultJsonSerializerOptions);
+                return new HttpResponseWrapper<TResponse>(deserializedResponse, httpResponseMessage, httpResponseMessage.IsSuccessStatusCode);
+            }
+            else
+            {
+                return new HttpResponseWrapper<TResponse>(default, httpResponseMessage, httpResponseMessage.IsSuccessStatusCode);
+            }
+        }
+
         public async Task<HttpResponseWrapper<object>> Delete(string url)
         {
-            var httpResponse = await _httpClient.DeleteAsync(url);
-            return new HttpResponseWrapper<object>(default, httpResponse, httpResponse.IsSuccessStatusCode);
+            var httpResponseMessage = await _httpClient.DeleteAsync(url);
+            return new HttpResponseWrapper<object>(default, httpResponseMessage, httpResponseMessage.IsSuccessStatusCode);
+        }
+
+        public async Task<HttpResponseWrapper<TResponse>> Delete<TResponse>(string url)
+        {
+            var httpResponseMessage = await _httpClient.DeleteAsync(url);
+
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var deserializedResponse = await Deserialize<TResponse>(httpResponseMessage, DefaultJsonSerializerOptions);
+                return new HttpResponseWrapper<TResponse>(deserializedResponse, httpResponseMessage, httpResponseMessage.IsSuccessStatusCode);
+            }
+            else
+            {
+                return new HttpResponseWrapper<TResponse>(default, httpResponseMessage, httpResponseMessage.IsSuccessStatusCode);
+            }
         }
 
         private async Task<TResult> Deserialize<TResult>(HttpResponseMessage httpResponseMessage, JsonSerializerOptions jsonSerializerOptions)

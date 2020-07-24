@@ -1,4 +1,4 @@
-﻿namespace BlogEngine.ClientServices.Services.Abstractions
+﻿namespace BlogEngine.Core.Services.Abstractions
 {
     public interface IReadingTimeEstimator
     {

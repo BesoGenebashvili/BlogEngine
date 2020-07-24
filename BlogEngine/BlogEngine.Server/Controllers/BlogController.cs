@@ -1,11 +1,12 @@
-﻿using BlogEngine.Core.Data.Entities;
-using BlogEngine.Core.Services.Abstractions;
-using BlogEngine.Shared.Models;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoMapper;
-using System.Linq;
+using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Services.Abstractions;
+using BlogEngine.Shared.Models;
 
 namespace BlogEngine.Server.Controllers
 {
@@ -15,11 +16,20 @@ namespace BlogEngine.Server.Controllers
     {
         private readonly IBlogRepository _blogRepository;
         private readonly IMapper _mapper;
+        private readonly IReadingTimeEstimator _readingTimeEstimator;
 
-        public BlogController(IBlogRepository blogRepository, IMapper mapper)
+        public BlogController(IBlogRepository blogRepository, IMapper mapper, IReadingTimeEstimator readingTimeEstimator)
         {
             _blogRepository = blogRepository;
             _mapper = mapper;
+            _readingTimeEstimator = readingTimeEstimator;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<BlogModel>>> Get()
+        {
+            var blogEntities = await _blogRepository.GetAllWithAllReferenceEntityes();
+            return blogEntities.Select(b => ToModel(b)).ToList();
         }
 
         [HttpGet("{id}")]
@@ -32,16 +42,12 @@ namespace BlogEngine.Server.Controllers
             return ToModel(blogEntity);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<BlogModel>>> Get()
-        {
-            var blogEntities = await _blogRepository.GetAllWithAllReferenceEntityes();
-            return blogEntities.Select(b => ToModel(b)).ToList();
-        }
-
         [HttpPost]
         public async Task<ActionResult<int>> Post(BlogModel blog)
         {
+            blog.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blog.HTMLContent);
+            blog.DateCreated = DateTime.Now;
+
             var insertedBlog = await _blogRepository.InsertAsync(ToEntity(blog));
             return insertedBlog.ID;
         }
@@ -49,6 +55,9 @@ namespace BlogEngine.Server.Controllers
         [HttpPut]
         public async Task<ActionResult<BlogModel>> Put(BlogModel blogModel)
         {
+            blogModel.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogModel.HTMLContent);
+            blogModel.LastUpdateDate = DateTime.Now;
+
             var blogEntity = await _blogRepository.UpdateAsync(ToEntity(blogModel));
             return ToModel(blogEntity);
         }
