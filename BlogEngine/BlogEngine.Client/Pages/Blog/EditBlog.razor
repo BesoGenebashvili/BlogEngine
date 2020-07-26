@@ -1,0 +1,31 @@
+﻿@page "/blog/edit/{ID:int}"
+@page "/blog/edit/{ID:int}/{Title}"
+@inject IBlogService BlogService
+@inject NavigationManager NavigationManager
+
+@if (_blog == null)
+{
+    <TextCenter Text="Loading..." />
+}
+else
+{
+    <BlogForm Blog="_blog" ValidSubmit="OnValidSubmit" />
+}
+
+@code {
+    [Parameter] public int ID { get; set; }
+    [Parameter] public string Title { get; set; }
+
+    private BlogModel _blog;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _blog = await BlogService.GetBlogAsync(ID);
+    }
+
+    private async Task OnValidSubmit()
+    {
+        var updatedBlog = await BlogService.UpdateBlogAsync(_blog);
+        NavigationManager.NavigateTo($"blog/view/{updatedBlog.ID}");
+    }
+}

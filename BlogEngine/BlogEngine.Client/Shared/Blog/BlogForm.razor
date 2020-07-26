@@ -1,5 +1,5 @@
 ﻿<div class="container">
-    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="Blog" OnValidSubmit="ValidSubmit">
+    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="Blog" OnValidSubmit="DataAnnotationsValidated">
         <DataAnnotationsValidator />
 
         <SfTextBox @bind-Value="Blog.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
@@ -27,7 +27,7 @@
         </div>
 
         <br />
-        <SfButton CssClass="e-success" Disabled="false">Submit</SfButton>
+        <SfButton CssClass="e-success" Disabled="_submitButtDisabled">Submit</SfButton>
         <br />
     </EditForm>
 </div>
@@ -35,6 +35,15 @@
 @code{
     [Parameter] public BlogModel Blog { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
+
+    private bool _submitButtDisabled = false;
+
+    private async Task DataAnnotationsValidated()
+    {
+        _submitButtDisabled = true;
+        StateHasChanged();
+        await ValidSubmit.InvokeAsync(default);
+    }
 
     private void OnImageSelected(byte[] imageBytes)
     {

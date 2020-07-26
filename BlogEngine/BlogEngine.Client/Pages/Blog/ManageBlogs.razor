@@ -1,0 +1,24 @@
+﻿@page "/blog/manage"
+@inject IBlogService BlogService
+
+<BlogsDataGrid Blogs="_blogs" BlogDelete="OnBlogDelete"/>
+
+@code {
+    private List<BlogModel> _blogs = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task OnBlogDelete(int id)
+    {
+        await BlogService.DeleteBlogAsync(id);
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        _blogs = await BlogService.GetBlogsAsync();
+    }
+}
