@@ -1,4 +1,4 @@
-﻿<GenericList Collection="Blogs">
+﻿<GenericList Collection="BlogDTOs">
     <EmptyTemplateFragment>
         <div class="text-center">
             <h1>Articles not available</h1>
@@ -11,10 +11,10 @@
             <div class="container">
                 <div class="row d-flex">
 
-                    @foreach (var blog in Blogs)
+                    @foreach (var blogDTO in BlogDTOs)
                     {
                         <div class="col-md-6 col-lg-4">
-                            <IndividualBlogArticle Blog="blog" />
+                            <IndividualBlogArticle BlogDTO="blogDTO" />
                         </div>
                     }
 
@@ -26,5 +26,5 @@
 </GenericList>
 
 @code {
-    [Parameter] public List<BlogModel> Blogs { get; set; }
+    [Parameter] public List<BlogDTO> BlogDTOs { get; set; }
 }

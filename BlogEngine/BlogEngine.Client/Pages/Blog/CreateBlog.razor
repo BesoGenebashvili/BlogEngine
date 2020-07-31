@@ -2,16 +2,16 @@
 @inject IBlogService BlogService
 @inject NavigationManager NavigationManager
 
-<TextCenter Text="Create Blog"/>
+<TextCenter Text="Create Blog" />
 
-<BlogForm Blog="_blog" ValidSubmit="OnValidSubmit" />
+<CreateBlogForm BlogCreationDTO="_blogCreationDTO" ValidSubmit="OnValidSubmit" />
 
 @code{
-    private BlogModel _blog = new BlogModel();
+    private BlogCreationDTO _blogCreationDTO = new BlogCreationDTO();
 
     private async Task OnValidSubmit()
     {
-        int id = await BlogService.CreateBlogAsync(_blog);
-        NavigationManager.NavigateTo($"blog/view/{id}");
+        var blogDTO = await BlogService.CreateBlogAsync(_blogCreationDTO);
+        NavigationManager.NavigateTo($"blog/view/{blogDTO.ID}");
     }
 }

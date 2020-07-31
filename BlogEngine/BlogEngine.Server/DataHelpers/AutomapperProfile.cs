@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Shared.Models;
+using BlogEngine.Shared.DTOs;
 
 namespace BlogEngine.Server.DataHelpers
 {
@@ -8,14 +8,13 @@ namespace BlogEngine.Server.DataHelpers
     {
         public AutomapperProfile()
         {
-            CreateMap<BlogModel, Blog>();
-            CreateMap<Blog, BlogModel>();
+            CreateMap<Blog, BlogDTO>();
 
-            CreateMap<CommentModel, Comment>();
-            CreateMap<Comment, CommentModel>();
+            CreateMap<BlogCreationDTO, Blog>();
 
-            CreateMap<GenreModel, Genre>();
-            CreateMap<Genre, GenreModel>();
+            CreateMap<BlogUpdateDTO, Blog>()
+                .ForMember(b => b.ID, options => options.Ignore())
+                .ReverseMap();
         }
     }
 }

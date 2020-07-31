@@ -1,0 +1,67 @@
+﻿<div class="container">
+    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="BlogCreationDTO" OnValidSubmit="DataAnnotationsValidated">
+        <DataAnnotationsValidator />
+
+        <SfTextBox @bind-Value="BlogCreationDTO.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
+        <br />
+
+        <SfTextBox @bind-Value="BlogCreationDTO.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
+        <br />
+
+        <br />
+        <InputImage Image="BlogCreationDTO.Cover"
+                    LabelText="Choose Cover"
+                    ImageSelected="OnImageSelected"
+                    ImageRemoved="OnImageRemoved"
+                    WrapperCssClass="w-75 form-font-size form-border" />
+
+        <br />
+        <br />
+
+        <div class="control-section w-75">
+            <SfRichTextEditor @bind-Value="BlogCreationDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
+                <ChildContent>
+                    <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
+                </ChildContent>
+            </SfRichTextEditor>
+        </div>
+
+        <br />
+        <SfButton CssClass="e-success" Disabled="_submitButtDisabled">Submit</SfButton>
+        <br />
+    </EditForm>
+</div>
+
+@code{
+    // TODO : Add publish date picker
+
+    [Parameter] public BlogCreationDTO BlogCreationDTO { get; set; }
+    [Parameter] public EventCallback ValidSubmit { get; set; }
+
+    private bool _submitButtDisabled = false;
+
+    private async Task DataAnnotationsValidated()
+    {
+        _submitButtDisabled = true;
+        StateHasChanged();
+        await ValidSubmit.InvokeAsync(default);
+    }
+
+    private void OnImageSelected(byte[] imageBytes)
+    {
+        BlogCreationDTO.Cover = imageBytes;
+    }
+
+    private void OnImageRemoved()
+    {
+        BlogCreationDTO.Cover = null;
+    }
+
+    private object[] GetRichTextEditorTools()
+    {
+        return new object[] {
+        "Bold", "Italic", "Underline", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList", "|",
+        "CreateLink", "Image", "|","SourceCode", "|", "Undo", "Redo" };
+    }
+}

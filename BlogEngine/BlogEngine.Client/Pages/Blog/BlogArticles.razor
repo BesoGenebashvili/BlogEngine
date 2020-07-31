@@ -1,13 +1,13 @@
 ﻿@page "/blog/articles"
 @inject IBlogService BlogService
 
-<BlogArticleList Blogs="Blogs" />
+<BlogArticleList BlogDTOs="_blogDTOs" />
 
 @code {
-    public List<BlogModel> Blogs { get; set; }
+    private List<BlogDTO> _blogDTOs { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        Blogs = await BlogService.GetBlogsAsync();
+        _blogDTOs = await BlogService.GetBlogsAsync();
     }
 }

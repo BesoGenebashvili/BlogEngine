@@ -2,18 +2,18 @@
 @page "/blog/view/{ID:int}/{Title}"
 @inject IBlogService BlogService
 
-@if (_blog == null)
+@if (_blogDTO == null)
 {
     <TextCenter Text="Loading..." />
 }
 else
 {
-    <TextCenter Text="@_blog.Title" />
+    <TextCenter Text="@_blogDTO.Title" />
 
     <br />
 
     <div class="container">
-        @((MarkupString)_blog.HTMLContent)
+        @((MarkupString)_blogDTO.HTMLContent)
     </div>
 }
 
@@ -21,10 +21,10 @@ else
     [Parameter] public int ID { get; set; }
     [Parameter] public string Title { get; set; }
 
-    private BlogModel _blog { get; set; }
+    private BlogDTO _blogDTO { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        _blog = await BlogService.GetBlogAsync(ID);
+        _blogDTO = await BlogService.GetBlogAsync(ID);
     }
 }

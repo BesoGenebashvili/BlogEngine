@@ -1,32 +1,32 @@
 ﻿<div class="blog-entry">
-    @if (Blog.Cover == null)
+    @if (BlogDTO.Cover == null)
     {
-        <a href="blog/view/@Blog.ID/@Blog.Title" class="block-20"
+        <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="block-20"
            style="background-image: url('css/Images/blog-cover-template.png');"></a>
     }
     else
     {
-        <a href="blog/view/@Blog.ID/@Blog.Title" class="block-20"
-           style="background-image: url('data:image/jpeg;base64,@(Convert.ToBase64String(Blog.Cover))');"></a>
+        <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="block-20"
+           style="background-image: url('data:image/jpeg;base64,@(Convert.ToBase64String(BlogDTO.Cover))');"></a>
     }
     <div class="blog-text p-4 float-right d-block">
 
         <div class="topper d-flex align-items-center">
             <div class="day-wrapper py-2 pl-3 pr-1 align-self-stretch">
-                <span class="day">@Blog.DateCreated.Value.Day</span>
+                <span class="day">@BlogDTO.DateCreated.Value.Day</span>
             </div>
             <div class="date-wrapper pl-0 pr-3 py-2 align-self-stretch">
-                <span class="date">@Blog.DateCreated.Value.ToString("yyyy")</span>
-                <span class="date">@Blog.DateCreated.Value.ToString("MMMM")</span>
+                <span class="date">@BlogDTO.DateCreated.Value.ToString("yyyy")</span>
+                <span class="date">@BlogDTO.DateCreated.Value.ToString("MMMM")</span>
             </div>
         </div>
 
         <h3 class="blog-heading mb-3">
-            <a href="blog/view/@Blog.ID/@Blog.Title">@Blog.Title</a>
+            <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title">@BlogDTO.Title</a>
         </h3>
-        <p>@Blog.ShortDescription</p>
+        <p>@BlogDTO.ShortDescription</p>
         <p>
-            <a href="blog/view/@Blog.ID/@Blog.Title" class="read-more-btn">
+            <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="read-more-btn">
                 <span style="font-size: 20px;">→</span>
                 READ MORE
             </a>
@@ -35,5 +35,5 @@
 </div>
 
 @code {
-    [Parameter] public BlogModel Blog { get; set; }
+    [Parameter] public BlogDTO BlogDTO { get; set; }
 }

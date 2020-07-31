@@ -1,15 +1,15 @@
 ﻿<div class="container">
-    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="Blog" OnValidSubmit="DataAnnotationsValidated">
+    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="BlogUpdateDTO" OnValidSubmit="DataAnnotationsValidated">
         <DataAnnotationsValidator />
 
-        <SfTextBox @bind-Value="Blog.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
+        <SfTextBox @bind-Value="BlogUpdateDTO.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
         <br />
 
-        <SfTextBox @bind-Value="Blog.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
+        <SfTextBox @bind-Value="BlogUpdateDTO.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
         <br />
 
         <br />
-        <InputImage Image="Blog.Cover"
+        <InputImage Image="BlogUpdateDTO.Cover"
                     LabelText="Choose Cover"
                     ImageSelected="OnImageSelected"
                     ImageRemoved="OnImageRemoved"
@@ -19,7 +19,7 @@
         <br />
 
         <div class="control-section w-75">
-            <SfRichTextEditor @bind-Value="Blog.HTMLContent" ShowCharCount="true" MaxLength="2000">
+            <SfRichTextEditor @bind-Value="BlogUpdateDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
                 <ChildContent>
                     <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
                 </ChildContent>
@@ -33,7 +33,7 @@
 </div>
 
 @code{
-    [Parameter] public BlogModel Blog { get; set; }
+    [Parameter] public BlogUpdateDTO BlogUpdateDTO { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
 
     private bool _submitButtDisabled = false;
@@ -47,12 +47,12 @@
 
     private void OnImageSelected(byte[] imageBytes)
     {
-        Blog.Cover = imageBytes;
+        BlogUpdateDTO.Cover = imageBytes;
     }
 
     private void OnImageRemoved()
     {
-        Blog.Cover = null;
+        BlogUpdateDTO.Cover = null;
     }
 
     private object[] GetRichTextEditorTools()

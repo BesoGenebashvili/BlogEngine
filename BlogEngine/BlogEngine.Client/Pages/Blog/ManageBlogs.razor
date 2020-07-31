@@ -1,10 +1,10 @@
 ﻿@page "/blog/manage"
 @inject IBlogService BlogService
 
-<BlogsDataGrid Blogs="_blogs" BlogDelete="OnBlogDelete"/>
+<BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete"/>
 
 @code {
-    private List<BlogModel> _blogs = null;
+    private List<BlogDTO> _blogDTOs = null;
 
     protected async override Task OnInitializedAsync()
     {
@@ -19,6 +19,6 @@
 
     private async Task LoadPage()
     {
-        _blogs = await BlogService.GetBlogsAsync();
+        _blogDTOs = await BlogService.GetBlogsAsync();
     }
 }

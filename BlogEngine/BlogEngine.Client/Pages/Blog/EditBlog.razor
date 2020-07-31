@@ -3,29 +3,29 @@
 @inject IBlogService BlogService
 @inject NavigationManager NavigationManager
 
-@if (_blog == null)
+@if (_blogUpdateDTO == null)
 {
     <TextCenter Text="Loading..." />
 }
 else
 {
-    <BlogForm Blog="_blog" ValidSubmit="OnValidSubmit" />
+    <EditBlogForm BlogUpdateDTO="_blogUpdateDTO" ValidSubmit="OnValidSubmit"/>
 }
 
 @code {
     [Parameter] public int ID { get; set; }
     [Parameter] public string Title { get; set; }
 
-    private BlogModel _blog;
+    private BlogUpdateDTO _blogUpdateDTO;
 
     protected async override Task OnInitializedAsync()
     {
-        _blog = await BlogService.GetBlogAsync(ID);
+        _blogUpdateDTO = await BlogService.GetBlogUpdateDTOAsync(ID);
     }
 
     private async Task OnValidSubmit()
     {
-        var updatedBlog = await BlogService.UpdateBlogAsync(_blog);
+        var updatedBlog = await BlogService.UpdateBlogAsync(_blogUpdateDTO.ID, _blogUpdateDTO);
         NavigationManager.NavigateTo($"blog/view/{updatedBlog.ID}");
     }
 }

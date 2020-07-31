@@ -1,16 +1,16 @@
 ﻿@inject NavigationManager NavigationManager
 
-<SfGrid DataSource="@Blogs" AllowPaging="true">
+<SfGrid DataSource="@BlogDTOs" AllowPaging="true">
     <GridColumns>
-        <GridColumn Field=@nameof(BlogModel.ID) HeaderText="ID" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogModel.Title) HeaderText="Title" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogModel.DateCreated) HeaderText="Date Created" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogModel.LastUpdateBy) HeaderText="Date Updated" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogModel.Cover) HeaderText="Has A Cover Image" Type="ColumnType.Date" TextAlign="TextAlign.Center">
+        <GridColumn Field=@nameof(BlogDTO.ID) HeaderText="ID" TextAlign="TextAlign.Center"></GridColumn>
+        <GridColumn Field=@nameof(BlogDTO.Title) HeaderText="Title" TextAlign="TextAlign.Center"></GridColumn>
+        <GridColumn Field=@nameof(BlogDTO.DateCreated) HeaderText="Date Created" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
+        <GridColumn Field=@nameof(BlogDTO.LastUpdateBy) HeaderText="Date Updated" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
+        <GridColumn Field=@nameof(BlogDTO.Cover) HeaderText="Has A Cover Image" Type="ColumnType.Date" TextAlign="TextAlign.Center">
             <Template>
                 @{
-                    var blogModel = context as BlogModel;
-                    @if (blogModel.Cover != null)
+                    var blogDTO = context as BlogDTO;
+                    @if (blogDTO.Cover != null)
                     {
                         <div>Yes</div>
                     }
@@ -24,11 +24,11 @@
         <GridColumn HeaderText="Actions" TextAlign="TextAlign.Center">
             <Template>
                 @{
-                    var blogModel = context as BlogModel;
-                    string editLink = $"/blog/edit/{blogModel.ID}/{blogModel.Title}";
+                    var blogDTO = context as BlogDTO;
+                    string editLink = $"/blog/edit/{blogDTO.ID}/{blogDTO.Title}";
 
                     <SfButton @onclick="(() => NavigationManager.NavigateTo(editLink))" CssClass="e-warning e-small">Edit</SfButton>
-                    <SfButton OnClick="(() => OnDeleteButtonClick(blogModel))" CssClass="e-danger e-small">Delete</SfButton>
+                    <SfButton OnClick="(() => OnDeleteButtonClick(blogDTO))" CssClass="e-danger e-small">Delete</SfButton>
                 }
             </Template>
         </GridColumn>
@@ -53,15 +53,15 @@
 </SfDialog>
 
 @code{
-    [Parameter] public List<BlogModel> Blogs { get; set; }
+    [Parameter] public List<BlogDTO> BlogDTOs { get; set; }
     [Parameter] public EventCallback<int> BlogDelete { get; set; }
 
     private bool deleteDialogVisible = false;
-    private BlogModel _blogToDelete = null;
+    private BlogDTO _blogToDelete = null;
 
-    private void OnDeleteButtonClick(BlogModel blogModel)
+    private void OnDeleteButtonClick(BlogDTO blogDTO)
     {
-        _blogToDelete = blogModel;
+        _blogToDelete = blogDTO;
         deleteDialogVisible = true;
     }
 
