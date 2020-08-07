@@ -3,7 +3,7 @@ using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Core.Data.Entities
 {
-    public class Genre
+    public class Category
     {
         public int ID { get; set; }
 
@@ -13,6 +13,6 @@ namespace BlogEngine.Core.Data.Entities
 
         // TODO: add rate column
 
-        public List<BlogGenre> BlogGenres { get; set; } = new List<BlogGenre>();
+        public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }

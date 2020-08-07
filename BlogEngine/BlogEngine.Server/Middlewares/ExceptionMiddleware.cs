@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BlogEngine.Core.Exceptions;
 using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -32,6 +33,11 @@ namespace BlogEngine.Server.Middlewares
         {
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+            /*
+            if (ex is EntityNotFoundException)
+                httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            */
 
             var errorDetails = new ErrorDetails()
             {

@@ -6,20 +6,26 @@ namespace BlogEngine.Shared.DTOs
 {
     public class BlogCreationDTO
     {
-        [Required(ErrorMessage = "title is required")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "title must be at least 2 and at max 50 characters long")]
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "{0} is required")]
+        [StringLength(50, ErrorMessage = "{0} should not be more than 100 Characters")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "short description is required")]
-        [StringLength(100, MinimumLength = 10, ErrorMessage = "short description must be at least 10 and at max 100 characters long")]
+        [DataType(DataType.Text)]
+        [Required(ErrorMessage = "Short Description is required")]
+        [StringLength(100, ErrorMessage = "Short Description should not be more than 100 Characters")]
         public string ShortDescription { get; set; }
 
-        [Required(ErrorMessage = "content is required")]
+        [DataType(DataType.Html)]
+        [Required(ErrorMessage = "HTML Content is required")]
         public string HTMLContent { get; set; }
+
+        [DataType(DataType.Text)]
+        [MaxLength(50, ErrorMessage = "Created By should not be more than 50 Characters")]
+        public string CreatedBy { get; set; }
 
         public byte[] Cover { get; set; }
 
-        public List<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
-        public List<BlogGenre> BlogGenres { get; set; } = new List<BlogGenre>();
+        public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }

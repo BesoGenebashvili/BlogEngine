@@ -1,11 +1,11 @@
 ﻿namespace BlogEngine.Core.Data.Entities.JoiningEntities
 {
-    public class BlogGenre
+    public class BlogCategory
     {
         public int BlogID { get; set; }
-        public int GenreID { get; set; }
+        public int CategoryID { get; set; }
 
         public Blog Blog { get; set; }
-        public Genre Genre { get; set; }
+        public Category Category { get; set; }
     }
 }

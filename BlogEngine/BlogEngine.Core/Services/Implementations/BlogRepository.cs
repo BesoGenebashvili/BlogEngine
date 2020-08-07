@@ -20,7 +20,7 @@ namespace BlogEngine.Core.Services.Implementations
         public Task<IEnumerable<Blog>> GetAllWithAllReferenceEntityes()
         {
             return Task.FromResult(_context.Blogs
-                 .Include(b => b.BlogGenres)
+                 .Include(b => b.BlogCategories)
                  .Include(b => b.BlogComments)
                  .AsEnumerable());
         }
@@ -29,7 +29,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             return _context.Blogs
                 .Where(b => b.ID.Equals(id))
-                .Include(b => b.BlogGenres)
+                .Include(b => b.BlogCategories)
                 .Include(b => b.BlogComments)
                 .FirstOrDefault();
         }
@@ -38,7 +38,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             return await _context.Blogs
                 .Where(b => b.ID.Equals(id))
-                .Include(b => b.BlogGenres)
+                .Include(b => b.BlogCategories)
                 .Include(b => b.BlogComments)
                 .FirstOrDefaultAsync();
         }

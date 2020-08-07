@@ -5,7 +5,7 @@ namespace BlogEngine.Core.Exceptions
     public class EntityNullException : Exception
     {
         public EntityNullException(string entityName)
-            : base($"The entity with a name = '{entityName}' was not found in the Database")
+            : base($"The entity with a name = '{entityName}' was null")
         {
         }
 

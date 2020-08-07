@@ -12,19 +12,20 @@ namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public class BlogController : ControllerBase
+    public class BlogsController : ControllerBase
     {
         private readonly IBlogRepository _blogRepository;
         private readonly IMapper _mapper;
         private readonly IReadingTimeEstimator _readingTimeEstimator;
 
-        public BlogController(IBlogRepository blogRepository, IMapper mapper, IReadingTimeEstimator readingTimeEstimator)
+        public BlogsController(IBlogRepository blogRepository, IMapper mapper, IReadingTimeEstimator readingTimeEstimator)
         {
             _blogRepository = blogRepository;
             _mapper = mapper;
             _readingTimeEstimator = readingTimeEstimator;
         }
 
+        //GET api/blogs
         [HttpGet]
         public async Task<ActionResult<List<BlogDTO>>> Get()
         {
@@ -33,7 +34,8 @@ namespace BlogEngine.Server.Controllers
             return _mapper.Map<List<BlogDTO>>(blogEntities.ToList());
         }
 
-        [HttpGet("{id:int}", Name = "getBlog")]
+        //GET api/blogs/{id}
+        [HttpGet("{id:int}", Name = "Get")]
         public async Task<ActionResult<BlogDTO>> Get(int id)
         {
             var blogEntity = await _blogRepository.GetByIdAsync(id);
@@ -43,6 +45,7 @@ namespace BlogEngine.Server.Controllers
             return ToDTO(blogEntity);
         }
 
+        //POST api/blogs
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BlogCreationDTO blogCreationDTO)
         {
@@ -53,9 +56,21 @@ namespace BlogEngine.Server.Controllers
 
             var insertedBlog = await _blogRepository.InsertAsync(blog);
 
-            return new CreatedAtRouteResult("getBlog", new { insertedBlog.ID }, ToDTO(insertedBlog));
+            return new CreatedAtRouteResult(nameof(Get), new { insertedBlog.ID }, ToDTO(insertedBlog));
         }
 
+        //GET api/blogs/update/{id}
+        [HttpGet("update/{id:int}")]
+        public async Task<ActionResult<BlogUpdateDTO>> PutGet(int id)
+        {
+            var blogEntity = await _blogRepository.GetByIdAsync(id);
+
+            if (blogEntity == null) return NotFound();
+
+            return ToUpdateDTO(blogEntity);
+        }
+
+        //PUT api/blogs/{id}
         [HttpPut("{id:int}")]
         public async Task<ActionResult<BlogDTO>> Put(int id, [FromBody] BlogUpdateDTO blogUpdateDTO)
         {
@@ -73,20 +88,15 @@ namespace BlogEngine.Server.Controllers
             return ToDTO(updatedEntity);
         }
 
-        [HttpGet("update/{id:int}")]
-        public async Task<ActionResult<BlogUpdateDTO>> PutGet(int id)
+        //DELETE api/blogs/{id}
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<bool>> Delete(int id)
         {
             var blogEntity = await _blogRepository.GetByIdAsync(id);
 
             if (blogEntity == null) return NotFound();
 
-            return ToUpdateDTO(blogEntity);
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult<bool>> Delete(int id)
-        {
-            return await _blogRepository.DeleteAsync(id);
+            return await _blogRepository.DeleteAsync(blogEntity.ID);
         }
 
         private Blog ToEntity(BlogCreationDTO blogCreationDTO) => _mapper.Map<Blog>(blogCreationDTO);

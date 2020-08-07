@@ -9,7 +9,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
     public class BlogService : IBlogService
     {
         private readonly IHttpService _httpService;
-        private const string Url = "api/blog";
+        private const string Url = "api/blogs";
 
         public BlogService(IHttpService httpService)
         {

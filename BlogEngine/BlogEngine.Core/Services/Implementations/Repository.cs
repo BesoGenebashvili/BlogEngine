@@ -139,7 +139,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             if (entity == null)
             {
-                ThrowHelper.ThrowEntityNotFoundException(nameof(TEntity));
+                ThrowHelper.ThrowEntityNotFoundException(typeof(TEntity).Name);
             }
         }
 
@@ -147,7 +147,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             if (entity == null)
             {
-                ThrowHelper.ThrowEntityNullException(nameof(TEntity));
+                ThrowHelper.ThrowEntityNullException(typeof(TEntity).Name);
             }
         }
     }
