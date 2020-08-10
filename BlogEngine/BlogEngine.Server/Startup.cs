@@ -3,6 +3,8 @@ using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Core.Services.Implementations;
 using BlogEngine.Server.Extensions;
+using BlogEngine.Server.Services.Abstractions;
+using BlogEngine.Server.Services.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,28 +28,27 @@ namespace BlogEngine.Server
         {
             services.AddControllers();
 
-            // db
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DbConnection"),
                     b => b.MigrationsAssembly("BlogEngine.Core"));
             });
 
-            // json configuration
             services.AddMvc().AddNewtonsoftJson(jsonOptions => jsonOptions.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-            // mapper
-            services.AddAutoMapper(configuration=> 
+            services.AddAutoMapper(configuration =>
             {
                 configuration.AllowNullCollections = true;
                 configuration.AllowNullDestinationValues = true;
-            },typeof(Startup));
+            }, typeof(Startup));
 
-            // blog EF service
             services.AddScoped<IBlogRepository, BlogRepository>();
 
-            // reading time calculator service
             services.AddScoped<IReadingTimeEstimator, ReadingTimeEstimator>();
+
+            services.AddScoped<IBlogService, BlogService>();
+
+            services.AddScoped<IBlogSearchService, BlogSearchService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

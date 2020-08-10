@@ -17,7 +17,7 @@ namespace BlogEngine.Core.Services.Implementations
             _context = context;
         }
 
-        public Task<IEnumerable<Blog>> GetAllWithAllReferenceEntityes()
+        public Task<IEnumerable<Blog>> GetAllWithReferences()
         {
             return Task.FromResult(_context.Blogs
                  .Include(b => b.BlogCategories)

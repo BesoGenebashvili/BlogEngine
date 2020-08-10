@@ -6,6 +6,6 @@ namespace BlogEngine.Core.Services.Abstractions
 {
     public interface IBlogRepository : IRepository<Blog>
     {
-        Task<IEnumerable<Blog>> GetAllWithAllReferenceEntityes();
+        Task<IEnumerable<Blog>> GetAllWithReferences();
     }
 }

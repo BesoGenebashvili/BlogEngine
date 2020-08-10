@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using AutoMapper;
-using BlogEngine.Core.Data.Entities;
-using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Server.Services.Abstractions;
 
 namespace BlogEngine.Server.Controllers
 {
@@ -14,93 +10,76 @@ namespace BlogEngine.Server.Controllers
     [Route("api/[Controller]")]
     public class BlogsController : ControllerBase
     {
-        private readonly IBlogRepository _blogRepository;
-        private readonly IMapper _mapper;
-        private readonly IReadingTimeEstimator _readingTimeEstimator;
+        private readonly IBlogService _blogService;
+        private readonly IBlogSearchService _blogSearchService;
 
-        public BlogsController(IBlogRepository blogRepository, IMapper mapper, IReadingTimeEstimator readingTimeEstimator)
+        public BlogsController(IBlogService blogService, IBlogSearchService blogSearchService)
         {
-            _blogRepository = blogRepository;
-            _mapper = mapper;
-            _readingTimeEstimator = readingTimeEstimator;
+            _blogService = blogService;
+            _blogSearchService = blogSearchService;
         }
 
         //GET api/blogs
         [HttpGet]
         public async Task<ActionResult<List<BlogDTO>>> Get()
         {
-            var blogEntities = await _blogRepository.GetAllWithAllReferenceEntityes();
-
-            return _mapper.Map<List<BlogDTO>>(blogEntities.ToList());
+            return await _blogService.GetAllAsync();
         }
 
         //GET api/blogs/{id}
         [HttpGet("{id:int}", Name = "Get")]
         public async Task<ActionResult<BlogDTO>> Get(int id)
         {
-            var blogEntity = await _blogRepository.GetByIdAsync(id);
+            var blogDTO = await _blogService.GetByIdAsync(id);
 
-            if (blogEntity == null) return NotFound();
+            if (blogDTO == null) return NotFound();
 
-            return ToDTO(blogEntity);
+            return blogDTO;
+        }
+
+        //GET api/blogs/search
+        [HttpGet("search")]
+        public async Task<ActionResult<List<BlogDTO>>> Search([FromQuery] BlogSearchDTO blogSearchDTO)
+        {
+            return await _blogSearchService.SearchAsync(blogSearchDTO);
         }
 
         //POST api/blogs
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BlogCreationDTO blogCreationDTO)
         {
-            var blog = ToEntity(blogCreationDTO);
+            if (blogCreationDTO == null) return BadRequest();
 
-            blog.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blog.HTMLContent);
-            blog.DateCreated = DateTime.Now;
+            var insertedBlog = await _blogService.InsertAsync(blogCreationDTO);
 
-            var insertedBlog = await _blogRepository.InsertAsync(blog);
-
-            return new CreatedAtRouteResult(nameof(Get), new { insertedBlog.ID }, ToDTO(insertedBlog));
+            return new CreatedAtRouteResult(nameof(Get), new { insertedBlog.ID }, insertedBlog);
         }
 
         //GET api/blogs/update/{id}
         [HttpGet("update/{id:int}")]
         public async Task<ActionResult<BlogUpdateDTO>> PutGet(int id)
         {
-            var blogEntity = await _blogRepository.GetByIdAsync(id);
+            var blogFromDb = await _blogService.GetUpdateDTOAsync(id);
 
-            if (blogEntity == null) return NotFound();
+            if (blogFromDb == null) return NotFound();
 
-            return ToUpdateDTO(blogEntity);
+            return blogFromDb;
         }
 
         //PUT api/blogs/{id}
         [HttpPut("{id:int}")]
         public async Task<ActionResult<BlogDTO>> Put(int id, [FromBody] BlogUpdateDTO blogUpdateDTO)
         {
-            var blogEntity = await _blogRepository.GetByIdAsync(id);
+            if (blogUpdateDTO == null) return BadRequest();
 
-            if (blogEntity == null) return NotFound();
-
-            _mapper.Map(blogUpdateDTO, blogEntity);
-
-            blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogUpdateDTO.HTMLContent);
-            blogEntity.LastUpdateDate = DateTime.Now;
-
-            var updatedEntity = await _blogRepository.UpdateAsync(blogEntity);
-
-            return ToDTO(updatedEntity);
+            return await _blogService.UpdateAsync(id, blogUpdateDTO);
         }
 
         //DELETE api/blogs/{id}
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<bool>> Delete(int id)
         {
-            var blogEntity = await _blogRepository.GetByIdAsync(id);
-
-            if (blogEntity == null) return NotFound();
-
-            return await _blogRepository.DeleteAsync(blogEntity.ID);
+            return await _blogService.DeleteAsync(id);
         }
-
-        private Blog ToEntity(BlogCreationDTO blogCreationDTO) => _mapper.Map<Blog>(blogCreationDTO);
-        private BlogDTO ToDTO(Blog blogEntity) => _mapper.Map<BlogDTO>(blogEntity);
-        private BlogUpdateDTO ToUpdateDTO(Blog blogEntity) => _mapper.Map<BlogUpdateDTO>(blogEntity);
     }
 }
