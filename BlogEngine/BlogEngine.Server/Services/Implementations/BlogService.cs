@@ -53,14 +53,14 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<BlogDTO> InsertAsync(BlogCreationDTO blogCreationDTO)
         {
-            var blog = ToEntity(blogCreationDTO);
+            var blogEntity = ToEntity(blogCreationDTO);
 
-            blog.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blog.HTMLContent);
-            blog.DateCreated = DateTime.Now;
+            blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogEntity.HTMLContent);
+            blogEntity.DateCreated = DateTime.Now;
 
-            var insertedBlog = await _blogRepository.InsertAsync(blog);
+            var insertedEntity = await _blogRepository.InsertAsync(blogEntity);
 
-            return ToDTO(insertedBlog);
+            return ToDTO(insertedEntity);
         }
 
         public async Task<BlogDTO> UpdateAsync(int id, BlogUpdateDTO blogUpdateDTO)

@@ -6,9 +6,6 @@ namespace BlogEngine.Shared.DTOs
 {
     public class BlogUpdateDTO
     {
-        [Key]
-        public int ID { get; set; }
-
         [DataType(DataType.Text)]
         [Required(ErrorMessage = "{0} is required")]
         [MaxLength(50, ErrorMessage = "{0} should not be more than 100 Characters")]

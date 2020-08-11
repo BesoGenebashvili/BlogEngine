@@ -8,13 +8,25 @@ namespace BlogEngine.Server.DataHelpers
     {
         public AutomapperProfile()
         {
+            #region Blog
+
             CreateMap<Blog, BlogDTO>();
 
             CreateMap<BlogCreationDTO, Blog>();
 
-            CreateMap<BlogUpdateDTO, Blog>()
-                .ForMember(b => b.ID, options => options.Ignore())
-                .ReverseMap();
+            CreateMap<BlogUpdateDTO, Blog>().ReverseMap();
+
+            #endregion
+
+            #region Category
+
+            CreateMap<Category, CategoryDTO>();
+
+            CreateMap<CategoryCreationDTO, Category>();
+
+            CreateMap<CategoryUpdateDTO, Category>().ReverseMap();
+
+            #endregion
         }
     }
 }

@@ -20,8 +20,8 @@ namespace BlogEngine.Core.Services.Implementations
         public Task<IEnumerable<Blog>> GetAllWithReferences()
         {
             return Task.FromResult(_context.Blogs
-                 .Include(b => b.BlogCategories)
-                 .Include(b => b.BlogComments)
+                 .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
+                 .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
                  .AsEnumerable());
         }
 
@@ -29,17 +29,17 @@ namespace BlogEngine.Core.Services.Implementations
         {
             return _context.Blogs
                 .Where(b => b.ID.Equals(id))
-                .Include(b => b.BlogCategories)
-                .Include(b => b.BlogComments)
+                .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
+                .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
                 .FirstOrDefault();
         }
 
-        public async override Task<Blog> GetByIdAsync(int id)
+        public override async Task<Blog> GetByIdAsync(int id)
         {
             return await _context.Blogs
                 .Where(b => b.ID.Equals(id))
-                .Include(b => b.BlogCategories)
-                .Include(b => b.BlogComments)
+                .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
+                .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
                 .FirstOrDefaultAsync();
         }
     }

@@ -25,7 +25,7 @@ else
 
     private async Task OnValidSubmit()
     {
-        var updatedBlog = await BlogService.UpdateBlogAsync(_blogUpdateDTO.ID, _blogUpdateDTO);
+        var updatedBlog = await BlogService.UpdateBlogAsync(ID, _blogUpdateDTO);
         NavigationManager.NavigateTo($"blog/view/{updatedBlog.ID}");
     }
 }

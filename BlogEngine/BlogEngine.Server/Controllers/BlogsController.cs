@@ -27,7 +27,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         //GET api/blogs/{id}
-        [HttpGet("{id:int}", Name = "Get")]
+        [HttpGet("{id:int}", Name = "GetBlog")]
         public async Task<ActionResult<BlogDTO>> Get(int id)
         {
             var blogDTO = await _blogService.GetByIdAsync(id);
@@ -52,7 +52,7 @@ namespace BlogEngine.Server.Controllers
 
             var insertedBlog = await _blogService.InsertAsync(blogCreationDTO);
 
-            return new CreatedAtRouteResult(nameof(Get), new { insertedBlog.ID }, insertedBlog);
+            return new CreatedAtRouteResult("GetBlog", new { insertedBlog.ID }, insertedBlog);
         }
 
         //GET api/blogs/update/{id}
@@ -72,7 +72,11 @@ namespace BlogEngine.Server.Controllers
         {
             if (blogUpdateDTO == null) return BadRequest();
 
-            return await _blogService.UpdateAsync(id, blogUpdateDTO);
+            var blogDTO = await _blogService.UpdateAsync(id, blogUpdateDTO);
+
+            if (blogDTO == null) return NotFound();
+
+            return blogDTO;
         }
 
         //DELETE api/blogs/{id}
