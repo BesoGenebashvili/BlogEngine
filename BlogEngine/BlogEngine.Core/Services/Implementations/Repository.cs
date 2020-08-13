@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Linq.Expressions;
-using System.Linq;
+using BlogEngine.Core.Helpers;
 using BlogEngine.Core.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using BlogEngine.Core.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -82,7 +82,7 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowEntityNullException(entity);
 
             _dbSet.Add(entity);
-            _context.SaveChanges();
+            SaveChanges();
             return entity;
         }
 
@@ -91,7 +91,7 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowEntityNullException(entity);
 
             await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync();
             return entity;
         }
 
@@ -100,7 +100,7 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowEntityNullException(entity);
 
             _dbSet.Update(entity);
-            _context.SaveChanges();
+            SaveChanges();
             return entity;
         }
 
@@ -109,7 +109,7 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowEntityNullException(entity);
 
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            await SaveChangesAsync();
             return entity;
         }
 
@@ -120,7 +120,7 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowNotFoundException(entityFromDb);
 
             _dbSet.Remove(entityFromDb);
-            return _context.SaveChanges() != 0;
+            return SaveChanges();
         }
 
         public virtual async Task<bool> DeleteAsync(int id)
@@ -130,12 +130,12 @@ namespace BlogEngine.Core.Services.Implementations
             NullCheckThrowNotFoundException(entityFromDb);
 
             _dbSet.Remove(entityFromDb);
-            return await _context.SaveChangesAsync() != 0;
+            return await SaveChangesAsync();
         }
 
-        private TEntity Find(int id) => _dbSet.Find(id);
+        protected TEntity Find(int id) => _dbSet.Find(id);
 
-        private void NullCheckThrowNotFoundException(TEntity entity)
+        protected void NullCheckThrowNotFoundException(TEntity entity)
         {
             if (entity == null)
             {
@@ -143,11 +143,45 @@ namespace BlogEngine.Core.Services.Implementations
             }
         }
 
-        private void NullCheckThrowEntityNullException(TEntity entity)
+        protected void NullCheckThrowEntityNullException(TEntity entity)
         {
             if (entity == null)
             {
                 ThrowHelper.ThrowEntityNullException(typeof(TEntity).Name);
+            }
+        }
+
+        /*
+        protected void NullCheckThrowArgumentNullException(TEntity entity)
+        {
+            if (entity == null)
+            {
+                ThrowHelper.ThrowArgumentNullException(typeof(TEntity).Name);
+            }
+        }
+        */
+
+        protected async Task<bool> SaveChangesAsync()
+        {
+            try
+            {
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        protected bool SaveChanges()
+        {
+            try
+            {
+                return _context.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }
