@@ -56,7 +56,6 @@ namespace BlogEngine.Server.Services.Implementations
             var blogEntity = ToEntity(blogCreationDTO);
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogEntity.HTMLContent);
-            blogEntity.DateCreated = DateTime.Now;
 
             var insertedEntity = await _blogRepository.InsertAsync(blogEntity);
 
@@ -72,7 +71,6 @@ namespace BlogEngine.Server.Services.Implementations
             _mapper.Map(blogUpdateDTO, blogEntity);
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogUpdateDTO.HTMLContent);
-            blogEntity.LastUpdateDate = DateTime.Now;
 
             var updatedEntity = await _blogRepository.UpdateAsync(blogEntity);
 

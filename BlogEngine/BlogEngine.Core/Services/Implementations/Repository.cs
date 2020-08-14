@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using BlogEngine.Core.Data.Entities;
 
 namespace BlogEngine.Core.Services.Implementations
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly DbContext _context;
         private readonly DbSet<TEntity> _dbSet;
@@ -27,7 +28,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            return await FindAsync(id);
         }
 
         public virtual IEnumerable<TEntity> GetAll()
@@ -42,7 +43,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
-            IQueryable<TEntity> query = _dbSet;
+            IQueryable<TEntity> query = _dbSet.AsQueryable();
 
             if (filter != null)
             {
@@ -83,6 +84,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             _dbSet.Add(entity);
             SaveChanges();
+
             return entity;
         }
 
@@ -92,6 +94,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
+
             return entity;
         }
 
@@ -101,6 +104,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             _dbSet.Update(entity);
             SaveChanges();
+
             return entity;
         }
 
@@ -110,12 +114,13 @@ namespace BlogEngine.Core.Services.Implementations
 
             _dbSet.Update(entity);
             await SaveChangesAsync();
+
             return entity;
         }
 
         public virtual bool Delete(int id)
         {
-            TEntity entityFromDb = _dbSet.Find(id);
+            TEntity entityFromDb = Find(id);
 
             NullCheckThrowNotFoundException(entityFromDb);
 
@@ -125,7 +130,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            TEntity entityFromDb = await _dbSet.FindAsync(id);
+            TEntity entityFromDb = await FindAsync(id);
 
             NullCheckThrowNotFoundException(entityFromDb);
 
@@ -134,6 +139,8 @@ namespace BlogEngine.Core.Services.Implementations
         }
 
         protected TEntity Find(int id) => _dbSet.Find(id);
+
+        protected async Task<TEntity> FindAsync(int id) => await _dbSet.FindAsync(id);
 
         protected void NullCheckThrowNotFoundException(TEntity entity)
         {

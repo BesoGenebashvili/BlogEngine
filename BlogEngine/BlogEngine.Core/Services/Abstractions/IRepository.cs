@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using BlogEngine.Core.Data.Entities;
 
 namespace BlogEngine.Core.Services.Abstractions
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         TEntity GetById(int id);
         Task<TEntity> GetByIdAsync(int id);

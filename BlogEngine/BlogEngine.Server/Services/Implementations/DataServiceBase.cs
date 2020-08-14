@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace BlogEngine.Server.Services.Implementations
 {
     public class DataServiceBase<TEntity, TDTO, TCreationDTO, TUpdateDTO>
         : IDataServiceBase<TDTO, TCreationDTO, TUpdateDTO>
-        where TEntity : class
+        where TEntity : BaseEntity
         where TDTO : class
         where TCreationDTO : class
         where TUpdateDTO : class

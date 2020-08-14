@@ -23,8 +23,6 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var categoryEntity = ToEntity(categoryCreationDTO);
 
-            categoryEntity.DateCreated = DateTime.Now;
-
             var insertedEntity = await _categoryRepository.InsertAsync(categoryEntity);
 
             return ToDTO(insertedEntity);
@@ -37,8 +35,6 @@ namespace BlogEngine.Server.Services.Implementations
             if (categoryEntity == null) return null;
 
             _mapper.Map(categoryUpdateDTO, categoryEntity);
-
-            categoryEntity.DateCreated = DateTime.Now;
 
             var updatedEntity = await _categoryRepository.UpdateAsync(categoryEntity);
 

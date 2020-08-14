@@ -14,6 +14,10 @@ namespace BlogEngine.Shared.DTOs
         public string Name { get; set; }
         public byte[] GeneralCover { get; set; }
 
+        [DataType(DataType.Text)]
+        [MaxLength(50, ErrorMessage = "Created By should not be more than 50 Characters")]
+        public string CreatedBy { get; set; }
+
         public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }
