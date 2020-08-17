@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Shared.DTOs
 {
@@ -25,7 +24,6 @@ namespace BlogEngine.Shared.DTOs
         public string LastUpdateBy { get; set; }
 
         public byte[] Cover { get; set; }
-
-        public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
+        public List<int> CategoryIDs { get; set; } = new List<int>();
     }
 }

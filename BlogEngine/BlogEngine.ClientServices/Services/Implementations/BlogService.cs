@@ -33,7 +33,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public async Task<BlogUpdateDTO> GetBlogUpdateDTOAsync(int id)
         {
-            return await _httpService.GetHelperAsync<BlogUpdateDTO>($"{Url}/update/{id}");
+            return await _httpService.GetHelperAsync<BlogUpdateDTO>($"{Url}/edit/{id}");
         }
 
         public async Task<BlogDTO> UpdateBlogAsync(int id, BlogUpdateDTO blogUpdateDTO)

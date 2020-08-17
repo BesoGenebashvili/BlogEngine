@@ -57,7 +57,7 @@ namespace BlogEngine.Core.Data.DatabaseContexts
             var now = DateTime.Now;
 
             var addedEntities = ChangeTracker.Entries()
-                .Where(E => E.State == EntityState.Added)
+                .Where(e => e.State == EntityState.Added && e.Entity is BaseEntity)
                 .ToList();
 
             addedEntities.ForEach(e =>
@@ -67,7 +67,7 @@ namespace BlogEngine.Core.Data.DatabaseContexts
             });
 
             var editedEntities = ChangeTracker.Entries()
-                .Where(E => E.State == EntityState.Modified)
+                .Where(e => e.State == EntityState.Modified && e.Entity is BaseEntity)
                 .ToList();
 
             editedEntities.ForEach(e =>

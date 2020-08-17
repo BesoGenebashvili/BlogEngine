@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using AutoMapper;
@@ -13,15 +12,18 @@ namespace BlogEngine.Server.Services.Implementations
     public class BlogService : IBlogService
     {
         private readonly IBlogRepository _blogRepository;
+        private ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly IReadingTimeEstimator _readingTimeEstimator;
 
         public BlogService(
             IBlogRepository blogRepository,
+            ICategoryRepository categoryRepository,
             IMapper mapper,
             IReadingTimeEstimator readingTimeEstimator)
         {
             _blogRepository = blogRepository;
+            _categoryRepository = categoryRepository;
             _mapper = mapper;
             _readingTimeEstimator = readingTimeEstimator;
         }
@@ -42,6 +44,30 @@ namespace BlogEngine.Server.Services.Implementations
             if (blogEntity == null) return null;
 
             return ToUpdateDTO(blogEntity);
+        }
+
+        public async Task<BlogEditPageDTO> GetEditPageDTOAsync(int id)
+        {
+            var blogEntity = await GetUpdateDTOAsync(id);
+
+            if (blogEntity == null) return null;
+
+            var allCategories = await _categoryRepository.GetAllWithReferences();
+
+            var selectedCategories = allCategories
+                .Where(c => blogEntity.CategoryIDs.Contains(c.ID))
+                .ToList();
+
+            var notSelectedCategories = allCategories
+                .Where(c => !blogEntity.CategoryIDs.Contains(c.ID))
+                .ToList();
+
+            return new BlogEditPageDTO()
+            {
+                BlogUpdateDTO = blogEntity,
+                SelectedCategoryDTOs = _mapper.Map<List<CategoryDTO>>(selectedCategories),
+                NotSelectedCategoryDTOs = _mapper.Map<List<CategoryDTO>>(notSelectedCategories)
+            };
         }
 
         public async Task<List<BlogDTO>> GetAllAsync()

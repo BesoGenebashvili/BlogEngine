@@ -17,7 +17,5 @@ namespace BlogEngine.Shared.DTOs
         [DataType(DataType.Text)]
         [MaxLength(50, ErrorMessage = "Last Update By should not be more than 50 Characters")]
         public string LastUpdateBy { get; set; }
-
-        public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }

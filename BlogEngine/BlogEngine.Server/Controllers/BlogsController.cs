@@ -55,15 +55,15 @@ namespace BlogEngine.Server.Controllers
             return new CreatedAtRouteResult("GetBlog", new { insertedBlog.ID }, insertedBlog);
         }
 
-        //GET api/blogs/update/{id}
-        [HttpGet("update/{id:int}")]
-        public async Task<ActionResult<BlogUpdateDTO>> PutGet(int id)
+        //GET api/blogs/edit/{id}
+        [HttpGet("edit/{id:int}")]
+        public async Task<ActionResult<BlogEditPageDTO>> PutGet(int id)
         {
-            var blogFromDb = await _blogService.GetUpdateDTOAsync(id);
+            var editPageDTO = await _blogService.GetEditPageDTOAsync(id);
 
-            if (blogFromDb == null) return NotFound();
+            if (editPageDTO == null) return NotFound();
 
-            return blogFromDb;
+            return editPageDTO;
         }
 
         //PUT api/blogs/{id}
