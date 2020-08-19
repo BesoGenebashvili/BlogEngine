@@ -2,15 +2,15 @@
 
 namespace BlogEngine.Core.Data.Entities
 {
-    public class Comment : BaseEntity
+    public class BaseComment : BaseEntity
     {
+        public int BlogID { get; set; }
+
         [Required]
         [StringLength(300, ErrorMessage = "Comment {0} should not be more than 300 Characters")]
         [DataType(DataType.MultilineText)]
         public string Body { get; set; }
 
-        public bool Edited { get; set; }
-
-        // TODO: add rate column
+        // TODO: add rate and edited column
     }
 }

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
-using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -22,7 +21,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             return Task.FromResult(_context.Blogs
                  .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
-                 .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
+                 .Include(b => b.MainComments).ThenInclude(mc => mc.SubComments)
                  .AsEnumerable());
         }
 
@@ -31,7 +30,7 @@ namespace BlogEngine.Core.Services.Implementations
             return _context.Blogs
                 .Where(b => b.ID.Equals(id))
                 .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
-                .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
+                .Include(b => b.MainComments).ThenInclude(mc => mc.SubComments)
                 .FirstOrDefault();
         }
 
@@ -40,7 +39,7 @@ namespace BlogEngine.Core.Services.Implementations
             return await _context.Blogs
                 .Where(b => b.ID.Equals(id))
                 .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
-                .Include(b => b.BlogComments).ThenInclude(bc => bc.Comment)
+                .Include(b => b.MainComments).ThenInclude(mc => mc.SubComments)
                 .FirstOrDefaultAsync();
         }
 
@@ -68,28 +67,6 @@ namespace BlogEngine.Core.Services.Implementations
              .Load();
 
             return entity;
-        }
-
-        public async Task<Comment> AddCommentAsync(int id, Comment comment)
-        {
-            var entityFromDb = await GetByIdAsync(id);
-
-            NullCheckThrowNotFoundException(entityFromDb);
-
-            entityFromDb.BlogComments.Add(new BlogComment() { Comment = comment });
-
-            await SaveChangesAsync();
-
-            return comment;
-        }
-
-        public async Task<IEnumerable<Comment>> GetAllCommentsByBlogIdAsync(int id)
-        {
-            var entityFromDb = await GetByIdAsync(id);
-
-            NullCheckThrowNotFoundException(entityFromDb);
-
-            return entityFromDb.BlogComments.Select(bc => bc.Comment);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace BlogEngine.Core.Data.Entities
         // TODO: add rate column
         // TODO: add publish date column
 
-        public List<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
+        public List<MainComment> MainComments { get; set; } = new List<MainComment>();
         public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }

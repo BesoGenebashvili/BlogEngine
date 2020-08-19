@@ -13,8 +13,7 @@ namespace BlogEngine.Shared.DTOs
         public int EstimatedReadingTimeInMinutes { get; set; }
         public byte[] Cover { get; set; }
 
-        public List<BlogComment> BlogComments { get; set; } = new List<BlogComment>();
-
+        public List<MainCommentDTO> MainCommentDTOs { get; set; } = new List<MainCommentDTO>();
         public List<CategoryDTO> CategoryDTOs { get; set; } = new List<CategoryDTO>();
     }
 }

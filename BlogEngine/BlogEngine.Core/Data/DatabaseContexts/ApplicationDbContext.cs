@@ -11,11 +11,11 @@ namespace BlogEngine.Core.Data.DatabaseContexts
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Blog> Blogs { get; set; }
-        public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<BlogComment> BlogComments { get; set; }
         public DbSet<BlogCategory> BlogCategories { get; set; }
-
+        public DbSet<MainComment> MainComments { get; set; }
+        public DbSet<SubComment> SubComments { get; set; }
+        
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
@@ -23,7 +23,6 @@ namespace BlogEngine.Core.Data.DatabaseContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BlogCategory>().HasKey(b => new { b.BlogID, b.CategoryID });
-            modelBuilder.Entity<BlogComment>().HasKey(b => new { b.BlogID, b.CommentID });
 
             base.OnModelCreating(modelBuilder);
         }
