@@ -73,10 +73,6 @@ namespace BlogEngine.Server.Services.Implementations
 
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            var entity = await _repository.GetByIdAsync(id);
-
-            if (entity == null) return false;
-
             return await _repository.DeleteAsync(id);
         }
 

@@ -7,7 +7,9 @@ namespace BlogEngine.Core.Services.Abstractions
     public interface ICommentRepository
     {
         Task<MainComment> GetMainCommentByIdAsync(int id);
+        Task<SubComment> GetSubCommentByIdAsync(int id);
         Task<IEnumerable<MainComment>> GetMainCommentsByBlogIdAsync(int id);
+        Task<IEnumerable<SubComment>> GetSubCommentsByBlogIdAsync(int id);
         Task<MainComment> InsertMainCommentAsync(MainComment mainComment);
         Task<SubComment> InsertSubCommentAsync(SubComment subComment);
         Task<bool> DeleteMainCommentAsync(int id);

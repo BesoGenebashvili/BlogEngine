@@ -14,7 +14,8 @@ namespace BlogEngine.Server.DataHelpers
             #region Blog
 
             CreateMap<Blog, BlogDTO>()
-                .ForMember(d => d.CategoryDTOs, opt => opt.MapFrom(MapCategoryDTOs));
+                .ForMember(d => d.CategoryDTOs, opt => opt.MapFrom(MapCategoryDTOs))
+                .ForMember(d => d.MainCommentDTOs, opt => opt.MapFrom(s => s.MainComments));
 
             CreateMap<BlogCreationDTO, Blog>()
                 .ForMember(d => d.BlogCategories, opt => opt.MapFrom(MapCategoryIDs));
@@ -33,6 +34,19 @@ namespace BlogEngine.Server.DataHelpers
             CreateMap<CategoryCreationDTO, Category>();
 
             CreateMap<CategoryUpdateDTO, Category>().ReverseMap();
+
+            #endregion
+
+            #region Comment
+
+            CreateMap<CommentCreationDTO, MainComment>().ReverseMap();
+
+            CreateMap<MainComment, MainCommentDTO>()
+                .ForMember(d => d.SubCommentDTOs, opt => opt.MapFrom(s => s.SubComments));
+
+            CreateMap<CommentCreationDTO, SubComment>().ReverseMap();
+
+            CreateMap<SubComment, SubCommentDTO>();
 
             #endregion
         }

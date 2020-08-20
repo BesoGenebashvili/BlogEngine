@@ -53,6 +53,10 @@ namespace BlogEngine.Server
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<ICategoryService, CategoryService>();
+
+            services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<ICommentService, CommentService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
