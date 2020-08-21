@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
+using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +31,40 @@ namespace BlogEngine.Server.Services.Implementations
                 blogs = blogs.Where(b => b.Title.Contains(blogSearchDTO.Title, System.StringComparison.OrdinalIgnoreCase));
             }
 
+            blogs = OrderBlogs(blogs, blogSearchDTO.SortOrder, blogSearchDTO.BlogOrderBy);
+
             return _mapper.Map<List<BlogDTO>>(blogs);
+        }
+
+
+        protected IEnumerable<Blog> OrderBlogs(IEnumerable<Blog> blogs, SortOrder sortOrder, BlogOrderBy blogOrderBy)
+        {
+            switch (sortOrder)
+            {
+                case SortOrder.Ascending: return OrderByAscending(blogs, blogOrderBy);
+                case SortOrder.Descending: return OrderByDescending(blogs, blogOrderBy);
+                default: return OrderByDescending(blogs, blogOrderBy);
+            }
+        }
+
+        protected IEnumerable<Blog> OrderByAscending(IEnumerable<Blog> blogs, BlogOrderBy blogOrderBy)
+        {
+            switch (blogOrderBy)
+            {
+                case BlogOrderBy.DateCreated: return blogs.OrderBy(b => b.DateCreated);
+                case BlogOrderBy.LastUpdateDate: return blogs.OrderBy(b => b.LastUpdateDate);
+                default: return blogs;
+            }
+        }
+
+        protected IEnumerable<Blog> OrderByDescending(IEnumerable<Blog> blogs, BlogOrderBy blogOrderBy)
+        {
+            switch (blogOrderBy)
+            {
+                case BlogOrderBy.DateCreated: return blogs.OrderByDescending(b => b.DateCreated);
+                case BlogOrderBy.LastUpdateDate: return blogs.OrderByDescending(b => b.LastUpdateDate);
+                default: return blogs;
+            }
         }
     }
 }

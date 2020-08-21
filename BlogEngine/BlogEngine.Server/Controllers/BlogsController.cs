@@ -76,7 +76,7 @@ namespace BlogEngine.Server.Controllers
 
             if (blogDTO == null) return NotFound();
 
-            return blogDTO; // TODO: Fix BUG: Updated blog have not included new category.
+            return blogDTO;
         }
 
         //DELETE api/blogs/{id}

@@ -68,5 +68,31 @@ namespace BlogEngine.Core.Services.Implementations
 
             return entity;
         }
+
+        public override Blog Update(Blog entity)
+        {
+            entity = base.Update(entity);
+
+            _context.Entry(entity)
+             .Collection(b => b.BlogCategories)
+             .Query()
+             .Include(b => b.Category)
+             .Load();
+
+            return entity;
+        }
+
+        public override async Task<Blog> UpdateAsync(Blog entity)
+        {
+            entity = await base.UpdateAsync(entity);
+
+            _context.Entry(entity)
+             .Collection(b => b.BlogCategories)
+             .Query()
+             .Include(b => b.Category)
+             .Load();
+
+            return entity;
+        }
     }
 }
