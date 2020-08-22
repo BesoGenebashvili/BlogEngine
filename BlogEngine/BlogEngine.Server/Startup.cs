@@ -57,6 +57,8 @@ namespace BlogEngine.Server
             services.AddScoped<ICommentRepository, CommentRepository>();
 
             services.AddScoped<ICommentService, CommentService>();
+
+            services.AddScoped<IPageService, PageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
