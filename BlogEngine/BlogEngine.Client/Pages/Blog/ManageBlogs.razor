@@ -1,5 +1,5 @@
 ﻿@page "/blog/manage"
-@inject IBlogService BlogService
+@inject IBlogClient BlogClient
 
 <BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete"/>
 
@@ -13,12 +13,12 @@
 
     private async Task OnBlogDelete(int id)
     {
-        await BlogService.DeleteBlogAsync(id);
+        await BlogClient.DeleteAsync(id);
         await LoadPage();
     }
 
     private async Task LoadPage()
     {
-        _blogDTOs = await BlogService.GetBlogsAsync();
+        _blogDTOs = await BlogClient.GetAllAsync();
     }
 }

@@ -1,6 +1,6 @@
 ﻿@page "/blog/edit/{ID:int}"
 @page "/blog/edit/{ID:int}/{Title}"
-@inject IBlogService BlogService
+@inject IBlogClient BlogClient
 @inject NavigationManager NavigationManager
 
 @if (_blogUpdateDTO == null)
@@ -9,7 +9,7 @@
 }
 else
 {
-    <EditBlogForm BlogUpdateDTO="_blogUpdateDTO" ValidSubmit="OnValidSubmit"/>
+    <EditBlogForm BlogUpdateDTO="_blogUpdateDTO" ValidSubmit="OnValidSubmit" />
 }
 
 @code {
@@ -20,12 +20,12 @@ else
 
     protected async override Task OnInitializedAsync()
     {
-        _blogUpdateDTO = await BlogService.GetBlogUpdateDTOAsync(ID);
+        _blogUpdateDTO = await BlogClient.GetUpdateDTOAsync(ID);
     }
 
     private async Task OnValidSubmit()
     {
-        var updatedBlog = await BlogService.UpdateBlogAsync(ID, _blogUpdateDTO);
+        var updatedBlog = await BlogClient.UpdateAsync(ID, _blogUpdateDTO);
         NavigationManager.NavigateTo($"blog/view/{updatedBlog.ID}");
     }
 }

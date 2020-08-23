@@ -1,5 +1,5 @@
 ﻿@page "/blog/create"
-@inject IBlogService BlogService
+@inject IBlogClient BlogClient
 @inject NavigationManager NavigationManager
 
 <TextCenter Text="Create Blog" />
@@ -11,7 +11,7 @@
 
     private async Task OnValidSubmit()
     {
-        var blogDTO = await BlogService.CreateBlogAsync(_blogCreationDTO);
+        var blogDTO = await BlogClient.CreateAsync(_blogCreationDTO);
         NavigationManager.NavigateTo($"blog/view/{blogDTO.ID}");
     }
 }

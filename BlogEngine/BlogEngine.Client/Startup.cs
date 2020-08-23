@@ -44,7 +44,7 @@ namespace BlogEngine.Client
             services.AddScoped<IHttpService, HttpService>();
 
             // blog service for api calls
-            services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IBlogClient, BlogClient>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

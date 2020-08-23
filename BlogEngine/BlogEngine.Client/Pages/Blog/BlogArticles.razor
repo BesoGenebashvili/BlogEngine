@@ -1,5 +1,5 @@
 ﻿@page "/blog/articles"
-@inject IBlogService BlogService
+@inject IBlogClient BlogClient
 
 <BlogArticleList BlogDTOs="_blogDTOs" />
 
@@ -8,6 +8,6 @@
 
     protected async override Task OnInitializedAsync()
     {
-        _blogDTOs = await BlogService.GetBlogsAsync();
+        _blogDTOs = await BlogClient.GetAllAsync();
     }
 }
