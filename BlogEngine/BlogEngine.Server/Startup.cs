@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using AutoMapper;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Services.Abstractions;
@@ -11,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 namespace BlogEngine.Server
@@ -59,10 +63,42 @@ namespace BlogEngine.Server
             services.AddScoped<ICommentService, CommentService>();
 
             services.AddScoped<IPageService, PageService>();
+
+            services.AddSwaggerGen(config =>
+            {
+                var openApiContact = new OpenApiContact()
+                {
+                    Name = "Beso Genebashvili",
+                    Email = "genebashvili99@gmail.com",
+                    Url = new Uri("https://github.com/BesoGenebashvili")
+                };
+
+                var openApiInfo = new OpenApiInfo()
+                {
+                    Version = "v1",
+                    Title = "BlogEngine.API",
+                    Description = "This is a Web API for BlogEngine project",
+                    Contact = openApiContact
+                };
+
+                config.SwaggerDoc("v1", openApiInfo);
+
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                config.IncludeXmlComments(xmlPath);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSwagger();
+
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "BlogEngine.API");
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
