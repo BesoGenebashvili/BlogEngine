@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Server.Services.Abstractions;
+using Microsoft.AspNetCore.Http;
+using BlogEngine.Shared.Models;
 
 namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
     public class BlogsController : ControllerBase
     {
         private readonly IBlogService _blogService;
@@ -21,6 +24,7 @@ namespace BlogEngine.Server.Controllers
 
         //GET api/blogs
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
         public async Task<ActionResult<List<BlogDTO>>> Get()
         {
             return await _blogService.GetAllAsync();
@@ -28,6 +32,8 @@ namespace BlogEngine.Server.Controllers
 
         //GET api/blogs/{id}
         [HttpGet("{id:int}", Name = "GetBlog")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogDTO))]
         public async Task<ActionResult<BlogDTO>> Get(int id)
         {
             var blogDTO = await _blogService.GetByIdAsync(id);
@@ -39,6 +45,7 @@ namespace BlogEngine.Server.Controllers
 
         //GET api/blogs/search
         [HttpGet("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
         public async Task<ActionResult<List<BlogDTO>>> Search([FromQuery] BlogSearchDTO blogSearchDTO)
         {
             return await _blogSearchService.SearchAsync(blogSearchDTO);
@@ -46,6 +53,8 @@ namespace BlogEngine.Server.Controllers
 
         //POST api/blogs
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(BlogDTO))]
         public async Task<ActionResult> Post([FromBody] BlogCreationDTO blogCreationDTO)
         {
             if (blogCreationDTO == null) return BadRequest();
@@ -57,6 +66,8 @@ namespace BlogEngine.Server.Controllers
 
         //GET api/blogs/edit/{id}
         [HttpGet("edit/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogEditPageDTO))]
         public async Task<ActionResult<BlogEditPageDTO>> PutGet(int id)
         {
             var editPageDTO = await _blogService.GetEditPageDTOAsync(id);
@@ -68,6 +79,9 @@ namespace BlogEngine.Server.Controllers
 
         //PUT api/blogs/{id}
         [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogDTO))]
         public async Task<ActionResult<BlogDTO>> Put(int id, [FromBody] BlogUpdateDTO blogUpdateDTO)
         {
             if (blogUpdateDTO == null) return BadRequest();
@@ -81,6 +95,7 @@ namespace BlogEngine.Server.Controllers
 
         //DELETE api/blogs/{id}
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Delete(int id)
         {
             return await _blogService.DeleteAsync(id);

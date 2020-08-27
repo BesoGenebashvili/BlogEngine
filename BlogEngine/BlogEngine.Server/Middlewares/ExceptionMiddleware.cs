@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BlogEngine.Core.Exceptions;
 using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Http;
 

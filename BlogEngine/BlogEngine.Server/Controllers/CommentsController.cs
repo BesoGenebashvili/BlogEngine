@@ -1,5 +1,7 @@
 ﻿using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -7,6 +9,7 @@ namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
     public class CommentsController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -17,6 +20,8 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("main/{id}", Name = "getMain")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MainCommentDTO))]
         public async Task<ActionResult<MainCommentDTO>> GetMain(int id)
         {
             var mainCommentDTO = await _commentService.GetMainCommentByIdAsync(id);
@@ -27,6 +32,8 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("sub/{id}", Name = "getSub")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SubCommentDTO))]
         public async Task<ActionResult<SubCommentDTO>> GetSub(int id)
         {
             var SubCommentDTO = await _commentService.GetSubCommentByIdAsync(id);
@@ -37,6 +44,8 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpPost("main")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MainCommentDTO))]
         public async Task<ActionResult<MainCommentDTO>> PostMain(CommentCreationDTO commentCreationDTO)
         {
             if (commentCreationDTO == null) return BadRequest();
@@ -53,6 +62,8 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpPost("sub")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SubCommentDTO))]
         public async Task<ActionResult<SubCommentDTO>> PostSub(CommentCreationDTO commentCreationDTO)
         {
             if (commentCreationDTO == null) return BadRequest();
@@ -69,12 +80,14 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpDelete("main/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> DeleteMain(int id)
         {
             return await _commentService.DeleteMainCommentAsync(id);
         }
 
         [HttpDelete("sub/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> DeleteSub(int id)
         {
             return await _commentService.DeleteSubCommentAsync(id);
