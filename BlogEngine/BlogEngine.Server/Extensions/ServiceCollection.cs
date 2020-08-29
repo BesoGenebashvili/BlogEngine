@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using BlogEngine.Server.Attributes;
 
 namespace BlogEngine.Server.Extensions
 {
@@ -70,6 +72,17 @@ namespace BlogEngine.Server.Extensions
                 configuration.AllowNullCollections = true;
                 configuration.AllowNullDestinationValues = true;
             }, typeof(Startup));
+        }
+
+        public static IServiceCollection AddHATEOASServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            services.AddTransient<CategoryHATEOASAttribute>();
+
+            services.AddTransient<ILinksGenerator, LinksGenerator>();
+
+            return services;
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)

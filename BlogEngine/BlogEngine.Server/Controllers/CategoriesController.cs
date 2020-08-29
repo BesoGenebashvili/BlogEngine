@@ -1,9 +1,11 @@
-﻿using BlogEngine.Server.Services.Abstractions;
+﻿using BlogEngine.Server.Attributes;
+using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Controllers
@@ -20,14 +22,16 @@ namespace BlogEngine.Server.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "getCategories")]
+        [ServiceFilter(typeof(CategoryHATEOASAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDTO>))]
         public async Task<ActionResult<List<CategoryDTO>>> Get()
         {
             return await _categoryService.GetAllAsync();
         }
 
-        [HttpGet("{id:int}", Name = "GetCategory")]
+        [HttpGet("{id:int}", Name = "getCategory")]
+        [ServiceFilter(typeof(CategoryHATEOASAttribute))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDTO))]
         public async Task<ActionResult<CategoryDTO>> Get(int id)
@@ -39,7 +43,7 @@ namespace BlogEngine.Server.Controllers
             return categoryDTO;
         }
 
-        [HttpPost]
+        [HttpPost(Name = "createCategory")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDTO))]
         public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
@@ -48,10 +52,10 @@ namespace BlogEngine.Server.Controllers
 
             var categoryDTO = await _categoryService.InsertAsync(categoryCreationDTO);
 
-            return new CreatedAtRouteResult("GetCategory", new { categoryDTO.ID }, categoryDTO);
+            return new CreatedAtRouteResult("getCategory", new { categoryDTO.ID }, categoryDTO);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:int}", Name = "updateCategory")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDTO))]
@@ -66,7 +70,7 @@ namespace BlogEngine.Server.Controllers
             return categoryDTO;
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}", Name = "deleteCategory")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Delete(int id)
         {

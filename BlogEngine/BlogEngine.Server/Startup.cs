@@ -31,6 +31,8 @@ namespace BlogEngine.Server
             services.AddMapper();
 
             services.AddSwagger();
+
+            services.AddHATEOASServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
