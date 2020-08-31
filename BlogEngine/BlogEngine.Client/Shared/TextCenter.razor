@@ -1,7 +1,8 @@
 ﻿<div class="text-center">
-    <h3 class="text-dark">@Text</h3>
+    <h3 class="text-dark @Css">@Text</h3>
 </div>
 
 @code{
     [Parameter] public string Text { get; set; }
+    [Parameter] public string Css { get; set; }
 }

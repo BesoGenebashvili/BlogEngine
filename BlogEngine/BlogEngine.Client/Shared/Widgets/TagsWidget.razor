@@ -1,0 +1,22 @@
+﻿<div class="card @CardCss">
+    <h5 class="card-header">@CardHeader</h5>
+    <div class="card-body">
+        <a class="btn m-1 btn-light">IT</a>
+        <a class="btn m-1 btn-light">Back-End</a>
+        <a class="btn m-1 btn-light">Remote</a>
+        <a class="btn m-1 btn-light">Upwork</a>
+        <a class="btn m-1 btn-light">C#</a>
+        <a class="btn m-1 btn-light">C++</a>
+        <a class="btn m-1 btn-light">IT</a>
+        <a class="btn m-1 btn-light">Back-End</a>
+        <a class="btn m-1 btn-light">Remote</a>
+        <a class="btn m-1 btn-light">Upwork</a>
+        <a class="btn m-1 btn-light">C#</a>
+        <a class="btn m-1 btn-light">C++</a>
+    </div>
+</div>
+
+@code{
+    [Parameter] public string CardHeader { get; set; } = "Featured Tags";
+    [Parameter] public string CardCss { get; set; }
+}

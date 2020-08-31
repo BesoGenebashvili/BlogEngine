@@ -2,22 +2,38 @@
 
 <Navigation />
 
-<br>
-<br>
-<br>
-<br>
-<br>
+<!-- Main Container -->
+<div class="container">
 
-<div>
-    @Body
+    <div class="row">
+
+        <!-- Body -->
+        <div class="col-md-8">
+            @Body
+        </div>
+
+        <!-- Sidebar Widgets -->
+        <div class="col-md-4">
+
+            <!-- Search Widget -->
+            <SearchWidget CardCss="my-4" />
+
+            <!-- Categories Widget -->
+            <CategoriesWidget CardCss="my-4" />
+
+            <!-- Tags Widget -->
+            <TagsWidget CardCss="my-4" />
+
+        </div>
+
+    </div>
+
 </div>
 
-@* TODO: add footer <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
+
+<!-- /.container -->
+@* TODO: add footer <br>
     <footer class="bg-dark py-5 position-absolute align-bottom">
         <div class="container">
             <h5 class="text-center text-light m-0">

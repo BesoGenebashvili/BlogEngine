@@ -7,20 +7,10 @@
     <WholeCollectionTemplate>
 
         <!-- blog articles -->
-        <div class="article-section">
-            <div class="container">
-                <div class="row d-flex">
-
-                    @foreach (var blogDTO in BlogDTOs)
-                    {
-                        <div class="col-md-6 col-lg-4">
-                            <IndividualBlogArticle BlogDTO="blogDTO" />
-                        </div>
-                    }
-
-                </div>
-            </div>
-        </div>
+        @foreach (var blogDTO in BlogDTOs)
+        {
+            <IndividualBlogArticle BlogDTO="blogDTO" CardCss="mb-4" />
+        }
 
     </WholeCollectionTemplate>
 </GenericList>

@@ -1,35 +1,37 @@
-﻿<!-- navigation -->
-<nav class="navbar b-navbar fixed-top navbar-expand-sm navbar-light bg-light">
+﻿<!-- Navigation -->
+<nav class="navbar navbar-expand-sm navbar-light bg-light shadow-sm sticky-top">
     <div class="container">
-        <a class="navbar-brand b-navbar-brand" href="/">Blog.</a>
-
-        <button class="navbar-toggler b-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>MENU
+        <a class="navbar-brand" href="/">BLOG</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
         </button>
-
-        <!-- navigation links -->
-        <div class="collapse navbar-collapse" id="navbarToggler">
-            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link b-nav-link mr-4" href="/">Home</a>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link b-nav-link mr-4" href="blog/articles">Articles</a>
+                    <a class="nav-link" href="blog/create">Create Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link b-nav-link mr-4" href="blog/create">Create Blog</a>
+                    <a class="nav-link" href="#">Filter Blogs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link b-nav-link mr-4" href="blog/manage">Manage Blogs</a>
+                    <a class="nav-link" href="blog/manage">Manage Blogs</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link b-nav-link mr-4" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link b-nav-link" href="#">Log in</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="category-dropdown" data-toggle="dropdown"
+                       aria-expanded="false">Category</a>
+                    <ul class="dropdown-menu" aria-labelledby="category-dropdown">
+                        <li><a class="dropdown-item" href="#">Create</a></li>
+                        <li><a class="dropdown-item" href="#">Filter</a></li>
+                        <li><a class="dropdown-item" href="#">Manage</a></li>
+                    </ul>
                 </li>
             </ul>
+            <div>
+                <a class="btn btn-outline-primary" href="#">Log in</a>
+            </div>
         </div>
     </div>
 </nav>

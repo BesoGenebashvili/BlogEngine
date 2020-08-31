@@ -1,39 +1,32 @@
-﻿<div class="blog-entry">
+﻿<div class="card @CardCss">
+
     @if (BlogDTO.Cover == null)
     {
-        <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="block-20"
-           style="background-image: url('css/Images/blog-cover-template.png');"></a>
+        <img class="card-img-top" src="css/Images/blog-cover-template.png">
     }
     else
     {
-        <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="block-20"
-           style="background-image: url('data:image/jpeg;base64,@(Convert.ToBase64String(BlogDTO.Cover))');"></a>
+        <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(BlogDTO.Cover))">
     }
-    <div class="blog-text p-4 float-right d-block">
 
-        <div class="topper d-flex align-items-center">
-            <div class="day-wrapper py-2 pl-3 pr-1 align-self-stretch">
-                <span class="day">@BlogDTO.DateCreated.Value.Day</span>
-            </div>
-            <div class="date-wrapper pl-0 pr-3 py-2 align-self-stretch">
-                <span class="date">@BlogDTO.DateCreated.Value.ToString("yyyy")</span>
-                <span class="date">@BlogDTO.DateCreated.Value.ToString("MMMM")</span>
-            </div>
-        </div>
-
-        <h3 class="blog-heading mb-3">
-            <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title">@BlogDTO.Title</a>
-        </h3>
-        <p>@BlogDTO.ShortDescription</p>
-        <p>
-            <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="read-more-btn">
-                <span style="font-size: 20px;">→</span>
-                READ MORE
-            </a>
+    <div class="card-body">
+        <h2 class="card-title">@BlogDTO.Title</h2>
+        <p class="card-text">
+            @BlogDTO.ShortDescription
         </p>
+        <a href="#" class="btn btn-primary">Read More &rarr;</a>
+    </div>
+
+    <div class="card-footer text-muted">
+        Posted on
+        @BlogDTO.DateCreated.Value.ToString("MMMM")
+        @BlogDTO.DateCreated.Value.Month,
+        @BlogDTO.DateCreated.Value.Year by
+        <a href="#">@(string.IsNullOrWhiteSpace(BlogDTO.CreatedBy) ? "Unknown" : BlogDTO.CreatedBy)</a>
     </div>
 </div>
 
 @code {
     [Parameter] public BlogDTO BlogDTO { get; set; }
+    [Parameter] public string CardCss { get; set; }
 }

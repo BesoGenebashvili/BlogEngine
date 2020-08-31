@@ -1,7 +1,15 @@
 ﻿@page "/"
+@inject IBlogClient _blogClient
 
-<h1>Hello, world!</h1>
+<h1 class="my-4">Latest Posts</h1>
 
-Welcome to your new app.
+<BlogArticleList BlogDTOs="_blogDTOs" />
 
-<br />
+@code{
+    private List<BlogDTO> _blogDTOs;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _blogDTOs = await _blogClient.GetAllAsync();
+    }
+}
