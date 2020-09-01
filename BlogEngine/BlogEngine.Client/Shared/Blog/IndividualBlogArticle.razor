@@ -12,9 +12,9 @@
     <div class="card-body">
         <h2 class="card-title">@BlogDTO.Title</h2>
         <p class="card-text">
-            @BlogDTO.ShortDescription
+            @BlogDTO.ShortDescription.GetStringBrief(225)
         </p>
-        <a href="#" class="btn btn-primary">Read More &rarr;</a>
+        <a href="/blog/view/@BlogDTO.ID/@BlogDTO.Title" class="btn btn-primary">Read More &rarr;</a>
     </div>
 
     <div class="card-footer text-muted">

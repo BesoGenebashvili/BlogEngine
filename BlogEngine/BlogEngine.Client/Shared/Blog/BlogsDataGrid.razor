@@ -1,41 +1,56 @@
 ﻿@inject NavigationManager NavigationManager
 
-<SfGrid DataSource="@BlogDTOs" AllowPaging="true">
-    <GridColumns>
-        <GridColumn Field=@nameof(BlogDTO.ID) HeaderText="ID" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogDTO.Title) HeaderText="Title" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogDTO.DateCreated) HeaderText="Date Created" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogDTO.LastUpdateBy) HeaderText="Date Updated" Type="ColumnType.Date" TextAlign="TextAlign.Center"></GridColumn>
-        <GridColumn Field=@nameof(BlogDTO.Cover) HeaderText="Has A Cover Image" Type="ColumnType.Date" TextAlign="TextAlign.Center">
-            <Template>
-                @{
-                    var blogDTO = context as BlogDTO;
-                    @if (blogDTO.Cover != null)
-                    {
-                        <div>Yes</div>
-                    }
-                    else
-                    {
-                        <div>No</div>
-                    }
-                }
-            </Template>
-        </GridColumn>
-        <GridColumn HeaderText="Actions" TextAlign="TextAlign.Center">
-            <Template>
-                @{
-                    var blogDTO = context as BlogDTO;
-                    string editLink = $"/blog/edit/{blogDTO.ID}/{blogDTO.Title}";
+@if (BlogDTOs == null)
+{
+    <Loading />
+}
+else if (BlogDTOs.Count == 0)
+{
+    <TextCenter Text="No Data Found" />
+}
+else
+{
+    <table class="table table-hover mt-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Short Description</th>
+                <th scope="col">Have Cover</th>
+                <th scope="col">Created By</th>
+                <th scope="col">Date Created</th>
+                <th scope="col">Last Update By</th>
+                <th scope="col">Last Update Date</th>
+                <th scope="col">Reading Time In Minutes</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody> @{ _modelCount = 1;}
+            @foreach (var blogDTO in BlogDTOs)
+            {
+                <tr>
+                    <th scope="row">@(_modelCount++)</th>
+                    <td>@blogDTO.ID</td>
+                    <td>@blogDTO.Title.GetStringBrief(20)</td>
+                    <td>@blogDTO.ShortDescription.GetStringBrief(20)</td>
+                    <td>@(blogDTO.Cover == null ? "yes" : "no")</td>
+                    <td>@blogDTO.CreatedBy</td>
+                    <td>@blogDTO.DateCreated.Value.ToLongDateString()</td>
+                    <td>@blogDTO.LastUpdateBy</td>
+                    <td>@blogDTO.LastUpdateDate.Value.ToLongDateString()</td>
+                    <td>@blogDTO.EstimatedReadingTimeInMinutes Minutes</td>
+                    <td>
+                        <a href="blog/edit/@blogDTO.ID" class="btn btn-warning btn-sm">Edit</a>
+                        <button @onclick="(() => OnDeleteButtonClick(blogDTO))" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
-                    <SfButton @onclick="(() => NavigationManager.NavigateTo(editLink))" CssClass="e-warning e-small">Edit</SfButton>
-                    <SfButton OnClick="(() => OnDeleteButtonClick(blogDTO))" CssClass="e-danger e-small">Delete</SfButton>
-                }
-            </Template>
-        </GridColumn>
-    </GridColumns>
-</SfGrid>
-
-<SfDialog @bind-Visible="@deleteDialogVisible" IsModal="true" Width="400px" ShowCloseIcon="true">
+<SfDialog @bind-Visible="@_deleteDialogVisible" IsModal="true" Width="400px" ShowCloseIcon="true">
     <DialogTemplates>
         <Header>
             Blog Delete
@@ -56,20 +71,21 @@
     [Parameter] public List<BlogDTO> BlogDTOs { get; set; }
     [Parameter] public EventCallback<int> BlogDelete { get; set; }
 
-    private bool deleteDialogVisible = false;
-    private BlogDTO _blogToDelete = null;
+    private int _modelCount;
+    private bool _deleteDialogVisible;
+    private BlogDTO _blogToDelete;
 
     private void OnDeleteButtonClick(BlogDTO blogDTO)
     {
         _blogToDelete = blogDTO;
-        deleteDialogVisible = true;
+        _deleteDialogVisible = true;
     }
 
     private async Task DeleteConfirmed()
     {
         await BlogDelete.InvokeAsync(_blogToDelete.ID);
-        deleteDialogVisible = false;
+        _deleteDialogVisible = false;
     }
 
-    private void DeleteCanceled() => deleteDialogVisible = false;
+    private void DeleteCanceled() => _deleteDialogVisible = false;
 }

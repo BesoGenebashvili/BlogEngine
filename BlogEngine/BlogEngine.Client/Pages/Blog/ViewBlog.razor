@@ -4,16 +4,92 @@
 
 @if (_blogDTO == null)
 {
-    <TextCenter Text="Loading..." />
+    <Loading />
 }
 else
 {
-    <TextCenter Text="@_blogDTO.Title" />
+    <!-- Title -->
+    <h1 class="mt-4">@_blogDTO.Title</h1>
 
-    <br />
+    <!-- Author -->
+    <p class="lead">by<a href="#">@_blogDTO.CreatedBy</a></p>
 
-    <div class="container">
-        @((MarkupString)_blogDTO.HTMLContent)
+    <hr>
+
+    <!-- Date/Time -->
+    <p>
+        Posted on
+        @_blogDTO.DateCreated.Value.ToString("MMMM")
+        @_blogDTO.DateCreated.Value.Month,
+        @_blogDTO.DateCreated.Value.Month at
+        @_blogDTO.DateCreated.Value.ToString("HH:mm")
+    </p>
+
+    <hr>
+
+    <!-- Preview Image -->
+
+    @if (_blogDTO.Cover == null)
+    {
+        <img class="img-fluid rounded" src="css/Images/blog-cover-template.png">
+    }
+    else
+    {
+        <img class="img-fluid rounded" src="data:image/jpeg;base64,@(Convert.ToBase64String(_blogDTO.Cover))">
+    }
+
+    <hr>
+
+    <!-- Post Content -->
+    @((MarkupString)_blogDTO.HTMLContent)
+
+    <hr>
+
+    <!-- Comments Form -->
+    <div class="card my-4">
+        <h5 class="card-header">Leave a Comment:</h5>
+        <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <textarea class="form-control mb-3" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Single Comment -->
+    <div class="media mb-4 d-flex align-items-start">
+        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+        <div class="media-body">
+            <h5 class="mt-0">Commenter Name</h5>
+            MainComment text 1
+        </div>
+    </div>
+
+    <!-- Comment with nested comments -->
+    <div class="media mb-4 d-flex align-items-start">
+        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+        <div class="media-body">
+            <h5 class="mt-0">Commenter Name</h5>
+            MainComment text 2
+            <div class="media mt-4 d-flex align-items-start">
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0">Commenter Name</h5>
+                    SubComment text 1
+                </div>
+            </div>
+
+            <div class="media mt-4 d-flex align-items-start">
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                <div class="media-body">
+                    <h5 class="mt-0">Commenter Name</h5>
+                    SubComment text 2
+                </div>
+            </div>
+
+        </div>
     </div>
 }
 

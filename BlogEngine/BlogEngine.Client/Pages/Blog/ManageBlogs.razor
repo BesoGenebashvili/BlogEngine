@@ -1,7 +1,10 @@
 ﻿@page "/blog/manage"
+@layout NavigationLayout
 @inject IBlogClient BlogClient
 
-<BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete"/>
+<TextCenter Text="Manage Blogs" />
+
+<BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete" />
 
 @code {
     private List<BlogDTO> _blogDTOs = null;

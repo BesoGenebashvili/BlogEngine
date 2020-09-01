@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Shared.DTOs
 {
