@@ -15,11 +15,13 @@ namespace BlogEngine.Server.Controllers
     {
         private readonly IBlogService _blogService;
         private readonly IBlogSearchService _blogSearchService;
+        private readonly INotificationSender _notificationSender;
 
-        public BlogsController(IBlogService blogService, IBlogSearchService blogSearchService)
+        public BlogsController(IBlogService blogService, IBlogSearchService blogSearchService, INotificationSender notificationSender)
         {
             _blogService = blogService;
             _blogSearchService = blogSearchService;
+            _notificationSender = notificationSender;
         }
 
         //GET api/blogs
@@ -60,6 +62,8 @@ namespace BlogEngine.Server.Controllers
             if (blogCreationDTO == null) return BadRequest();
 
             var insertedBlog = await _blogService.InsertAsync(blogCreationDTO);
+
+            await _notificationSender.SendBlogPostNotificationsAsync(insertedBlog);
 
             return new CreatedAtRouteResult("GetBlog", new { insertedBlog.ID }, insertedBlog);
         }

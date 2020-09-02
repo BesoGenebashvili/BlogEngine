@@ -33,6 +33,8 @@ namespace BlogEngine.Server
             services.AddSwagger();
 
             services.AddHATEOASServices();
+
+            services.AddMailServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

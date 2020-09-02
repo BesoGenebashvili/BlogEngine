@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using BlogEngine.Server.Attributes;
+using BlogEngine.Shared.Models;
 
 namespace BlogEngine.Server.Extensions
 {
@@ -35,6 +36,8 @@ namespace BlogEngine.Server.Extensions
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<INotificationReceiverRepository, NotificationReceiverRepository>();
 
             return services;
         }
@@ -63,6 +66,24 @@ namespace BlogEngine.Server.Extensions
                 {
                     jsonOptions.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
+        }
+
+        public static IServiceCollection AddMailServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<SMTPConfig>(configuration.GetSection("SMTPConfig"));
+
+            services.AddTransient<IMailService, MailService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddNotificationServices(this IServiceCollection services)
+        {
+            services.AddTransient<INotificationBodyBuilder, NotificationBodyBuilder>();
+
+            services.AddTransient<INotificationSender, NotificationSender>();
+
+            return services;
         }
 
         public static IServiceCollection AddMapper(this IServiceCollection services)

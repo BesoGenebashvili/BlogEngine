@@ -15,7 +15,8 @@ namespace BlogEngine.Core.Data.DatabaseContexts
         public DbSet<BlogCategory> BlogCategories { get; set; }
         public DbSet<MainComment> MainComments { get; set; }
         public DbSet<SubComment> SubComments { get; set; }
-        
+        public DbSet<NotificationReceiver> NotificationReceivers { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
