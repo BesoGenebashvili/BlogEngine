@@ -35,6 +35,8 @@ namespace BlogEngine.Server
             services.AddHATEOASServices();
 
             services.AddMailServices(Configuration);
+
+            services.AddNotificationServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

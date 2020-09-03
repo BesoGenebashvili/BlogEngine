@@ -56,6 +56,8 @@ namespace BlogEngine.Server.Extensions
 
             services.AddScoped<IPageService, PageService>();
 
+            services.AddScoped<INotificationReceiverService, NotificationReceiverService>();
+
             return services;
         }
 
@@ -110,6 +112,7 @@ namespace BlogEngine.Server.Extensions
         {
             return services.AddSwaggerGen(config =>
             {
+                // TODO: use config.json file for this values
                 var openApiContact = new OpenApiContact()
                 {
                     Name = "Beso Genebashvili",

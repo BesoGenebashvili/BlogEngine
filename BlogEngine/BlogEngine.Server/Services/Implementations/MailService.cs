@@ -11,7 +11,7 @@ namespace BlogEngine.Server.Services.Implementations
 {
     public class MailService : IMailService
     {
-        private SMTPConfig _SMTPConfig;
+        private readonly SMTPConfig _SMTPConfig;
 
         public MailService(IOptions<SMTPConfig> options)
         {

@@ -49,6 +49,14 @@ namespace BlogEngine.Server.DataHelpers
             CreateMap<SubComment, SubCommentDTO>();
 
             #endregion
+
+            #region Notification
+
+            CreateMap<NotificationReceiverCreationDTO, NotificationReceiver>();
+
+            CreateMap<NotificationReceiver, NotificationReceiverDTO>();
+
+            #endregion
         }
 
         private List<BlogCategory> MapCategoryIDs(BlogCreationDTO blogCreationDTO, Blog blog)

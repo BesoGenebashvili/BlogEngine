@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -73,7 +73,11 @@ namespace BlogEngine.Server.Services.Implementations
 
         public virtual async Task<bool> DeleteAsync(int id)
         {
-            return await _repository.DeleteAsync(id);
+            var entity = await _repository.GetByIdAsync(id);
+
+            if (entity == null) return false;
+
+            return await _repository.DeleteAsync(entity.ID);
         }
 
         protected TEntity ToEntity(TCreationDTO creationDTO) => _mapper.Map<TEntity>(creationDTO);

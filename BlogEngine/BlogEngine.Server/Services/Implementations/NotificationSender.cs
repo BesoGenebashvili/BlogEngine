@@ -10,7 +10,6 @@ namespace BlogEngine.Server.Services.Implementations
 {
     public class NotificationSender : INotificationSender
     {
-
         private readonly IMailService _mailService;
         private readonly INotificationBodyBuilder _notificationBodyBuilder;
         private readonly INotificationReceiverRepository _notificationReceiverRepository;
