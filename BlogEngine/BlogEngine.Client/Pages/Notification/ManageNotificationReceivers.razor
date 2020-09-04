@@ -1,0 +1,28 @@
+﻿@page "/notificationReceivers/manage"
+@layout NavigationLayout
+@inject NavigationManager NavigationManager
+@inject INotificationReceiverClient NotificationReceiverClient
+
+<TextCenter Text="Manage Notification Receivers" />
+
+<NotificationReceiversDataGrid NotificationReceiverDTOs="_notificationReceiverDTOs" NotificationReceiverDelete="OnNotificationReceiverDelete" />
+
+@code {
+    private List<NotificationReceiverDTO> _notificationReceiverDTOs;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task OnNotificationReceiverDelete(int id)
+    {
+        await NotificationReceiverClient.DeleteAsync(id);
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        _notificationReceiverDTOs = await NotificationReceiverClient.GetAllAsync();
+    }
+}

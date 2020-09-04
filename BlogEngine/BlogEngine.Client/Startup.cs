@@ -1,11 +1,11 @@
 using System;
+using System.IO;
+using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
-using System.Net.Http;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using Blazor.FileReader;
@@ -34,17 +34,16 @@ namespace BlogEngine.Client
                 return new HttpClient { BaseAddress = new Uri("https://localhost:44328") };
             });
 
-            // syncfusion service
             services.AddSyncfusionBlazor();
 
-            // file reader service
             services.AddFileReaderService();
 
-            // http service for api calls
+            // http services for api calls
             services.AddScoped<IHttpService, HttpService>();
 
-            // blog service for api calls
             services.AddScoped<IBlogClient, BlogClient>();
+
+            services.AddScoped<INotificationReceiverClient, NotificationReceiverClient>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,0 +1,85 @@
+﻿@if (NotificationReceiverDTOs == null)
+{
+    <Loading />
+}
+else if (NotificationReceiverDTOs.Count == 0)
+{
+    <TextCenter Text="No Data Found" />
+}
+else
+{
+    <table class="table table-hover mt-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Display Name</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">Created By</th>
+                <th scope="col">Date Created</th>
+                <th scope="col">Last Update By</th>
+                <th scope="col">Last Update Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ _modelCount = 1;}
+            @foreach (var notificationReceiverDTO in NotificationReceiverDTOs)
+            {
+                <tr>
+                    <th scope="row">@(_modelCount++)</th>
+                    <td>@notificationReceiverDTO.ID</td>
+                    <td>@notificationReceiverDTO.DisplayName.GetStringBrief(30)</td>
+                    <td>@notificationReceiverDTO.EmailAddress.GetStringBrief(30)</td>
+                    <td>@notificationReceiverDTO.CreatedBy</td>
+                    <td>@notificationReceiverDTO.DateCreated.Value.ToLongDateString()</td>
+                    <td>@notificationReceiverDTO.LastUpdateBy</td>
+                    <td>@notificationReceiverDTO.LastUpdateDate.Value.ToLongDateString()</td>
+                    <td>
+                        <button @onclick="(() => OnDeleteButtonClick(notificationReceiverDTO))" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<SfDialog @bind-Visible="@_deleteDialogVisible" IsModal="true" Width="400px" ShowCloseIcon="true">
+    <DialogTemplates>
+        <Header>
+            Subscriber Delete
+        </Header>
+        <Content>
+            Are you sure you want to delete Subscriber: @_notificationReceiverDTOToDelete?.DisplayName ?
+        </Content>
+    </DialogTemplates>
+    <DialogEvents Closed="DeleteCanceled"></DialogEvents>
+    <DialogButtons>
+        <DialogButton Content="Yes" IsPrimary="true" OnClick="DeleteConfirmed" />
+        <DialogButton Content="No" OnClick="@DeleteCanceled" />
+    </DialogButtons>
+    <DialogPositionData X="center" Y="center" />
+</SfDialog>
+
+@code{
+    [Parameter] public List<NotificationReceiverDTO> NotificationReceiverDTOs { get; set; }
+    [Parameter] public EventCallback<int> NotificationReceiverDelete { get; set; }
+
+    private int _modelCount;
+    private bool _deleteDialogVisible;
+    private NotificationReceiverDTO _notificationReceiverDTOToDelete;
+
+    private void OnDeleteButtonClick(NotificationReceiverDTO notificationReceiverDTO)
+    {
+        _notificationReceiverDTOToDelete = notificationReceiverDTO;
+        _deleteDialogVisible = true;
+    }
+
+    private async Task DeleteConfirmed()
+    {
+        await NotificationReceiverDelete.InvokeAsync(_notificationReceiverDTOToDelete.ID);
+        _deleteDialogVisible = false;
+    }
+
+    private void DeleteCanceled() => _deleteDialogVisible = false;
+}

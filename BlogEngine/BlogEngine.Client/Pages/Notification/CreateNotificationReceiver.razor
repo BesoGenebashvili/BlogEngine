@@ -1,0 +1,16 @@
+﻿@page "/notificationReceiver/create"
+@layout NavigationLayout
+@inject NavigationManager NavigationManager
+@inject INotificationReceiverClient NotificationReceiverClient
+
+<TextCenter Text="Subscribe" />
+
+<NotificationReceiverCreateForm ValidSubmit="OnValidSubmit" />
+
+@code {
+    private async Task OnValidSubmit(NotificationReceiverCreationDTO notificationReceiverCreationDTO)
+    {
+        await NotificationReceiverClient.CreateAsync(notificationReceiverCreationDTO);
+        NavigationManager.NavigateTo("notificationReceivers/manage");
+    }
+}

@@ -1,0 +1,37 @@
+﻿<EditForm Model="_notificationReceiverCreationDTO" OnValidSubmit="OnDataAnnotationsValidated"
+          class="d-flex justify-content-center align-items-center flex-column">
+    <DataAnnotationsValidator />
+
+    <div class="form-group w-25 my-2">
+        <label class="form-label" for="name">Name</label>
+        <input @bind-value="_notificationReceiverCreationDTO.DisplayName" type="text" class="form-control" id="name">
+        <ValidationMessage For="(()=>_notificationReceiverCreationDTO.DisplayName)" />
+    </div>
+
+    <div class="form-group w-25 my-2">
+        <label class="form-label" for="Email">Email</label>
+        <input @bind-value="_notificationReceiverCreationDTO.EmailAddress" type="email" class="form-control" id="Email">
+        <ValidationMessage For="(()=>_notificationReceiverCreationDTO.EmailAddress)" />
+    </div>
+
+
+    <div class="d-flex flex-row my-3">
+        <button type="reset" disabled="@_actionsDisabled" class="btn btn-warning mr-2">Clear</button>
+        <button type="submit" disabled="@_actionsDisabled" class="btn btn-success ml-2">Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public EventCallback<NotificationReceiverCreationDTO> ValidSubmit { get; set; }
+
+    private NotificationReceiverCreationDTO _notificationReceiverCreationDTO = new NotificationReceiverCreationDTO();
+    private bool _actionsDisabled = false;
+
+    private async Task OnDataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(_notificationReceiverCreationDTO);
+    }
+}
