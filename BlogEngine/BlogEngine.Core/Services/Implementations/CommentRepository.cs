@@ -34,7 +34,7 @@ namespace BlogEngine.Core.Services.Implementations
         public virtual Task<IEnumerable<MainComment>> GetMainCommentsByBlogIdAsync(int id)
         {
             return Task.FromResult(_context.MainComments
-                .Where(mc => mc.Equals(id))
+                .Where(mc => mc.BlogID.Equals(id))
                 .Include(mc => mc.SubComments)
                 .AsEnumerable());
         }
@@ -42,7 +42,7 @@ namespace BlogEngine.Core.Services.Implementations
         public Task<IEnumerable<SubComment>> GetSubCommentsByBlogIdAsync(int id)
         {
             return Task.FromResult(_context.SubComments
-                .Where(sc => sc.Equals(id))
+                .Where(sc => sc.BlogID.Equals(id))
                 .AsEnumerable());
         }
 

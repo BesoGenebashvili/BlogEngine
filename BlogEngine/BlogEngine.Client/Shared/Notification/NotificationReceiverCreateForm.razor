@@ -2,13 +2,13 @@
           class="d-flex justify-content-center align-items-center flex-column">
     <DataAnnotationsValidator />
 
-    <div class="form-group w-25 my-2">
+    <div class="form-group w-50 my-2">
         <label class="form-label" for="name">Name</label>
         <input @bind-value="_notificationReceiverCreationDTO.DisplayName" type="text" class="form-control" id="name">
         <ValidationMessage For="(()=>_notificationReceiverCreationDTO.DisplayName)" />
     </div>
 
-    <div class="form-group w-25 my-2">
+    <div class="form-group w-50 my-2">
         <label class="form-label" for="Email">Email</label>
         <input @bind-value="_notificationReceiverCreationDTO.EmailAddress" type="email" class="form-control" id="Email">
         <ValidationMessage For="(()=>_notificationReceiverCreationDTO.EmailAddress)" />

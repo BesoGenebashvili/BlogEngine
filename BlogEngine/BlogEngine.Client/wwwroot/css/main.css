@@ -5,3 +5,7 @@ body {
 .validation-message {
     color: indianred;
 }
+
+.user-thumbnail {
+    width: 64px;
+}

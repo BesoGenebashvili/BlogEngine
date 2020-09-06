@@ -1,6 +1,7 @@
 ﻿using BlogEngine.ClientServices.Extensions;
 using BlogEngine.ClientServices.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlogEngine.ClientServices.Services.Implementations
@@ -15,6 +16,17 @@ namespace BlogEngine.ClientServices.Services.Implementations
         {
             _httpService = httpService;
         }
+
+        public async Task<List<MainCommentDTO>> GetMainCommentsByBlogIdAsync(int id)
+        {
+            return await _httpService.GetHelperAsync<List<MainCommentDTO>>($"{MainUrl}/blog/{id}");
+        }
+
+        public async Task<List<SubCommentDTO>> GetSubCommentsByBlogIdAsync(int id)
+        {
+            return await _httpService.GetHelperAsync<List<SubCommentDTO>>($"{SubUrl}/blog/{id}");
+        }
+
         public async Task<MainCommentDTO> GetMainCommentByIdAsync(int id)
         {
             return await _httpService.GetHelperAsync<MainCommentDTO>($"{MainUrl}/{id}");

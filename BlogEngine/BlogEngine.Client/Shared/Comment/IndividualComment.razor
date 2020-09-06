@@ -1,0 +1,37 @@
+﻿<div class="@MainCommentWrapperCss">
+    <img class="d-flex mr-3 rounded-circle user-thumbnail" src="css/Images/user_template_128px.png" alt="user icon">
+    <div class="media-body">
+        <h5 class="mt-0">
+            Unknown
+            <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
+            <span @onclick="(async() => await MainCommentDelete.InvokeAsync(MainCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+        </h5>
+        @MainCommentDTO.Body
+
+        @foreach (var subCommentDTO in MainCommentDTO.SubCommentDTOs)
+        {
+            <!-- SubComment  -->
+            <div class="@SubCommentWrapperCss">
+                <img class="d-flex mr-3 rounded-circle user-thumbnail" src="css/Images/user_template_128px.png" alt="user icon">
+                <div class="media-body">
+                    <h5 class="mt-0">
+                        Unknown
+                        <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
+                        <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                    </h5>
+                    @subCommentDTO.Body
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@code {
+    [Parameter] public MainCommentDTO MainCommentDTO { get; set; }
+    [Parameter] public string MainCommentWrapperCss { get; set; }
+    [Parameter] public string SubCommentWrapperCss { get; set; }
+    [Parameter] public EventCallback<MainCommentDTO> CommentClickedForReply { get; set; }
+    [Parameter] public EventCallback<int> MainCommentDelete { get; set; }
+    [Parameter] public EventCallback<int> SubCommentDelete { get; set; }
+}

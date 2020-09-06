@@ -1,0 +1,89 @@
+﻿@inject ICommentClient CommentClient
+
+<CommentCreateForm BlogID="BlogID"
+                   ValidSubmit="OnValidSubmit"
+                   CommentToReply="_commentToReply"
+                   CancelReply="OnCancelReply" 
+                   WrapperCss="my-4"/>
+
+<GenericList Collection="_mainCommentDTOs">
+    <EmptyTemplateFragment>
+        <TextCenter Text="Comments not available" />
+    </EmptyTemplateFragment>
+
+    <WholeCollectionTemplate>
+
+        <!-- Comments -->
+        @foreach (var mainCommentDTO in _mainCommentDTOs)
+        {
+            <IndividualComment MainCommentDTO="mainCommentDTO"
+                               CommentClickedForReply="OnCommentClickedForReply"
+                               MainCommentDelete="OnMainCommentDelete"
+                               SubCommentDelete="OnSubCommentDelete"
+                               MainCommentWrapperCss="media mb-4 d-flex align-items-start text-break"
+                               SubCommentWrapperCss="media mt-4 d-flex align-items-start text-break" />
+        }
+
+    </WholeCollectionTemplate>
+</GenericList>
+
+@code{
+    [Parameter] public int BlogID { get; set; }
+
+    private List<MainCommentDTO> _mainCommentDTOs;
+    private MainCommentDTO _commentToReply;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadComponent();
+    }
+
+    private async Task LoadComponent()
+    {
+        _mainCommentDTOs = await CommentClient.GetMainCommentsByBlogIdAsync(BlogID);
+    }
+
+    private async Task OnValidSubmit(CommentCreationDTO commentCreationDTO)
+    {
+        if (commentCreationDTO.IsMain) await CommentClient.InsertMainCommentAsync(commentCreationDTO);
+        else await CommentClient.InsertSubCommentAsync(commentCreationDTO);
+
+        _commentToReply = null;
+
+        await LoadComponent();
+    }
+
+    private void OnCommentClickedForReply(MainCommentDTO mainCommentDTO)
+    {
+        _commentToReply = mainCommentDTO;
+    }
+
+    private void OnCancelReply()
+    {
+        _commentToReply = null;
+    }
+
+    private async Task OnMainCommentDelete(int id)
+    {
+        if (_commentToReply?.ID == id)
+        {
+            _commentToReply = null;
+        }
+
+        await CommentClient.DeleteMainCommentAsync(id);
+
+        await LoadComponent();
+    }
+
+    private async Task OnSubCommentDelete(int id)
+    {
+        if (_commentToReply?.ID == id)
+        {
+            _commentToReply = null;
+        }
+
+        await CommentClient.DeleteSubCommentAsync(id);
+
+        await LoadComponent();
+    }
+}

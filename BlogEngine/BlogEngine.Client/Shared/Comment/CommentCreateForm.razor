@@ -1,0 +1,59 @@
+﻿<div class="card @WrapperCss">
+    @if (CommentToReply != null)
+    {
+        <h5 class="card-header">Reply to @($"{CommentToReply.CreatedBy ?? "Unknown"}'s") Comment:</h5>
+    }
+    else
+    {
+        <h5 class="card-header">Leave a Comment:</h5>
+    }
+    <div class="card-body">
+        <EditForm Model="commentCreationDTO" OnValidSubmit="OnDataAnnotationsValidated">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <textarea @bind="commentCreationDTO.Body" class="form-control mb-3" rows="3"></textarea>
+                <ValidationMessage For="(() => commentCreationDTO.Body)" style="margin-bottom: .5rem" />
+            </div>
+
+            @if (CommentToReply != null)
+            {
+                <div @onclick="(async() => await CancelReply.InvokeAsync(null))" class="btn btn-light">Cancel reply</div>
+            }
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int BlogID { get; set; }
+    [Parameter] public MainCommentDTO CommentToReply { get; set; }
+    [Parameter] public string WrapperCss { get; set; }
+    [Parameter] public EventCallback<CommentCreationDTO> ValidSubmit { get; set; }
+    [Parameter] public EventCallback CancelReply { get; set; }
+
+    private CommentCreationDTO commentCreationDTO;
+
+    protected override void OnInitialized()
+    {
+        BuildFormModel();
+    }
+
+    private async Task OnDataAnnotationsValidated()
+    {
+        if (CommentToReply != null)
+        {
+            commentCreationDTO.MainCommentID = CommentToReply.ID;
+        }
+
+        await ValidSubmit.InvokeAsync(commentCreationDTO);
+
+        BuildFormModel();
+    }
+
+    private void BuildFormModel()
+    {
+        commentCreationDTO = new CommentCreationDTO() { BlogID = this.BlogID };
+    }
+}

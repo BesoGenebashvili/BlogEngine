@@ -12,7 +12,7 @@ else
     <h1 class="mt-4">@_blogDTO.Title</h1>
 
     <!-- Author -->
-    <p class="lead">by<a href="#">@_blogDTO.CreatedBy</a></p>
+    <p class="lead">by<a href="#"> @_blogDTO.CreatedBy</a></p>
 
     <hr>
 
@@ -44,53 +44,7 @@ else
     @((MarkupString)_blogDTO.HTMLContent)
 
     <hr>
-
-    <!-- Comments Form -->
-    <div class="card my-4">
-        <h5 class="card-header">Leave a Comment:</h5>
-        <div class="card-body">
-            <form>
-                <div class="form-group">
-                    <textarea class="form-control mb-3" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Single Comment -->
-    <div class="media mb-4 d-flex align-items-start">
-        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-        <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            MainComment text 1
-        </div>
-    </div>
-
-    <!-- Comment with nested comments -->
-    <div class="media mb-4 d-flex align-items-start">
-        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-        <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            MainComment text 2
-            <div class="media mt-4 d-flex align-items-start">
-                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">Commenter Name</h5>
-                    SubComment text 1
-                </div>
-            </div>
-
-            <div class="media mt-4 d-flex align-items-start">
-                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                <div class="media-body">
-                    <h5 class="mt-0">Commenter Name</h5>
-                    SubComment text 2
-                </div>
-            </div>
-
-        </div>
-    </div>
+    <CommentSection BlogID="ID" />
 }
 
 @code{

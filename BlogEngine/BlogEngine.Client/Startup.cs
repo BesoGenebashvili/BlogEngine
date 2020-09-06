@@ -43,6 +43,8 @@ namespace BlogEngine.Client
 
             services.AddScoped<IBlogClient, BlogClient>();
 
+            services.AddScoped<ICommentClient, CommentClient>();
+
             services.AddScoped<INotificationReceiverClient, NotificationReceiverClient>();
         }
 

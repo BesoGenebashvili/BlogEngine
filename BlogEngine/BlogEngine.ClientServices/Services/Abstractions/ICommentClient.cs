@@ -1,4 +1,5 @@
 ﻿using BlogEngine.Shared.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlogEngine.ClientServices.Services.Abstractions
@@ -11,5 +12,7 @@ namespace BlogEngine.ClientServices.Services.Abstractions
         Task<SubCommentDTO> InsertSubCommentAsync(CommentCreationDTO commentCreationDTO);
         Task<bool> DeleteMainCommentAsync(int id);
         Task<bool> DeleteSubCommentAsync(int id);
+        Task<List<MainCommentDTO>> GetMainCommentsByBlogIdAsync(int id);
+        Task<List<SubCommentDTO>> GetSubCommentsByBlogIdAsync(int id);
     }
 }
