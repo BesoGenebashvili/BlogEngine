@@ -9,3 +9,22 @@ body {
 .user-thumbnail {
     width: 64px;
 }
+
+.file-input-image {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.file-delete-btn {
+    cursor: pointer;
+}
+
+.category-card {
+    width: 18rem;
+}
+
+    .category-card img {
+        object-fit: cover;
+        height: 286px;
+    }

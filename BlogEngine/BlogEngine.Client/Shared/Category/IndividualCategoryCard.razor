@@ -1,0 +1,23 @@
+﻿<div class="card category-card">
+
+    @if (CategoryDTO.GeneralCover != null)
+    {
+        <img class="card-img-top" src="data:image/jpeg;base64,@(Convert.ToBase64String(CategoryDTO.GeneralCover))" alt="category-image">
+    }
+    else
+    {
+        <img src="css/Images/image_not_available_template.png" class="card-img-top" alt="category-image">
+    }
+
+    <div class="card-body">
+        <h5 class="card-title">@CategoryDTO.Name</h5>
+
+        <a href="#" class="btn btn-primary">Details</a>
+        <a href="category/edit/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-warning">Edit</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public CategoryDTO CategoryDTO { get; set; }
+}

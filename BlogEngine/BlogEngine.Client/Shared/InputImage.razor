@@ -1,6 +1,6 @@
 ﻿@inject IFileReaderService FileReaderService
 
-<div class="file-input-wrapper p-3 text-dark @WrapperCssClass">
+<div class="@WrapperCssClass">
 
     <label class="d-block mb-0">@LabelText</label>
 
@@ -13,7 +13,7 @@
     @if (Image != null)
     {
         <img class="file-input-image" src="data:image/jpeg;base64,@(Convert.ToBase64String(Image))">
-        <i @onclick="(() => ImageFileRemoved())" class="delete-btn ml-2 far fa-trash-alt"></i>
+        <i @onclick="(() => ImageFileRemoved())" class="file-delete-btn ml-2 far fa-trash-alt"></i>
     }
 </div>
 

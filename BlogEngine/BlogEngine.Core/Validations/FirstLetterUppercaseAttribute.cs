@@ -4,8 +4,6 @@ namespace BlogEngine.Core.Validations
 {
     public class FirstLetterUppercaseAttribute : ValidationAttribute
     {
-        public new string ErrorMessage { get; set; } = "First letter should be uppercase";
-
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(value.ToString()))
@@ -17,7 +15,7 @@ namespace BlogEngine.Core.Validations
 
             if (firstLetter != firstLetter.ToUpper())
             {
-                return new ValidationResult(ErrorMessage);
+                return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
             }
 
             return ValidationResult.Success;

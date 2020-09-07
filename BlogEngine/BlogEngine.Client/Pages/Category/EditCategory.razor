@@ -1,0 +1,32 @@
+﻿@page "/category/edit/{ID:int}"
+@page "/category/edit/{ID:int}/{Name}"
+@layout NavigationLayout
+@inject ICategoryClient CategoryClient
+@inject NavigationManager NavigationManager
+
+@if (_categoryEditPageDTO == null)
+{
+    <TextCenter Text="Loading..." />
+}
+else
+{
+    <CategoryEditForm CategoryUpdateDTO="_categoryEditPageDTO.CategoryUpdateDTO" ValidSubmit="OnValidSubmit"/>
+}
+
+@code {
+        [Parameter] public int ID { get; set; }
+        [Parameter] public string Name { get; set; }
+
+    private CategoryEditPageDTO _categoryEditPageDTO;
+
+    protected async override Task OnInitializedAsync()
+    {
+        _categoryEditPageDTO = await CategoryClient.GetEditPageDTOAsync(ID);
+    }
+
+    private async Task OnValidSubmit()
+    {
+        var updatedCategory = await CategoryClient.UpdateAsync(ID, _categoryEditPageDTO.CategoryUpdateDTO);
+        NavigationManager.NavigateTo($"category/manage");
+    }
+}

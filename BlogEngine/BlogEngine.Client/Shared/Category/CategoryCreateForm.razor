@@ -1,0 +1,44 @@
+﻿<EditForm Model="_categoryCreationDTO" OnValidSubmit="OnDataAnnotationsValidated"
+          class="d-flex justify-content-center align-items-center flex-column">
+    <DataAnnotationsValidator />
+
+    <div class="form-group w-50 my-2">
+        <label class="form-label" for="name">Name</label>
+        <input @bind-value="_categoryCreationDTO.Name" type="text" class="form-control" id="name">
+        <ValidationMessage For="(() => _categoryCreationDTO.Name)" />
+    </div>
+
+    <InputImage Image="_categoryCreationDTO.GeneralCover"
+                LabelText="Choose General Cover"
+                ImageSelected="OnImageSelected"
+                ImageRemoved="OnImageRemoved"
+                WrapperCssClass="form-group w-50 my-2" />
+
+    <button type="submit" disabled="@_actionsDisabled" class="btn btn-success ml-2">Submit</button>
+
+</EditForm>
+
+@code {
+    [Parameter] public EventCallback<CategoryCreationDTO> ValidSubmit { get; set; }
+
+    private CategoryCreationDTO _categoryCreationDTO = new CategoryCreationDTO();
+    private bool _actionsDisabled = false;
+
+    private async Task OnDataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(_categoryCreationDTO);
+    }
+
+    private void OnImageSelected(byte[] imageBytes)
+    {
+        _categoryCreationDTO.GeneralCover = imageBytes;
+    }
+
+    private void OnImageRemoved()
+    {
+        _categoryCreationDTO.GeneralCover = null;
+    }
+}

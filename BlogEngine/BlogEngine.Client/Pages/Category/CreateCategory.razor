@@ -1,0 +1,16 @@
+﻿@page "/category/create"
+@layout NavigationLayout
+@inject NavigationManager NavigationManager
+@inject ICategoryClient CategoryClient
+
+<TextCenter Text="Create Category" />
+
+<CategoryCreateForm ValidSubmit="OnValidSubmit" />
+
+@code{
+    private async Task OnValidSubmit(CategoryCreationDTO categoryCreationDTO)
+    {
+        await CategoryClient.CreateAsync(categoryCreationDTO);
+        NavigationManager.NavigateTo("category/manage");
+    }
+}

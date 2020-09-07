@@ -1,6 +1,4 @@
-﻿using BlogEngine.Core.Data.Entities.JoiningEntities;
-using BlogEngine.Core.Validations;
-using System.Collections.Generic;
+﻿using BlogEngine.Core.Validations;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngine.Shared.DTOs
@@ -9,9 +7,10 @@ namespace BlogEngine.Shared.DTOs
     {
         [Required(ErrorMessage = "{0} is required")]
         [StringLength(50, ErrorMessage = "{0} should not be more than 100 Characters")]
-        [FirstLetterUppercase]
+        [FirstLetterUppercase(ErrorMessage = "First letter should be uppercase")]
         [DataType(DataType.Text)]
         public string Name { get; set; }
+
         public byte[] GeneralCover { get; set; }
 
         [DataType(DataType.Text)]

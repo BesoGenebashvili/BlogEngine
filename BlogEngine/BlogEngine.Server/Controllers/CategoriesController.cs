@@ -42,6 +42,18 @@ namespace BlogEngine.Server.Controllers
             return categoryDTO;
         }
 
+        [HttpGet("edit/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryEditPageDTO))]
+        public async Task<ActionResult<CategoryEditPageDTO>> PutGet(int id)
+        {
+            var editPageDTO = await _categoryService.GetEditPageDTOAsync(id);
+
+            if (editPageDTO == null) return NotFound();
+
+            return editPageDTO;
+        }
+
         [HttpPost(Name = "createCategory")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDTO))]

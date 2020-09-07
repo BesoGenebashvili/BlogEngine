@@ -3,7 +3,6 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
-using System;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Implementations
@@ -39,6 +38,15 @@ namespace BlogEngine.Server.Services.Implementations
             var updatedEntity = await _categoryRepository.UpdateAsync(categoryEntity);
 
             return ToDTO(updatedEntity);
+        }
+
+        public async Task<CategoryEditPageDTO> GetEditPageDTOAsync(int id)
+        {
+            var categoryEntity = await _categoryRepository.GetByIdAsync(id);
+
+            if (categoryEntity == null) return null;
+
+            return _mapper.Map<CategoryEditPageDTO>(categoryEntity);
         }
     }
 }

@@ -1,0 +1,27 @@
+﻿@page "/category/manage"
+@layout NavigationLayout
+@inject ICategoryClient CategoryClient
+
+<TextCenter Text="Manage Categories" />
+
+<CategoryList CategoryDTOs="_categoryDTOs" />
+
+@code {
+    private List<CategoryDTO> _categoryDTOs = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    //private async Task OnCategoryDelete(int id)
+    //{
+    //    await CategoryClient.DeleteAsync(id);
+    //    await LoadPage();
+    //}
+
+    private async Task LoadPage()
+    {
+        _categoryDTOs = await CategoryClient.GetAllAsync();
+    }
+}

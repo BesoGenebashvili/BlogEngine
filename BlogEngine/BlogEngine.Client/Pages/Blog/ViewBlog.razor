@@ -31,7 +31,7 @@ else
 
     @if (_blogDTO.Cover == null)
     {
-        <img class="img-fluid rounded" src="css/Images/blog-cover-template.png">
+        <img class="img-fluid rounded" src="css/Images/image_not_available_template.png">
     }
     else
     {
@@ -44,6 +44,8 @@ else
     @((MarkupString)_blogDTO.HTMLContent)
 
     <hr>
+
+    <!-- Comments -->
     <CommentSection BlogID="ID" />
 }
 

@@ -35,6 +35,10 @@ namespace BlogEngine.Server.DataHelpers
 
             CreateMap<CategoryUpdateDTO, Category>().ReverseMap();
 
+            CreateMap<Category, CategoryEditPageDTO>()
+                .ForMember(c => c.CategoryUpdateDTO, opt => opt.MapFrom(s => s))
+                .ForMember(c => c.CategoryID, opt => opt.MapFrom(s => s.ID));
+
             #endregion
 
             #region Comment

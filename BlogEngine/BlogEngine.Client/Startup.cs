@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using Blazor.FileReader;
-using BlogEngine.ClientServices.Services.Implementations;
-using BlogEngine.ClientServices.Services.Abstractions;
+using BlogEngine.Client.Extensions;
 
 namespace BlogEngine.Client
 {
@@ -26,26 +23,16 @@ namespace BlogEngine.Client
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
             services.AddServerSideBlazor();
 
-            // TODO: HttpClient BaseAdress should parsed from  ***.JSON file
-            services.AddScoped<HttpClient>(s =>
-            {
-                return new HttpClient { BaseAddress = new Uri("https://localhost:44328") };
-            });
+            services.AddHttpClientService();
 
             services.AddSyncfusionBlazor();
 
             services.AddFileReaderService();
 
-            // http services for api calls
-            services.AddScoped<IHttpService, HttpService>();
-
-            services.AddScoped<IBlogClient, BlogClient>();
-
-            services.AddScoped<ICommentClient, CommentClient>();
-
-            services.AddScoped<INotificationReceiverClient, NotificationReceiverClient>();
+            services.AddClientAPIServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

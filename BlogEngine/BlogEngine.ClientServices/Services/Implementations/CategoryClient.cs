@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {
-    class CategoryClient : ICategoryClient
+    public class CategoryClient : ICategoryClient
     {
         private readonly IHttpService _httpService;
         private const string Url = "api/Categories";
@@ -19,6 +19,11 @@ namespace BlogEngine.ClientServices.Services.Implementations
         public async Task<CategoryDTO> GetAsync(int id)
         {
             return await _httpService.GetHelperAsync<CategoryDTO>($"{Url}/{id}");
+        }
+
+        public async Task<CategoryEditPageDTO> GetEditPageDTOAsync(int id)
+        {
+            return await _httpService.GetHelperAsync<CategoryEditPageDTO>($"{Url}/edit/{id}");
         }
 
         public async Task<List<CategoryDTO>> GetAllAsync()
