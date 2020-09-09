@@ -4,18 +4,20 @@
 @inject ICategoryClient CategoryClient
 @inject NavigationManager NavigationManager
 
+<TextCenter Text="Edit Category" />
+
 @if (_categoryEditPageDTO == null)
 {
     <TextCenter Text="Loading..." />
 }
 else
 {
-    <CategoryEditForm CategoryUpdateDTO="_categoryEditPageDTO.CategoryUpdateDTO" ValidSubmit="OnValidSubmit"/>
+    <CategoryEditForm CategoryUpdateDTO="_categoryEditPageDTO.CategoryUpdateDTO" ValidSubmit="OnValidSubmit" />
 }
 
 @code {
-        [Parameter] public int ID { get; set; }
-        [Parameter] public string Name { get; set; }
+    [Parameter] public int ID { get; set; }
+    [Parameter] public string Name { get; set; }
 
     private CategoryEditPageDTO _categoryEditPageDTO;
 

@@ -27,7 +27,7 @@
         </div>
 
         <br />
-        <button class="btn btn-success" disabled="@_submitButtDisabled">Submit</button>
+        <button class="btn btn-success" disabled="@_actionsDisabled">Submit</button>
         <br />
     </EditForm>
 </div>
@@ -36,12 +36,13 @@
     [Parameter] public BlogUpdateDTO BlogUpdateDTO { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
 
-    private bool _submitButtDisabled = false;
+    private bool _actionsDisabled = false;
 
     private async Task DataAnnotationsValidated()
     {
-        _submitButtDisabled = true;
+        _actionsDisabled = true;
         StateHasChanged();
+
         await ValidSubmit.InvokeAsync(default);
     }
 

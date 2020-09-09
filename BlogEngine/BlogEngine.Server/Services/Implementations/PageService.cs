@@ -26,11 +26,19 @@ namespace BlogEngine.Server.Services.Implementations
                 .Take(10)
                 .ToList();
 
+            /*
             var featuredCategoryDTOs = blogDTOs
                 .SelectMany(b => b.CategoryDTOs)
                 .GroupBy(c => c.ID)
                 .OrderByDescending(c => c.Count())
                 .SelectMany(g => g)
+                .Take(10)
+                .ToList();
+
+            */
+
+            // Temporary Test
+            var featuredCategoryDTOs = (await _categoryService.GetAllAsync())
                 .Take(10)
                 .ToList();
 

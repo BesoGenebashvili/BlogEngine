@@ -29,6 +29,8 @@ namespace BlogEngine.Client.Extensions
 
             services.AddScoped<ICategoryClient, CategoryClient>();
 
+            services.AddScoped<IPagesClient, PagesClient>();
+
             return services;
         }
     }

@@ -14,10 +14,11 @@
 
         <a href="#" class="btn btn-primary">Details</a>
         <a href="category/edit/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-warning">Edit</a>
-        <a href="#" class="btn btn-danger">Delete</a>
+        <button @onclick="(async() => await CategoryDelete.InvokeAsync(CategoryDTO))" class="btn btn-danger">Delete</button>
     </div>
 </div>
 
 @code {
     [Parameter] public CategoryDTO CategoryDTO { get; set; }
+    [Parameter] public EventCallback<CategoryDTO> CategoryDelete { get; set; }
 }

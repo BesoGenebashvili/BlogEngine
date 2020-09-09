@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IPagesClient PagesClient
 
 <Navigation />
 
@@ -19,7 +20,7 @@
             <SearchWidget CardCss="my-4" />
 
             <!-- Categories Widget -->
-            <CategoriesWidget CardCss="my-4" />
+            <CategoriesWidget CategoryDTOs="_indexPageDTO?.FeaturedCategoryDTOs" CardCss="my-4" />
 
             <!-- Tags Widget -->
             <TagsWidget CardCss="my-4" />
@@ -29,8 +30,6 @@
     </div>
 
 </div>
-
-
 
 <!-- /.container -->
 @* TODO: add footer <br>
@@ -42,3 +41,12 @@
             </h5>
         </div>
     </footer>*@
+@code{
+
+    private IndexPageDTO _indexPageDTO;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _indexPageDTO = await PagesClient.GetIndexPageDTOAsync();
+    }
+}

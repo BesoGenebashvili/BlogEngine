@@ -2,37 +2,59 @@
     <h5 class="card-header">@CardHeader</h5>
     <div class="card-body">
         <div class="row">
-            <div class="col-lg-6">
-                <ul class="list-unstyled mb-0">
-                    <li>
-                        <a href="#">Web Design</a>
-                    </li>
-                    <li>
-                        <a href="#">HTML</a>
-                    </li>
-                    <li>
-                        <a href="#">Freebies</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-lg-6">
-                <ul class="list-unstyled mb-0">
-                    <li>
-                        <a href="#">JavaScript</a>
-                    </li>
-                    <li>
-                        <a href="#">CSS</a>
-                    </li>
-                    <li>
-                        <a href="#">Tutorials</a>
-                    </li>
-                </ul>
-            </div>
+
+            <GenericList Collection="CategoryDTOs">
+                <NullTemplateFragment>
+                    <Loading />
+                </NullTemplateFragment>
+
+                <EmptyTemplateFragment>
+                    <h6 class="text-center">No Categories Found</h6>
+                </EmptyTemplateFragment>
+
+                <WholeCollectionTemplate>
+
+                    <!-- Featured categories -->
+
+                    @{ 
+                        var half = (int)Math.Ceiling(CategoryDTOs.Count / (decimal)2);
+                    }
+
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled mb-0">
+                            @for (int i = 0; i < half; i++)
+                            {
+                                var iterator = i;
+
+                                <li>
+                                    <a href="category/manage">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <ul class="list-unstyled mb-0">
+                            @for (int i = half; i < CategoryDTOs.Count; i++)
+                            {
+                                var iterator = i;
+
+                                <li>
+                                    <a href="category/manage">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </WholeCollectionTemplate>
+
+            </GenericList>
         </div>
     </div>
 </div>
 
 @code{
+    [Parameter] public List<CategoryDTO> CategoryDTOs { get; set; }
     [Parameter] public string CardHeader { get; set; } = "Featured Categories";
     [Parameter] public string CardCss { get; set; }
 }

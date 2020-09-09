@@ -5,14 +5,13 @@
 
 <TextCenter Text="Create Blog" />
 
-<CreateBlogForm BlogCreationDTO="_blogCreationDTO" ValidSubmit="OnValidSubmit" />
+<CreateBlogForm ValidSubmit="OnValidSubmit" />
 
 @code{
-    private BlogCreationDTO _blogCreationDTO = new BlogCreationDTO();
 
-    private async Task OnValidSubmit()
+    private async Task OnValidSubmit(BlogCreationDTO blogCreationDTO)
     {
-        var blogDTO = await BlogClient.CreateAsync(_blogCreationDTO);
+        var blogDTO = await BlogClient.CreateAsync(blogCreationDTO);
         NavigationManager.NavigateTo($"blog/view/{blogDTO.ID}");
     }
 }

@@ -1,60 +1,62 @@
-﻿<div class="container">
-    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="BlogCreationDTO" OnValidSubmit="DataAnnotationsValidated">
-        <DataAnnotationsValidator />
+﻿<EditForm Model="_blogCreationDTO"
+          OnValidSubmit="DataAnnotationsValidated"
+          class="d-flex justify-content-center align-items-center flex-column">
+    <DataAnnotationsValidator />
 
-        <SfTextBox @bind-Value="BlogCreationDTO.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
-        <br />
+    <div class="form-group w-50 my-2">
+        <label class="form-label" for="title">Title</label>
+        <input @bind-value="_blogCreationDTO.Title" type="text" class="form-control" id="title">
+        <ValidationMessage For="(() => _blogCreationDTO.Title)" />
+    </div>
 
-        <SfTextBox @bind-Value="BlogCreationDTO.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
-        <br />
+    <div class="form-group w-50 my-2">
+        <label class="form-label" for="short-description">Short Description</label>
+        <textarea @bind="_blogCreationDTO.ShortDescription" class="form-control" id="short-description" />
+        <ValidationMessage For="(() => _blogCreationDTO.ShortDescription)" />
+    </div>
 
-        <br />
-        <InputImage Image="BlogCreationDTO.Cover"
-                    LabelText="Choose Cover"
-                    ImageSelected="OnImageSelected"
-                    ImageRemoved="OnImageRemoved"
-                    WrapperCssClass="w-75 form-font-size form-border" />
+    <InputImage Image="_blogCreationDTO.Cover"
+                LabelText="Choose Cover"
+                ImageSelected="OnImageSelected"
+                ImageRemoved="OnImageRemoved"
+                WrapperCssClass="form-group w-50 my-2" />
 
-        <br />
-        <br />
+    <div class="control-section w-50 my-2">
+        <label class="form-label" for="blog-content">Blog Content</label>
+        <SfRichTextEditor @bind-Value="_blogCreationDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
+            <ChildContent>
+                <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
+            </ChildContent>
+        </SfRichTextEditor>
+        <ValidationMessage For="(() => _blogCreationDTO.HTMLContent)" />
+    </div>
 
-        <div class="control-section w-75">
-            <SfRichTextEditor @bind-Value="BlogCreationDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
-                <ChildContent>
-                    <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
-                </ChildContent>
-            </SfRichTextEditor>
-        </div>
-
-        <br />
-        <button class="btn btn-success" disabled="@_submitButtDisabled">Submit</button>
-        <br />
-    </EditForm>
-</div>
+    <button type="submit" class="btn btn-success" disabled="@_actionsDisabled">Submit</button>
+</EditForm>
 
 @code{
     // TODO : Add publish date picker
+    private BlogCreationDTO _blogCreationDTO = new BlogCreationDTO();
+    [Parameter] public EventCallback<BlogCreationDTO> ValidSubmit { get; set; }
 
-    [Parameter] public BlogCreationDTO BlogCreationDTO { get; set; }
-    [Parameter] public EventCallback ValidSubmit { get; set; }
-
-    private bool _submitButtDisabled = false;
+    private bool _actionsDisabled = false;
 
     private async Task DataAnnotationsValidated()
     {
-        _submitButtDisabled = true;
+        _actionsDisabled = true;
         StateHasChanged();
-        await ValidSubmit.InvokeAsync(default);
+
+        await ValidSubmit.InvokeAsync(_blogCreationDTO);
     }
 
     private void OnImageSelected(byte[] imageBytes)
     {
-        BlogCreationDTO.Cover = imageBytes;
+        _blogCreationDTO.Cover = imageBytes;
     }
 
     private void OnImageRemoved()
     {
-        BlogCreationDTO.Cover = null;
+        _blogCreationDTO.Cover = null;
     }
 
     private object[] GetRichTextEditorTools()

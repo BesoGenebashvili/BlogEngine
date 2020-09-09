@@ -1,0 +1,53 @@
+﻿@if (displayModal)
+{
+    <div class="modal-backdrop show"></div>
+
+    <div class="modal fade show" id="exampleModal" tabindex="-1"
+         role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" style="display:block;">
+
+        <div class="modal-dialog @(Centered ? "fully-centered": "")" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        @ModalTitle
+                    </h5>
+                    <button disabled="@_actionsDisabled" @onclick="Cancel" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @ModalBodyTemplate
+                </div>
+                <div class="modal-footer">
+                    <button disabled="@_actionsDisabled" @onclick="Cancel" class="btn btn-secondary">Cancel</button>
+                    <button disabled="@_actionsDisabled" @onclick="OnConfirmButtonClicked" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool displayModal = false;
+    private bool _actionsDisabled = false;
+
+    [Parameter] public string ModalTitle { get; set; } = "Confirm";
+    [Parameter] public bool Centered { get; set; } = false;
+    [Parameter] public RenderFragment ModalBodyTemplate { get; set; }
+    [Parameter] public EventCallback Confirm { get; set; }
+    [Parameter] public EventCallback Cancel { get; set; }
+
+    public void Show() => displayModal = true;
+    public void Hide() => displayModal = false;
+
+    private async Task OnConfirmButtonClicked()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await Confirm.InvokeAsync(default);
+
+        _actionsDisabled = false;
+    }
+}

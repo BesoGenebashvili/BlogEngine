@@ -4,24 +4,52 @@
 
 <TextCenter Text="Manage Categories" />
 
-<CategoryList CategoryDTOs="_categoryDTOs" />
+<CategoryList CategoryDTOs="_categoryDTOs"
+              CategoryDelete="OnCategoryDelete" />
+
+<ConfirmationModal @ref="confirmationModal"
+                   Confirm="OnModalConfirm"
+                   Cancel="OnModalCancel"
+                   Centered="true">
+    <ModalBodyTemplate>
+        <p>Do you want to permanently delete category : @_categoryToDelete.Name ?</p>
+    </ModalBodyTemplate>
+</ConfirmationModal>
 
 @code {
+    private ConfirmationModal confirmationModal;
     private List<CategoryDTO> _categoryDTOs = null;
+    private CategoryDTO _categoryToDelete = null;
 
     protected async override Task OnInitializedAsync()
     {
         await LoadPage();
     }
 
-    //private async Task OnCategoryDelete(int id)
-    //{
-    //    await CategoryClient.DeleteAsync(id);
-    //    await LoadPage();
-    //}
-
     private async Task LoadPage()
     {
         _categoryDTOs = await CategoryClient.GetAllAsync();
+    }
+
+    private void OnCategoryDelete(CategoryDTO categoryDTO)
+    {
+        _categoryToDelete = categoryDTO;
+
+        confirmationModal.Show();
+    }
+
+    public async Task OnModalConfirm()
+    {
+        await CategoryClient.DeleteAsync(_categoryToDelete.ID);
+        _categoryToDelete = null;
+
+        confirmationModal.Hide();
+        await LoadPage();
+    }
+
+    public void OnModalCancel()
+    {
+        _categoryToDelete = null;
+        confirmationModal.Hide();
     }
 }
