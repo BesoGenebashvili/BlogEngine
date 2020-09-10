@@ -1,32 +1,34 @@
 ﻿@page "/blog/edit/{ID:int}"
 @page "/blog/edit/{ID:int}/{Title}"
-@layout EmptyLayout
+@layout NavigationLayout
 @inject IBlogClient BlogClient
 @inject NavigationManager NavigationManager
 
-@if (_blogUpdateDTO == null)
+<TextCenter Text="Edit Blog" />
+
+@if (_blogEditPageDTO == null)
 {
     <TextCenter Text="Loading..." />
 }
 else
 {
-    <EditBlogForm BlogUpdateDTO="_blogUpdateDTO" ValidSubmit="OnValidSubmit" />
+    <EditBlogForm BlogEditPageDTO="_blogEditPageDTO" ValidSubmit="OnValidSubmit" />
 }
 
 @code {
     [Parameter] public int ID { get; set; }
     [Parameter] public string Title { get; set; }
 
-    private BlogUpdateDTO _blogUpdateDTO;
+    private BlogEditPageDTO _blogEditPageDTO;
 
     protected async override Task OnInitializedAsync()
     {
-        _blogUpdateDTO = await BlogClient.GetUpdateDTOAsync(ID);
+        _blogEditPageDTO = await BlogClient.GetEditPageDTOAsync(ID);
     }
 
     private async Task OnValidSubmit()
     {
-        var updatedBlog = await BlogClient.UpdateAsync(ID, _blogUpdateDTO);
+        var updatedBlog = await BlogClient.UpdateAsync(ID, _blogEditPageDTO.BlogUpdateDTO);
         NavigationManager.NavigateTo($"blog/view/{updatedBlog.ID}");
     }
 }

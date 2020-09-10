@@ -2,12 +2,26 @@
 @layout NavigationLayout
 @inject NavigationManager NavigationManager
 @inject IBlogClient BlogClient
+@inject ICategoryClient CategoryClient
 
 <TextCenter Text="Create Blog" />
 
-<CreateBlogForm ValidSubmit="OnValidSubmit" />
+@if (_categoryDTOs == null)
+{
+    <TextCenter Text="Loading..." />
+}
+else
+{
+    <CreateBlogForm CategoryDTOs="_categoryDTOs" ValidSubmit="OnValidSubmit" />
+}
 
 @code{
+    private List<CategoryDTO> _categoryDTOs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categoryDTOs = await CategoryClient.GetAllAsync();
+    }
 
     private async Task OnValidSubmit(BlogCreationDTO blogCreationDTO)
     {

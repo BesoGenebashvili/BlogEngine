@@ -6,6 +6,6 @@ namespace BlogEngine.Shared.DTOs
     {
         public BlogUpdateDTO BlogUpdateDTO { get; set; }
         public List<CategoryDTO> SelectedCategoryDTOs { get; set; } = new List<CategoryDTO>();
-        public List<CategoryDTO> NotSelectedCategoryDTOs { get; set; } = new List<CategoryDTO>();
+        public List<CategoryDTO> AllCategoryDTOs { get; set; } = new List<CategoryDTO>();
     }
 }

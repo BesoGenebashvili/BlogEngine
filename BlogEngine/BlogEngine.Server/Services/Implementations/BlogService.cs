@@ -57,16 +57,17 @@ namespace BlogEngine.Server.Services.Implementations
             var selectedCategories = allCategories
                 .Where(c => blogEntity.CategoryIDs.Contains(c.ID))
                 .ToList();
-
-            var notSelectedCategories = allCategories
-                .Where(c => !blogEntity.CategoryIDs.Contains(c.ID))
-                .ToList();
+            
+            //
+            //var notSelectedCategories = allCategories
+            //    .Where(c => !blogEntity.CategoryIDs.Contains(c.ID))
+            //    .ToList();
 
             return new BlogEditPageDTO()
             {
                 BlogUpdateDTO = blogEntity,
                 SelectedCategoryDTOs = _mapper.Map<List<CategoryDTO>>(selectedCategories),
-                NotSelectedCategoryDTOs = _mapper.Map<List<CategoryDTO>>(notSelectedCategories)
+                AllCategoryDTOs = _mapper.Map<List<CategoryDTO>>(allCategories)
             };
         }
 

@@ -1,59 +1,80 @@
 ﻿<div class="container">
-    <EditForm class="d-flex justify-content-center align-items-center flex-column" Model="BlogUpdateDTO" OnValidSubmit="DataAnnotationsValidated">
+    <EditForm Model="BlogEditPageDTO.BlogUpdateDTO" OnValidSubmit="DataAnnotationsValidated"
+              class="d-flex justify-content-center align-items-center flex-column">
         <DataAnnotationsValidator />
 
-        <SfTextBox @bind-Value="BlogUpdateDTO.Title" Width="75%" CssClass="e-outline" Placeholder="Title" FloatLabelType="@FloatLabelType.Auto" />
-        <br />
+        <div class="form-group w-50 my-2">
+            <label class="form-label" for="title">Title</label>
+            <input @bind-value="BlogEditPageDTO.BlogUpdateDTO.Title" type="text" class="form-control" id="title">
+            <ValidationMessage For="(() => BlogEditPageDTO.BlogUpdateDTO.Title)" />
+        </div>
 
-        <SfTextBox @bind-Value="BlogUpdateDTO.ShortDescription" Width="75%" Placeholder="Enter short description" FloatLabelType="@FloatLabelType.Auto" Multiline="true"></SfTextBox>
-        <br />
+        <div class="form-group w-50 my-2">
+            <label class="form-label" for="short-description">Short Description</label>
+            <textarea @bind="BlogEditPageDTO.BlogUpdateDTO.ShortDescription" class="form-control" id="short-description" />
+            <ValidationMessage For="(() => BlogEditPageDTO.BlogUpdateDTO.ShortDescription)" />
+        </div>
 
-        <br />
-        <InputImage Image="BlogUpdateDTO.Cover"
+        <InputImage Image="BlogEditPageDTO.BlogUpdateDTO.Cover"
                     LabelText="Choose Cover"
                     ImageSelected="OnImageSelected"
                     ImageRemoved="OnImageRemoved"
-                    WrapperCssClass="w-75 form-font-size form-border" />
+                    WrapperCssClass="form-group w-50 my-2" />
 
-        <br />
-        <br />
+        <div class="w-50 my-2">
+            <label class="form-label" for="category-selector">Select Categories</label>
+            <SfMultiSelect ID="category-selector" @bind-Value="_selectedCategoryIDs" DataSource="BlogEditPageDTO.AllCategoryDTOs" AllowFiltering="true">
+                <MultiSelectFieldSettings Text="Name" Value="ID"></MultiSelectFieldSettings>
+            </SfMultiSelect>
+        </div>
 
-        <div class="control-section w-75">
-            <SfRichTextEditor @bind-Value="BlogUpdateDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
+        <div class="control-section w-50 my-2">
+            <label class="form-label" for="blog-content">Blog Content</label>
+            <SfRichTextEditor @bind-Value="BlogEditPageDTO.BlogUpdateDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
                 <ChildContent>
                     <RichTextEditorToolbarSettings Items="GetRichTextEditorTools()" />
                 </ChildContent>
             </SfRichTextEditor>
+            <ValidationMessage For="(() => BlogEditPageDTO.BlogUpdateDTO.HTMLContent)" />
         </div>
 
-        <br />
-        <button class="btn btn-success" disabled="@_actionsDisabled">Submit</button>
-        <br />
+        <button type="submit" class="btn btn-success my-2" disabled="@_actionsDisabled">Submit</button>
     </EditForm>
 </div>
 
 @code{
-    [Parameter] public BlogUpdateDTO BlogUpdateDTO { get; set; }
+    [Parameter] public BlogEditPageDTO BlogEditPageDTO { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
 
+    private int[] _selectedCategoryIDs = new int[] { };
     private bool _actionsDisabled = false;
+
+    protected override void OnInitialized()
+    {
+        if (BlogEditPageDTO != null)
+        {
+            _selectedCategoryIDs = BlogEditPageDTO.BlogUpdateDTO.CategoryIDs.ToArray();
+        }
+    }
 
     private async Task DataAnnotationsValidated()
     {
         _actionsDisabled = true;
         StateHasChanged();
 
+        BlogEditPageDTO.BlogUpdateDTO.CategoryIDs = _selectedCategoryIDs != null ? _selectedCategoryIDs.ToList() : new List<int>();
+
         await ValidSubmit.InvokeAsync(default);
     }
 
     private void OnImageSelected(byte[] imageBytes)
     {
-        BlogUpdateDTO.Cover = imageBytes;
+        BlogEditPageDTO.BlogUpdateDTO.Cover = imageBytes;
     }
 
     private void OnImageRemoved()
     {
-        BlogUpdateDTO.Cover = null;
+        BlogEditPageDTO.BlogUpdateDTO.Cover = null;
     }
 
     private object[] GetRichTextEditorTools()

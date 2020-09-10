@@ -43,6 +43,22 @@ else
     <!-- Post Content -->
     @((MarkupString)_blogDTO.HTMLContent)
 
+    <div class="my-2">
+        Categories:
+        @foreach (var categoryDTO in _blogDTO.CategoryDTOs)
+        {
+            <a href="#" class="btn-link mx-2">@categoryDTO.Name</a>
+        }
+    </div>
+
+    <div class="my-2">
+        Tags:
+        @foreach (var tag in new string[] { "IT", "Tech", "Blazor", "C#", "HTML", "CSS" })
+        {
+            <a href="#" class="btn btn-light">@tag</a>
+        }
+    </div>
+
     <hr>
 
     <!-- Comments -->

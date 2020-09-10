@@ -26,9 +26,9 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.GetHelperAsync<List<BlogDTO>>(Url);
         }
 
-        public async Task<BlogUpdateDTO> GetUpdateDTOAsync(int id)
+        public async Task<BlogEditPageDTO> GetEditPageDTOAsync(int id)
         {
-            return await _httpService.GetHelperAsync<BlogUpdateDTO>($"{Url}/edit/{id}");
+            return await _httpService.GetHelperAsync<BlogEditPageDTO>($"{Url}/edit/{id}");
         }
 
         public async Task<BlogDTO> CreateAsync(BlogCreationDTO blogCreationDTO)

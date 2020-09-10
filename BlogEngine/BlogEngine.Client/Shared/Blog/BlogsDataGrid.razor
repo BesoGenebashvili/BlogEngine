@@ -34,11 +34,11 @@ else
                     <td>@blogDTO.ID</td>
                     <td>@blogDTO.Title.GetStringBrief(20)</td>
                     <td>@blogDTO.ShortDescription.GetStringBrief(20)</td>
-                    <td>@(blogDTO.Cover == null ? "yes" : "no")</td>
+                    <td>@(blogDTO.Cover != null ? "yes" : "no")</td>
                     <td>@blogDTO.CreatedBy</td>
-                    <td>@blogDTO.DateCreated.Value.ToLongDateString()</td>
+                    <td>@blogDTO.DateCreated.Value.ToString("MMM d, yyyy")</td>
                     <td>@blogDTO.LastUpdateBy</td>
-                    <td>@blogDTO.LastUpdateDate.Value.ToLongDateString()</td>
+                    <td>@blogDTO.LastUpdateDate.Value.ToString("MMM d, yyyy")</td>
                     <td>@blogDTO.EstimatedReadingTimeInMinutes Minutes</td>
                     <td>
                         <a href="blog/edit/@blogDTO.ID" class="btn btn-warning btn-sm">Edit</a>

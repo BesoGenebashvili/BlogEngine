@@ -8,7 +8,7 @@ namespace BlogEngine.ClientServices.Services.Abstractions
     {
         Task<BlogDTO> GetAsync(int id);
         Task<List<BlogDTO>> GetAllAsync();
-        Task<BlogUpdateDTO> GetUpdateDTOAsync(int id);
+        Task<BlogEditPageDTO> GetEditPageDTOAsync(int id);
         Task<BlogDTO> CreateAsync(BlogCreationDTO blogCreationDTO);
         Task<BlogDTO> UpdateAsync(int id ,BlogUpdateDTO blogUpdateDTO);
         Task<bool> DeleteAsync(int id);

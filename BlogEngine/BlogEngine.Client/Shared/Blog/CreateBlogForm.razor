@@ -21,6 +21,13 @@
                 ImageRemoved="OnImageRemoved"
                 WrapperCssClass="form-group w-50 my-2" />
 
+    <div class="w-50 my-2">
+        <label class="form-label" for="category-selector">Select Categories</label>
+        <SfMultiSelect ID="category-selector" @bind-Value="_selectedCategoryIDs" DataSource="CategoryDTOs" AllowFiltering="true">
+            <MultiSelectFieldSettings Text="Name" Value="ID"></MultiSelectFieldSettings>
+        </SfMultiSelect>
+    </div>
+
     <div class="control-section w-50 my-2">
         <label class="form-label" for="blog-content">Blog Content</label>
         <SfRichTextEditor @bind-Value="_blogCreationDTO.HTMLContent" ShowCharCount="true" MaxLength="2000">
@@ -31,13 +38,16 @@
         <ValidationMessage For="(() => _blogCreationDTO.HTMLContent)" />
     </div>
 
-    <button type="submit" class="btn btn-success" disabled="@_actionsDisabled">Submit</button>
+    <button type="submit" class="btn btn-success my-2" disabled="@_actionsDisabled">Submit</button>
 </EditForm>
 
 @code{
     // TODO : Add publish date picker
-    private BlogCreationDTO _blogCreationDTO = new BlogCreationDTO();
     [Parameter] public EventCallback<BlogCreationDTO> ValidSubmit { get; set; }
+    [Parameter] public List<CategoryDTO> CategoryDTOs { get; set; }
+
+    private BlogCreationDTO _blogCreationDTO = new BlogCreationDTO();
+    private int[] _selectedCategoryIDs = new int[] { };
 
     private bool _actionsDisabled = false;
 
@@ -45,6 +55,9 @@
     {
         _actionsDisabled = true;
         StateHasChanged();
+
+        _blogCreationDTO.CategoryIDs = 
+            _selectedCategoryIDs != null ? _selectedCategoryIDs.ToList() : new List<int>();
 
         await ValidSubmit.InvokeAsync(_blogCreationDTO);
     }
