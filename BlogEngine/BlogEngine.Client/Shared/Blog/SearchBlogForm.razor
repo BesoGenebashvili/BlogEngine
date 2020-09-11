@@ -1,0 +1,51 @@
+﻿<div class="container">
+    <EditForm Model="BlogSearchDTO" OnValidSubmit="ValidSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <label for="title">Blog Title</label>
+                <input @bind-value="BlogSearchDTO.Title" id="title" class="form-control">
+                <ValidationMessage For="(() => BlogSearchDTO.Title)" />
+            </div>
+
+            <div class="col-lg-3">
+                <label for="sort">Sort By</label>
+                <select @bind="BlogSearchDTO.SortOrder" id="sort" class="form-select">
+
+                    @foreach (var sort in Enum.GetValues(BlogSearchDTO.SortOrder.GetType()))
+                    {
+                        <option value="@sort">@sort</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <label for="order">Order By</label>
+                <select @bind="BlogSearchDTO.BlogOrderBy" id="order" class="form-select">
+
+                    @foreach (var order in Enum.GetValues(BlogSearchDTO.BlogOrderBy.GetType()))
+                    {
+                        <option value="@order">@(((Enum)order).GetDisplayName())</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <br>
+                <div @onclick="FormClear" class="btn btn-light">Clear</div>
+                <button class="btn btn-success">Search</button>
+            </div>
+
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public BlogSearchDTO BlogSearchDTO { get; set; }
+    [Parameter] public EventCallback ValidSubmit { get; set; }
+    [Parameter] public EventCallback FormClear { get; set; }
+}

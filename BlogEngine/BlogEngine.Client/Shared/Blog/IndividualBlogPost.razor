@@ -1,0 +1,19 @@
+﻿<div class="card border-0 @CardCss">
+    <div class="card-body">
+
+        <h5 class="card-title mb-3">@BlogDTO.Title</h5>
+
+        <h6>@BlogDTO.EstimatedReadingTimeInMinutes minutes to read</h6>
+
+        <h6>Posted @BlogDTO.DateCreated.Value.GetRelativeTime() ago</h6>
+
+        <p class="card-text">@BlogDTO.ShortDescription</p>
+        <a href="blog/view/@BlogDTO.ID/@BlogDTO.Title" class="btn btn-primary">Read</a>
+    </div>
+    <hr>
+</div>
+
+@code {
+    [Parameter] public BlogDTO BlogDTO { get; set; }
+    [Parameter] public string CardCss { get; set; }
+}

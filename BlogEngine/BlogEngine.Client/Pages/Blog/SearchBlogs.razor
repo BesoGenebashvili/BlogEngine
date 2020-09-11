@@ -1,0 +1,35 @@
+﻿@page "/blog/search"
+@layout NavigationLayout
+@inject IBlogClient BlogClient
+
+<TextCenter Text="Search Blogs" />
+
+<SearchBlogForm BlogSearchDTO="_blogSearchDTO" ValidSubmit="OnValidSubmit" FormClear="OnFormClear"/>
+
+<BlogPostList BlogDTOs="_blogDTOs"/>
+
+@code {
+    private List<BlogDTO> _blogDTOs = null;
+    private BlogSearchDTO _blogSearchDTO = new BlogSearchDTO();
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        _blogDTOs = await BlogClient.SearchAsync(_blogSearchDTO);
+    }
+
+    private async Task OnValidSubmit()
+    {
+        await LoadPage();
+    }
+
+    private async Task OnFormClear()
+    {
+        _blogSearchDTO = new BlogSearchDTO();
+        await LoadPage();
+    }
+}

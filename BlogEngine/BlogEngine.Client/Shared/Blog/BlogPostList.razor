@@ -1,0 +1,22 @@
+﻿<GenericList Collection="BlogDTOs">
+    <EmptyTemplateFragment>
+        <TextCenter Text="Posts Not Available"/>
+    </EmptyTemplateFragment>
+    <WholeCollectionTemplate>
+
+        <!-- blog posts -->
+        <div class="container mt-3">
+
+            @foreach (var blogDTO in BlogDTOs)
+            {
+                <IndividualBlogPost BlogDTO="blogDTO" />
+            }
+
+        </div>
+
+    </WholeCollectionTemplate>
+</GenericList>
+
+@code {
+    [Parameter] public List<BlogDTO> BlogDTOs { get; set; }
+}

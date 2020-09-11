@@ -31,6 +31,13 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.GetHelperAsync<BlogEditPageDTO>($"{Url}/edit/{id}");
         }
 
+        public async Task<List<BlogDTO>> SearchAsync(BlogSearchDTO blogSearchDTO)
+        {
+            string blogSearchDTOQueryString = blogSearchDTO.ToQueryString();
+
+            return await _httpService.GetHelperAsync<List<BlogDTO>>($"{Url}/search?{blogSearchDTOQueryString}");
+        }
+
         public async Task<BlogDTO> CreateAsync(BlogCreationDTO blogCreationDTO)
         {
             return await _httpService.PostHelperAsync<BlogCreationDTO, BlogDTO>(Url, blogCreationDTO);
