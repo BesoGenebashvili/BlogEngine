@@ -35,3 +35,12 @@ body {
     top: 50%;
     transform: translate(-50%, -50%) !important;
 }
+
+.account-form {
+    width: 25rem;
+}
+
+.brand-link {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+}
