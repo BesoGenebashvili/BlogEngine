@@ -1,15 +1,17 @@
 ﻿@page "/blog/search"
 @layout NavigationLayout
 @inject IBlogClient BlogClient
+@inject ICategoryClient CategoryClient
 
 <TextCenter Text="Search Blogs" />
 
-<SearchBlogForm BlogSearchDTO="_blogSearchDTO" ValidSubmit="OnValidSubmit" FormClear="OnFormClear"/>
+<SearchBlogForm BlogSearchDTO="_blogSearchDTO" CategoryDTOs="_categoryDTOs" ValidSubmit="OnValidSubmit" FormClear="OnFormClear" />
 
-<BlogPostList BlogDTOs="_blogDTOs"/>
+<BlogPostList BlogDTOs="_blogDTOs" />
 
 @code {
-    private List<BlogDTO> _blogDTOs = null;
+    private List<BlogDTO> _blogDTOs;
+    private List<CategoryDTO> _categoryDTOs;
     private BlogSearchDTO _blogSearchDTO = new BlogSearchDTO();
 
     protected async override Task OnInitializedAsync()
@@ -19,7 +21,20 @@
 
     private async Task LoadPage()
     {
+        var loadBlogsTask = LoadBlogs();
+        var loadCategoriesTask = LoadCategories();
+
+        await Task.WhenAll(loadBlogsTask, loadCategoriesTask);
+    }
+
+    private async Task LoadBlogs()
+    {
         _blogDTOs = await BlogClient.SearchAsync(_blogSearchDTO);
+    }
+
+    private async Task LoadCategories()
+    {
+        _categoryDTOs = await CategoryClient.GetAllAsync();
     }
 
     private async Task OnValidSubmit()

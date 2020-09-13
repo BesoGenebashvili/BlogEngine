@@ -10,7 +10,22 @@
                 <ValidationMessage For="(() => BlogSearchDTO.Title)" />
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
+                <label for="category">Select Category</label>
+                <select @bind="BlogSearchDTO.CategoryID" id="category" class="form-select">
+
+                    @if (CategoryDTOs != null)
+                    {
+                        @foreach (var categoryDTO in CategoryDTOs)
+                        {
+                            <option value="@categoryDTO.ID">@categoryDTO.Name</option>
+                        }
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-lg-2">
                 <label for="sort">Sort By</label>
                 <select @bind="BlogSearchDTO.SortOrder" id="sort" class="form-select">
 
@@ -22,7 +37,7 @@
                 </select>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
                 <label for="order">Order By</label>
                 <select @bind="BlogSearchDTO.BlogOrderBy" id="order" class="form-select">
 
@@ -46,6 +61,7 @@
 
 @code {
     [Parameter] public BlogSearchDTO BlogSearchDTO { get; set; }
+    [Parameter] public List<CategoryDTO> CategoryDTOs { get; set; }
     [Parameter] public EventCallback ValidSubmit { get; set; }
     [Parameter] public EventCallback FormClear { get; set; }
 }

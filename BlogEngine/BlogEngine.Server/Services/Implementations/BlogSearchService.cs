@@ -31,6 +31,12 @@ namespace BlogEngine.Server.Services.Implementations
                 blogs = blogs.Where(b => b.Title.Contains(blogSearchDTO.Title, System.StringComparison.OrdinalIgnoreCase));
             }
 
+            if (blogSearchDTO.CategoryID.HasValue)
+            {
+                blogs = blogs.Where(b => b.BlogCategories
+                                          .Any(bc => bc.CategoryID.Equals(blogSearchDTO.CategoryID.Value)));
+            }
+
             blogs = OrderBlogs(blogs, blogSearchDTO.SortOrder, blogSearchDTO.BlogOrderBy);
 
             return _mapper.Map<List<BlogDTO>>(blogs);
