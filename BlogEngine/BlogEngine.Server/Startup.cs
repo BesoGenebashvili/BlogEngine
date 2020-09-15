@@ -22,6 +22,10 @@ namespace BlogEngine.Server
 
             services.AddDataAcess(Configuration);
 
+            services.AddIdentity();
+
+            services.AddJWTAuthentication(Configuration);
+
             services.AddRepositories();
 
             services.AddBLLServices();
@@ -59,6 +63,8 @@ namespace BlogEngine.Server
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -2,6 +2,7 @@
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Data.Entities.JoiningEntities;
 using BlogEngine.Shared.DTOs;
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -59,6 +60,14 @@ namespace BlogEngine.Server.DataHelpers
             CreateMap<NotificationReceiverCreationDTO, NotificationReceiver>();
 
             CreateMap<NotificationReceiver, NotificationReceiverDTO>();
+
+            #endregion
+
+            #region Identity
+
+            CreateMap<UserInfoDTO, ApplicationUser>()
+                .ForMember(au => au.Email, opt => opt.MapFrom(ui => ui.EmailAddress))
+                .ForMember(au => au.UserName, opt => opt.MapFrom(ui => ui.EmailAddress));
 
             #endregion
         }

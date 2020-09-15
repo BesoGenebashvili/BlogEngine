@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogEngine.Core.Data.DatabaseContexts
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -23,7 +25,13 @@ namespace BlogEngine.Core.Data.DatabaseContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BlogCategory>().HasKey(b => new { b.BlogID, b.CategoryID });
+            modelBuilder.Entity<BlogCategory>()
+                .HasKey(b => new { b.BlogID, b.CategoryID });
+
+            /*
+            modelBuilder.Entity<ApplicationUser>()
+                .Property(u => u.Id).HasColumnName("ID");
+            */
 
             base.OnModelCreating(modelBuilder);
         }

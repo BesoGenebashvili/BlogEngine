@@ -15,6 +15,11 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using BlogEngine.Server.Attributes;
 using BlogEngine.Shared.Models;
+using BlogEngine.Core.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BlogEngine.Server.Extensions
 {
@@ -27,6 +32,41 @@ namespace BlogEngine.Server.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DbConnection"),
                     b => b.MigrationsAssembly("BlogEngine.Core"));
             });
+        }
+
+        public static IServiceCollection AddIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole<int>>(config =>
+            {
+                config.Password.RequiredLength = 3;
+                config.Password.RequireDigit = false;
+                config.Password.RequireLowercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
+              .AddDefaultTokenProviders();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJWTAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var JWTKey = Encoding.UTF8.GetBytes(configuration["JWT:Key"]);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
+
+                        IssuerSigningKey = new SymmetricSecurityKey(JWTKey),
+                    };
+                });
+
+            return services;
         }
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
