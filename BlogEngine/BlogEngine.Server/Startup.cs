@@ -26,6 +26,8 @@ namespace BlogEngine.Server
 
             services.AddJWTAuthentication(Configuration);
 
+            services.AddJWTServices();
+
             services.AddRepositories();
 
             services.AddBLLServices();

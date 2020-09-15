@@ -69,6 +69,11 @@ namespace BlogEngine.Server.Extensions
             return services;
         }
 
+        public static IServiceCollection AddJWTServices(this IServiceCollection services)
+        {
+            return services.AddScoped<ITokenService, JWTTokenService>();
+        }
+
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IBlogRepository, BlogRepository>();
@@ -97,6 +102,9 @@ namespace BlogEngine.Server.Extensions
             services.AddScoped<IPageService, PageService>();
 
             services.AddScoped<INotificationReceiverService, NotificationReceiverService>();
+
+            // Should it be here?
+            services.AddScoped<IAccountService, AccountService>();
 
             return services;
         }
