@@ -1,10 +1,25 @@
 ﻿<Router AppAssembly="@typeof(Program).Assembly">
+
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+
+            <Authorizing>
+                <text>You are Authorizing...</text>
+            </Authorizing>
+
+            <NotAuthorized>
+                <text>You are Not Authorized.</text>
+            </NotAuthorized>
+
+        </AuthorizeRouteView>
     </Found>
+
     <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <TextCenter Text="Sorry, there's nothing at this address."/>
-        </LayoutView>
+        <CascadingAuthenticationState>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <TextCenter Text="Sorry, there's nothing at this address." />
+            </LayoutView>
+        </CascadingAuthenticationState>
     </NotFound>
+
 </Router>

@@ -2,6 +2,8 @@
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Shared.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
     public class CategoriesController : ControllerBase
     {
@@ -22,6 +25,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet(Name = "getCategories")]
+        [AllowAnonymous]
         [ServiceFilter(typeof(CategoryHATEOASAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDTO>))]
         public async Task<ActionResult<List<CategoryDTO>>> Get()
@@ -30,6 +34,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("{id:int}", Name = "getCategory")]
+        [AllowAnonymous]
         [ServiceFilter(typeof(CategoryHATEOASAttribute))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDTO))]

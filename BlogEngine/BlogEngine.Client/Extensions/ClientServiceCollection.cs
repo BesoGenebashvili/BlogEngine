@@ -3,6 +3,8 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using BlogEngine.ClientServices.Services.Abstractions;
 using BlogEngine.ClientServices.Services.Implementations;
+using BlogEngine.ClientServices.Account;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace BlogEngine.Client.Extensions
 {
@@ -30,6 +32,31 @@ namespace BlogEngine.Client.Extensions
             services.AddScoped<ICategoryClient, CategoryClient>();
 
             services.AddScoped<IPagesClient, PagesClient>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJSInteropServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBrowserStorageService, BrowserStorageService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddJWTAuthenticationServices(this IServiceCollection services)
+        {
+            services.AddScoped<JWTAuthenticationStateProvider>();
+
+            services.AddScoped<IJWTClaimParserService, JWTClaimParserService>();
+
+            services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
+
+            services.AddScoped<ILoginService, JWTAuthenticationStateProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
+
+            services.AddOptions();
+            services.AddAuthorizationCore(opt => { });
 
             return services;
         }

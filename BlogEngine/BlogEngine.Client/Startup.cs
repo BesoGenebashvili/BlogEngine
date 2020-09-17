@@ -33,6 +33,10 @@ namespace BlogEngine.Client
             services.AddFileReaderService();
 
             services.AddClientAPIServices();
+
+            services.AddJSInteropServices();
+
+            services.AddJWTAuthenticationServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
