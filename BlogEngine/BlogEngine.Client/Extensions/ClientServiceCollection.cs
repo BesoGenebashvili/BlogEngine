@@ -33,6 +33,8 @@ namespace BlogEngine.Client.Extensions
 
             services.AddScoped<IPagesClient, PagesClient>();
 
+            services.AddScoped<IAccountClient, AccountClient>();
+
             return services;
         }
 

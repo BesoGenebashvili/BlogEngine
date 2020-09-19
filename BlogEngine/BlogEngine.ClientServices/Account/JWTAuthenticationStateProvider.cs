@@ -53,15 +53,15 @@ namespace BlogEngine.ClientServices.Account
         #region LoginService
 
         // TODO: This must be separated service
-        public async Task Login(string token)
+        public async Task LoginAsync(string token)
         {
             await _browserStorageService.SetInLocalStorage(TOKENKEY, token);
-            var authStateTask = BuildAuthenticationStateAsync(token);
+            var authState = await BuildAuthenticationStateAsync(token);
 
-            NotifyAuthenticationStateChanged(authStateTask);
+            NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
 
-        public async Task Logout()
+        public async Task LogoutAsync()
         {
             await _browserStorageService.RemoveFromLocalStorage(TOKENKEY);
             _httpClient.DefaultRequestHeaders.Authorization = null;

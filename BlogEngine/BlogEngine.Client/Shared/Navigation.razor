@@ -37,8 +37,16 @@
                     </ul>
                 </li>
             </ul>
-            <div>
-                <a class="btn btn-outline-primary" href="account/login">Log in</a>
+            <div class="d-flex align-items-center flex-row">
+                <AuthorizeView>
+                    <Authorized Context="authState">
+                        <p class="my-0 mr-2">Hello @authState.User.Identity.Name</p>
+                        <a class="btn btn-outline-primary" href="account/logout">Log out</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-outline-primary" href="account/login">Log in</a>
+                    </NotAuthorized>
+                </AuthorizeView>
             </div>
         </div>
     </div>

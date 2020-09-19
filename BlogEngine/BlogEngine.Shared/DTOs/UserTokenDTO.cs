@@ -4,9 +4,8 @@ namespace BlogEngine.Shared.DTOs
 {
     public class UserTokenDTO
     {
-        public UserTokenDTO(string token)
+        public UserTokenDTO()
         {
-            Token = token;
         }
 
         public UserTokenDTO(string token, DateTime expirationDate)

@@ -1,0 +1,62 @@
+﻿<style>
+    body {
+        background-color: #f7f9fb !important;
+    }
+</style>
+
+<div class="container d-flex align-items-center flex-column">
+    <EditForm Model="_userInfoDTO" OnValidSubmit="DataAnnotationsValidated" class="shadow p-3 mb-5 bg-white rounded account-form">
+        <DataAnnotationsValidator />
+
+        <h3 class="mb-3">Register</h3>
+
+        @* TODO: Add missing fields to register model ! *@
+        <div class="mb-3">
+            <label for="first-name" class="form-label">First Name</label>
+            <input type="text" id="first-name" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="last-name" class="form-label">Last Name</label>
+            <input type="text" id="last-name" class="form-control">
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">E-Mail Address</label>
+            <input @bind-value="_userInfoDTO.EmailAddress" type="email" id="email" class="form-control">
+            <ValidationMessage For="(() => _userInfoDTO.EmailAddress)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input @bind-value="_userInfoDTO.Password" type="password" id="password" class="form-control">
+            <ValidationMessage For="(() => _userInfoDTO.Password)" />
+        </div>
+
+        @* TODO: Add missing fields to register model ! *@
+        <div class="mb-3">
+            <label for="repeat-password" class="form-label">Repeat Password</label>
+            <input type="password" id="repeat-password" class="form-control">
+        </div>
+
+        <button disabled="@_actionsDisabled" type="submit" class="btn btn-success mb-3 w-100">Register</button>
+
+        <div class="text-center">
+            <p>Already have an account? <a href="account/login" class="text-decoration-none">Login</a> </p>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public EventCallback<UserInfoDTO> ValidSubmit { get; set; }
+    private UserInfoDTO _userInfoDTO = new UserInfoDTO();
+    private bool _actionsDisabled = false;
+
+    private async Task DataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(_userInfoDTO);
+    }
+}
