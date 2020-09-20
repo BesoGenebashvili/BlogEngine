@@ -6,7 +6,7 @@ namespace BlogEngine.Server.Services.Abstractions
 {
     public interface IAccountService
     {
-        Task<IdentityResult> RegisterAsync(UserInfoDTO userInfoDTO);
-        Task<SignInResult> LoginAsync(UserInfoDTO userInfoDTO);
+        Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO);
+        Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO);
     }
 }

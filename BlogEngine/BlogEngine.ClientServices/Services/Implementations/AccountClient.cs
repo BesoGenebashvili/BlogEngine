@@ -15,14 +15,14 @@ namespace BlogEngine.ClientServices.Services.Implementations
             _httpService = httpService;
         }
 
-        public async Task<UserTokenDTO> LoginAsync(UserInfoDTO userInfoDTO)
+        public async Task<UserTokenDTO> LoginAsync(UserLoginDTO userLoginDTO)
         {
-            return await _httpService.PostHelperAsync<UserInfoDTO, UserTokenDTO>(BaseUrl + "/login", userInfoDTO);
+            return await _httpService.PostHelperAsync<UserLoginDTO, UserTokenDTO>(BaseUrl + "/login", userLoginDTO);
         }
 
-        public async Task<UserTokenDTO> RegisterAsync(UserInfoDTO userInfoDTO)
+        public async Task<UserTokenDTO> RegisterAsync(UserRegisterDTO userRegisterDTO)
         {
-            return await _httpService.PostHelperAsync<UserInfoDTO, UserTokenDTO>(BaseUrl + "/register", userInfoDTO);
+            return await _httpService.PostHelperAsync<UserRegisterDTO, UserTokenDTO>(BaseUrl + "/register", userRegisterDTO);
         }
     }
 }

@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
     public class NotificationsController : ControllerBase
     {
@@ -21,6 +24,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<NotificationReceiverDTO>))]
         public async Task<ActionResult<List<NotificationReceiverDTO>>> Get()
         {
@@ -28,6 +32,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("{id:int}", Name = "getNotificationReceiver")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NotificationReceiverDTO))]
         public async Task<ActionResult<NotificationReceiverDTO>> Get(int id)

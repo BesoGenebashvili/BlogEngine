@@ -38,10 +38,12 @@ namespace BlogEngine.Server.Extensions
         {
             services.AddIdentity<ApplicationUser, IdentityRole<int>>(config =>
             {
-                config.Password.RequiredLength = 3;
+                // Temporary simple validation
+                config.Password.RequiredLength = 1;
                 config.Password.RequireDigit = false;
                 config.Password.RequireLowercase = false;
                 config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 

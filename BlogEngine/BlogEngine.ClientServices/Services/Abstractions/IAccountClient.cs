@@ -5,7 +5,7 @@ namespace BlogEngine.ClientServices.Services.Abstractions
 {
     public interface IAccountClient
     {
-        Task<UserTokenDTO> LoginAsync(UserInfoDTO userInfoDTO);
-        Task<UserTokenDTO> RegisterAsync(UserInfoDTO userInfoDTO);
+        Task<UserTokenDTO> LoginAsync(UserLoginDTO userLoginDTO);
+        Task<UserTokenDTO> RegisterAsync(UserRegisterDTO userRegisterDTO);
     }
 }

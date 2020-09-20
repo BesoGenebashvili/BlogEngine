@@ -22,25 +22,25 @@ namespace BlogEngine.Server.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(UserTokenDTO), 200)]
-        public async Task<ActionResult<UserTokenDTO>> Register([FromBody] UserInfoDTO userInfoDTO)
+        public async Task<ActionResult<UserTokenDTO>> Register([FromBody] UserRegisterDTO userRegisterDTO)
         {
-            var identityResult = await _accountService.RegisterAsync(userInfoDTO);
+            var identityResult = await _accountService.RegisterAsync(userRegisterDTO);
 
             if (!identityResult.Succeeded) return BadRequest(identityResult.Errors);
 
-            return await _tokenService.BuildToken(userInfoDTO);
+            return await _tokenService.BuildToken(userRegisterDTO);
         }
 
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(UserTokenDTO), 200)]
-        public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserInfoDTO userInfoDTO)
+        public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserLoginDTO userLoginDTO)
         {
-            var signInResult = await _accountService.LoginAsync(userInfoDTO);
+            var signInResult = await _accountService.LoginAsync(userLoginDTO);
 
             if (!signInResult.Succeeded) return BadRequest("Invalid Login attempt");
 
-            return await _tokenService.BuildToken(userInfoDTO);
+            return await _tokenService.BuildToken(userLoginDTO);
         }
     }
 }

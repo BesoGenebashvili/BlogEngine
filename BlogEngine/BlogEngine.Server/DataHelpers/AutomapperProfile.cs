@@ -65,9 +65,13 @@ namespace BlogEngine.Server.DataHelpers
 
             #region Identity
 
-            CreateMap<UserInfoDTO, ApplicationUser>()
-                .ForMember(au => au.Email, opt => opt.MapFrom(ui => ui.EmailAddress))
-                .ForMember(au => au.UserName, opt => opt.MapFrom(ui => ui.EmailAddress));
+            CreateMap<UserLoginDTO, ApplicationUser>()
+                .ForMember(au => au.Email, opt => opt.MapFrom(ul => ul.EmailAddress))
+                .ForMember(au => au.UserName, opt => opt.MapFrom(ul => ul.EmailAddress));
+
+            CreateMap<UserRegisterDTO, ApplicationUser>()
+                .ForMember(au => au.Email, opt => opt.MapFrom(ur => ur.EmailAddress))
+                .ForMember(au => au.UserName, opt => opt.MapFrom(ur => ur.EmailAddress));
 
             #endregion
         }

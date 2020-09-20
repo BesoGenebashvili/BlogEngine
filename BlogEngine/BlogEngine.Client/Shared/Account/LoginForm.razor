@@ -5,20 +5,20 @@
 </style>
 
 <div class="container d-flex align-items-center flex-column">
-    <EditForm Model="_userInfoDTO" OnValidSubmit="DataAnnotationsValidated" class="shadow p-3 mb-5 bg-white rounded account-form">
+    <EditForm Model="_userLoginDTO" OnValidSubmit="DataAnnotationsValidated" class="shadow p-3 mb-5 bg-white rounded account-form">
         <DataAnnotationsValidator />
         <h3 class="mb-3">Login</h3>
 
         <div class="mb-3">
             <label for="email" class="form-label">E-Mail Address</label>
-            <input @bind-value="_userInfoDTO.EmailAddress" type="email" id="email" class="form-control">
-            <ValidationMessage For="(() => _userInfoDTO.EmailAddress)" />
+            <input @bind-value="_userLoginDTO.EmailAddress" type="email" id="email" class="form-control">
+            <ValidationMessage For="(() => _userLoginDTO.EmailAddress)" />
         </div>
 
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input @bind-value="_userInfoDTO.Password" type="password" id="password" class="form-control">
-            <ValidationMessage For="(() => _userInfoDTO.Password)" />
+            <input @bind-value="_userLoginDTO.Password" type="password" id="password" class="form-control">
+            <ValidationMessage For="(() => _userLoginDTO.Password)" />
         </div>
 
         <div class="mb-3 form-check">
@@ -35,8 +35,8 @@
 </div>
 
 @code {
-    [Parameter] public EventCallback<UserInfoDTO> ValidSubmit { get; set; }
-    private UserInfoDTO _userInfoDTO = new UserInfoDTO();
+    [Parameter] public EventCallback<UserLoginDTO> ValidSubmit { get; set; }
+    private UserLoginDTO _userLoginDTO = new UserLoginDTO();
     private bool _actionsDisabled = false;
 
     private async Task DataAnnotationsValidated()
@@ -44,6 +44,6 @@
         _actionsDisabled = true;
         StateHasChanged();
 
-        await ValidSubmit.InvokeAsync(_userInfoDTO);
+        await ValidSubmit.InvokeAsync(_userLoginDTO);
     }
 }

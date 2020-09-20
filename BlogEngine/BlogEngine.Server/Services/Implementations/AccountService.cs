@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using AutoMapper;
+using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
@@ -24,28 +24,36 @@ namespace BlogEngine.Server.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task<IdentityResult> RegisterAsync(UserInfoDTO userInfoDTO)
+        public async Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO)
         {
-            NullCheckThrowArgumentNullException(userInfoDTO);
+            NullCheckThrowArgumentNullException(userRegisterDTO);
 
-            var applicationUser = _mapper.Map<ApplicationUser>(userInfoDTO);
+            var applicationUser = _mapper.Map<ApplicationUser>(userRegisterDTO);
 
-            return await _userManager.CreateAsync(applicationUser, userInfoDTO.Password);
+            return await _userManager.CreateAsync(applicationUser, userRegisterDTO.Password);
         }
 
-        public async Task<SignInResult> LoginAsync(UserInfoDTO userInfoDTO)
+        public async Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO)
         {
-            NullCheckThrowArgumentNullException(userInfoDTO);
+            NullCheckThrowArgumentNullException(userLoginDTO);
 
             return await _signInManager
-                .PasswordSignInAsync(userInfoDTO.EmailAddress, userInfoDTO.Password, false, false);
+                .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
         }
 
-        protected void NullCheckThrowArgumentNullException(UserInfoDTO userInfoDTO)
+        protected void NullCheckThrowArgumentNullException(UserRegisterDTO userRegisterDTO)
         {
-            if (userInfoDTO == null)
+            if (userRegisterDTO == null)
             {
-                throw new ArgumentNullException(nameof(userInfoDTO));
+                throw new ArgumentNullException(nameof(userRegisterDTO));
+            }
+        }
+
+        protected void NullCheckThrowArgumentNullException(UserLoginDTO userLoginDTO)
+        {
+            if (userLoginDTO == null)
+            {
+                throw new ArgumentNullException(nameof(userLoginDTO));
             }
         }
     }

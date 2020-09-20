@@ -22,6 +22,11 @@ namespace BlogEngine.Server.Services.Implementations
 
         public Task<UserTokenDTO> BuildToken(UserInfoDTO userInfoDTO)
         {
+            if (userInfoDTO == null)
+            {
+                throw new ArgumentNullException(nameof(userInfoDTO));
+            }
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, userInfoDTO.EmailAddress),

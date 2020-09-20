@@ -4,11 +4,13 @@ namespace BlogEngine.Shared.DTOs
 {
     public class UserInfoDTO
     {
-        [Required]
+        [Required(ErrorMessage = "Email Address is required")]
         [EmailAddress]
+        [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} is required")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

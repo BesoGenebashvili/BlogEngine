@@ -7,9 +7,9 @@
 <LoginForm ValidSubmit="OnValidSubmit"/>
 
 @code{
-    private async Task OnValidSubmit(UserInfoDTO userInfoDTO)
+    private async Task OnValidSubmit(UserLoginDTO userLoginDTO)
     {
-        var userTokenDTO = await AccountClient.LoginAsync(userInfoDTO);
+        var userTokenDTO = await AccountClient.LoginAsync(userLoginDTO);
         await LoginService.LoginAsync(userTokenDTO.Token);
 
         NavigationManager.NavigateTo("");

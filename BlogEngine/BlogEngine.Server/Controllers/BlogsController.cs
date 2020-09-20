@@ -5,11 +5,14 @@ using BlogEngine.Shared.DTOs;
 using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using BlogEngine.Shared.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogEngine.Server.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
     public class BlogsController : ControllerBase
     {
@@ -24,16 +27,16 @@ namespace BlogEngine.Server.Controllers
             _notificationSender = notificationSender;
         }
 
-        //GET api/blogs
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
         public async Task<ActionResult<List<BlogDTO>>> Get()
         {
             return await _blogService.GetAllAsync();
         }
 
-        //GET api/blogs/{id}
         [HttpGet("{id:int}", Name = "GetBlog")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogDTO))]
         public async Task<ActionResult<BlogDTO>> Get(int id)
@@ -45,15 +48,14 @@ namespace BlogEngine.Server.Controllers
             return blogDTO;
         }
 
-        //GET api/blogs/search
         [HttpGet("search")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
         public async Task<ActionResult<List<BlogDTO>>> Search([FromQuery] BlogSearchDTO blogSearchDTO)
         {
             return await _blogSearchService.SearchAsync(blogSearchDTO);
         }
 
-        //POST api/blogs
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(BlogDTO))]
@@ -68,7 +70,6 @@ namespace BlogEngine.Server.Controllers
             return new CreatedAtRouteResult("GetBlog", new { insertedBlog.ID }, insertedBlog);
         }
 
-        //GET api/blogs/edit/{id}
         [HttpGet("edit/{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogEditPageDTO))]
@@ -81,7 +82,6 @@ namespace BlogEngine.Server.Controllers
             return editPageDTO;
         }
 
-        //PUT api/blogs/{id}
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -97,7 +97,6 @@ namespace BlogEngine.Server.Controllers
             return blogDTO;
         }
 
-        //DELETE api/blogs/{id}
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Delete(int id)

@@ -40,7 +40,7 @@
             <div class="d-flex align-items-center flex-row">
                 <AuthorizeView>
                     <Authorized Context="authState">
-                        <p class="my-0 mr-2">Hello @authState.User.Identity.Name</p>
+                        <p class="my-0 mr-2">Hello <a href="account/personal">@authState.User.Identity.Name</a></p>
                         <a class="btn btn-outline-primary" href="account/logout">Log out</a>
                     </Authorized>
                     <NotAuthorized>

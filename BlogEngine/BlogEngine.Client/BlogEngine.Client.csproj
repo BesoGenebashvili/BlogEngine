@@ -14,4 +14,8 @@
     <ProjectReference Include="..\BlogEngine.Shared\BlogEngine.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
+
 </Project>
