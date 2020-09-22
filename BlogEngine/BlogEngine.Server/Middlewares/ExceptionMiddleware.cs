@@ -38,11 +38,7 @@ namespace BlogEngine.Server.Middlewares
                 httpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
             */
 
-            var errorDetails = new ErrorDetails()
-            {
-                StatusCode = httpContext.Response.StatusCode,
-                Message = $"Internal Server Error: { ex.Message}"
-            };
+            var errorDetails = new ErrorDetails(httpContext.Response.StatusCode, $"Internal Server Error: { ex.Message }");
 
             string errorDetailsJson = JsonSerializer.Serialize(errorDetails);
 

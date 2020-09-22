@@ -1,0 +1,1 @@
+﻿DELETE AspNetRoles WHERE id = 1

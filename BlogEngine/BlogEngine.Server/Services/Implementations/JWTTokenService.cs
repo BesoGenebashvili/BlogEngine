@@ -4,8 +4,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,24 +16,33 @@ namespace BlogEngine.Server.Services.Implementations
     public class JWTTokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public JWTTokenService(IConfiguration configuration)
+        public JWTTokenService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _configuration = configuration;
+            _userManager = userManager;
         }
 
-        public Task<UserTokenDTO> BuildToken(UserInfoDTO userInfoDTO)
+        public async Task<UserTokenDTO> BuildToken(UserInfoDTO userInfoDTO)
         {
             if (userInfoDTO == null)
             {
                 throw new ArgumentNullException(nameof(userInfoDTO));
             }
 
+            var identityUser = await _userManager.FindByEmailAsync(userInfoDTO.EmailAddress);
+
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, userInfoDTO.EmailAddress),
+                new Claim(ClaimTypes.Name, identityUser.FirstName),
+                new Claim(ClaimTypes.Surname, identityUser.LastName),
                 new Claim(ClaimTypes.Email, userInfoDTO.EmailAddress),
             };
+
+            var userClaims = await _userManager.GetClaimsAsync(identityUser);
+
+            claims.AddRange(userClaims);
 
             var JWTKey = Encoding.UTF8.GetBytes(_configuration["JWT:Key"]);
 
@@ -50,7 +61,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var token = new JwtSecurityTokenHandler().WriteToken(JWTToken);
 
-            return Task.FromResult(new UserTokenDTO(token, expirationDate));
+            return new UserTokenDTO(token, expirationDate);
         }
     }
 }

@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using BlogEngine.Core.Data.DatabaseContexts;
+using System.Security.Claims;
+using BlogEngine.Server.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -12,15 +17,18 @@ namespace BlogEngine.Server.Services.Implementations
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _applicationDbContext;
         private readonly IMapper _mapper;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext applicationDbContext,
             IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _applicationDbContext = applicationDbContext;
             _mapper = mapper;
         }
 
@@ -41,6 +49,93 @@ namespace BlogEngine.Server.Services.Implementations
                 .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
         }
 
+        public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
+        {
+            var userInfoDetailDTOTasks = _applicationDbContext.Users
+                .AsEnumerable()
+                .OrderBy(u => u.Email)
+                .Select(async user =>
+                {
+                    var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(user);
+                    userInfoDetailDTO.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+                    return userInfoDetailDTO;
+                }).ToArray();
+
+            var userInfoDetailDTOs = await Task.WhenAll(userInfoDetailDTOTasks);
+
+            return userInfoDetailDTOs.ToList();
+        }
+
+        public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
+        {
+            NullCheckThrowArgumentNullException(userRoleDTO);
+
+            var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
+
+            if (user == null)
+            {
+                return new AccountOperationResult()
+                {
+                    UserNotFound = true,
+                    Errors = $"User with a ID = '{userRoleDTO.UserID}' was not found in the Database"
+                };
+            }
+
+            var identityResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, userRoleDTO.RoleName));
+
+            return new AccountOperationResult()
+            {
+                Successed = identityResult.Succeeded,
+                Errors = string.Join(", ", identityResult.Errors)
+            };
+        }
+
+        public async Task<AccountOperationResult> RemoveRoleAsync(UserRoleDTO userRoleDTO)
+        {
+            NullCheckThrowArgumentNullException(userRoleDTO);
+
+            var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
+
+            if (user == null)
+            {
+                return new AccountOperationResult()
+                {
+                    UserNotFound = true,
+                    Errors = $"User with a ID = '{userRoleDTO.UserID}' was not found in the Database"
+                };
+            }
+
+            var identityResult = await _userManager.RemoveClaimAsync(user, new Claim(ClaimTypes.Role, userRoleDTO.RoleName));
+
+            return new AccountOperationResult()
+            {
+                Successed = identityResult.Succeeded,
+                Errors = string.Join(", ", identityResult.Errors)
+            };
+        }
+
+        public async Task<AccountOperationResult> DeleteAsync(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+            {
+                return new AccountOperationResult()
+                {
+                    UserNotFound = true,
+                    Errors = $"User with a ID = '{id}' was not found in the Database"
+                };
+            }
+
+            var identityResult = await _userManager.DeleteAsync(user);
+
+            return new AccountOperationResult()
+            {
+                Successed = identityResult.Succeeded,
+                Errors = string.Join(", ", identityResult.Errors)
+            };
+        }
+
         protected void NullCheckThrowArgumentNullException(UserRegisterDTO userRegisterDTO)
         {
             if (userRegisterDTO == null)
@@ -54,6 +149,14 @@ namespace BlogEngine.Server.Services.Implementations
             if (userLoginDTO == null)
             {
                 throw new ArgumentNullException(nameof(userLoginDTO));
+            }
+        }
+
+        protected void NullCheckThrowArgumentNullException(UserRoleDTO userRoleDTO)
+        {
+            if (userRoleDTO == null)
+            {
+                throw new ArgumentNullException(nameof(userRoleDTO));
             }
         }
     }

@@ -2,4 +2,22 @@
 
 <TextCenter Text="Page is under construction" />
 
+@if (_authenticationState != null && _authenticationState.User != null)
+{
+    <h3>First Name : @_authenticationState.GetClaimValue(ClaimTypes.Name)</h3>
+    <h3>Last Name : @_authenticationState.GetClaimValue(ClaimTypes.Surname)</h3>
+    <h3>E-Mail Address : @_authenticationState.GetClaimValue(ClaimTypes.Email)</h3>
+}
+
 @* TODO: Implement *@
+
+@code{
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private AuthenticationState _authenticationState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authenticationState = await AuthenticationStateTask;
+    }
+}

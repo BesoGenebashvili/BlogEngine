@@ -1,5 +1,7 @@
-﻿using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.Server.Helpers;
+using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Abstractions
@@ -8,5 +10,9 @@ namespace BlogEngine.Server.Services.Abstractions
     {
         Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO);
         Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO);
+        Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs();
+        Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO);
+        Task<AccountOperationResult> RemoveRoleAsync(UserRoleDTO userRoleDTO);
+        Task<AccountOperationResult> DeleteAsync(int id);
     }
 }

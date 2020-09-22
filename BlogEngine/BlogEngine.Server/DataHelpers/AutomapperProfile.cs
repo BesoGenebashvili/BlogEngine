@@ -73,6 +73,10 @@ namespace BlogEngine.Server.DataHelpers
                 .ForMember(au => au.Email, opt => opt.MapFrom(ur => ur.EmailAddress))
                 .ForMember(au => au.UserName, opt => opt.MapFrom(ur => ur.EmailAddress));
 
+            CreateMap<ApplicationUser, UserInfoDetailDTO>()
+                .ForMember(ui => ui.EmailAddress, opt => opt.MapFrom(au => au.Email))
+                .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
+
             #endregion
         }
 
