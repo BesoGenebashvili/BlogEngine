@@ -49,21 +49,23 @@ namespace BlogEngine.Server.Services.Implementations
                 .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
         }
 
-        public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
+        public Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
         {
-            var userInfoDetailDTOTasks = _applicationDbContext.Users
+            // TODO: Fix thread issue
+
+            var userInfoDetailDTOs = _applicationDbContext.Users
                 .AsEnumerable()
                 .OrderBy(u => u.Email)
-                .Select(async user =>
+                .Select(user =>
                 {
                     var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(user);
-                    userInfoDetailDTO.Roles = (await _userManager.GetRolesAsync(user)).ToList();
+                    // userInfoDetailDTO.Roles = await GetUserRoles(user);
                     return userInfoDetailDTO;
-                }).ToArray();
+                }).ToList();
 
-            var userInfoDetailDTOs = await Task.WhenAll(userInfoDetailDTOTasks);
+            // var userInfoDetailDTOs = await Task.WhenAll(userInfoDetailDTOsTasks);
 
-            return userInfoDetailDTOs.ToList();
+            return Task.FromResult(userInfoDetailDTOs);
         }
 
         public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
@@ -134,6 +136,18 @@ namespace BlogEngine.Server.Services.Implementations
                 Successed = identityResult.Succeeded,
                 Errors = string.Join(", ", identityResult.Errors)
             };
+        }
+
+        public async Task<List<string>> GetUserRoles(ApplicationUser applicationUser)
+        {
+            var claims = await _userManager.GetClaimsAsync(applicationUser);
+
+            var roles = claims
+                .Where(c => c.Type.Equals(ClaimTypes.Role))
+                .Select(c => c.Value)
+                .ToList();
+
+            return roles;
         }
 
         protected void NullCheckThrowArgumentNullException(UserRegisterDTO userRegisterDTO)

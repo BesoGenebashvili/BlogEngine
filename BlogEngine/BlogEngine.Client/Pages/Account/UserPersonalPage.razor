@@ -9,6 +9,12 @@
     <h3>E-Mail Address : @_authenticationState.GetClaimValue(ClaimTypes.Email)</h3>
 }
 
+<AuthorizeView Roles="@UserRole.Admin">
+    <Authorized>
+        <a class="btn btn-link btn-lg" href="accounts/manage">Manage Accounts</a>
+    </Authorized>
+</AuthorizeView>
+
 @* TODO: Implement *@
 
 @code{

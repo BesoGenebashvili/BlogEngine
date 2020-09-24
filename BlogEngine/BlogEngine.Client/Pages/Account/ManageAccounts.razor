@@ -1,0 +1,58 @@
+﻿@page "/accounts/manage"
+@layout BrandOnlyLayout
+@inject IAccountClient AccountClient
+@attribute [Authorize(Roles = UserRole.Admin)]
+
+<TextCenter Text="Manage Accounts" />
+
+<AccountsDataGrid UserInfoDetailDTOs="_userInfoDetailDTOs" UserDelete="OnUserDelete" />
+
+<ConfirmationModal @ref="confirmationModal"
+                   Confirm="OnModalConfirm"
+                   Cancel="OnModalCancel"
+                   Centered="true">
+    <ModalBodyTemplate>
+        <p>Do you want to permanently delete User with Email Adress : @_userToDelete.EmailAddress ?</p>
+    </ModalBodyTemplate>
+</ConfirmationModal>
+
+@code{
+    // TODO : add role editor
+
+    private List<UserInfoDetailDTO> _userInfoDetailDTOs;
+
+    private ConfirmationModal confirmationModal;
+    private UserInfoDetailDTO _userToDelete = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        _userInfoDetailDTOs = await AccountClient.GetUserInfoDetailDTOsAsync();
+    }
+
+    private void OnUserDelete(UserInfoDetailDTO userInfoDetailDTO)
+    {
+        _userToDelete = userInfoDetailDTO;
+
+        confirmationModal.Show();
+    }
+
+    public async Task OnModalConfirm()
+    {
+        await AccountClient.DeleteUserAsync(_userToDelete.ID);
+        _userToDelete = null;
+
+        confirmationModal.Hide();
+        await LoadPage();
+    }
+
+    public void OnModalCancel()
+    {
+        _userToDelete = null;
+        confirmationModal.Hide();
+    }
+}

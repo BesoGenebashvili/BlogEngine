@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
 using BlogEngine.Shared.Models;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Controllers
 {
@@ -17,7 +18,6 @@ namespace BlogEngine.Server.Controllers
     {
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
-        private const string AdminRole = "Admin";
 
         public AccountsController(IAccountService accountService, ITokenService tokenService)
         {
@@ -50,7 +50,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("users")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = AdminRole)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(typeof(List<UserInfoDetailDTO>), 200)]
         public async Task<ActionResult<List<UserInfoDetailDTO>>> GetUsers()
         {
@@ -58,7 +58,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpPost("assignRole")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = AdminRole)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(bool), 200)]
         public async Task<ActionResult<bool>> AssignRole([FromBody] UserRoleDTO userRoleDTO)
@@ -74,7 +74,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpPost("removeRole")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = AdminRole)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(bool), 200)]
         public async Task<ActionResult<bool>> RemoveRole([FromBody] UserRoleDTO userRoleDTO)
@@ -90,7 +90,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = AdminRole)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(bool), 200)]
         public async Task<ActionResult<bool>> DeleteUser(int id)

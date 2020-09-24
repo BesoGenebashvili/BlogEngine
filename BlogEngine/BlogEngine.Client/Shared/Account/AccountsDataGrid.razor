@@ -1,0 +1,54 @@
+﻿@if (UserInfoDetailDTOs == null)
+{
+    <Loading />
+}
+else if (UserInfoDetailDTOs.Count == 0)
+{
+    <TextCenter Text="No Data Found" />
+}
+else
+{
+    <table class="table table-hover mt-3">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Email Address</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ _modelCount = 1;}
+            @foreach (var userInfoDetailDTO in UserInfoDetailDTOs)
+            {
+                <tr>
+                    <th scope="row">@(_modelCount++)</th>
+                    <td>@userInfoDetailDTO.ID</td>
+                    <td>@userInfoDetailDTO.EmailAddress</td>
+                    <td>@userInfoDetailDTO.FirstName</td>
+                    <td>@userInfoDetailDTO.LastName</td>
+                    <td>
+                        @foreach (var role in userInfoDetailDTO.Roles)
+                        {
+                            <span>@role ,</span>
+                        }
+                    </td>
+                    <td>
+                        <button @onclick="(async() => await UserDelete.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code{
+    [Parameter] public List<UserInfoDetailDTO> UserInfoDetailDTOs { get; set; }
+    [Parameter] public EventCallback<UserInfoDetailDTO> UserDelete { get; set; }
+
+    private int _modelCount;
+}

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using BlogEngine.Server.Extensions;
+using System.Linq;
 
 namespace BlogEngine.Server.Controllers
 {
@@ -30,9 +32,13 @@ namespace BlogEngine.Server.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
-        public async Task<ActionResult<List<BlogDTO>>> Get()
+        public async Task<ActionResult<List<BlogDTO>>> Get([FromQuery] PaginationDTO paginationDTO)
         {
-            return await _blogService.GetAllAsync();
+            var blogDTOs = await _blogService.GetAllAsync();
+
+            await HttpContext.InsertPaginationParametersInResponseAsync(blogDTOs, paginationDTO.RecordsPerPage);
+
+            return blogDTOs.Paginate(paginationDTO).ToList();
         }
 
         [HttpGet("{id:int}", Name = "GetBlog")]
