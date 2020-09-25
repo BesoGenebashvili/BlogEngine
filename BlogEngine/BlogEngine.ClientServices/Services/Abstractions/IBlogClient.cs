@@ -1,4 +1,5 @@
-﻿using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.ClientServices.Helpers;
+using BlogEngine.Shared.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace BlogEngine.ClientServices.Services.Abstractions
     {
         Task<BlogDTO> GetAsync(int id);
         Task<List<BlogDTO>> GetAllAsync();
+        Task<PaginatedResponse<List<BlogDTO>>> GetAllPaginatedAsync(PaginationDTO paginationDTO);
         Task<BlogEditPageDTO> GetEditPageDTOAsync(int id);
         Task<List<BlogDTO>> SearchAsync(BlogSearchDTO blogSearchDTO);
         Task<BlogDTO> CreateAsync(BlogCreationDTO blogCreationDTO);

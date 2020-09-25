@@ -1,13 +1,36 @@
 ﻿@page "/blog/articles"
 @inject IBlogClient BlogClient
 
+<TextCenter Text="Blog Articles"/>
+
 <BlogArticleList BlogDTOs="_blogDTOs" />
+
+<PaginationSection CurrentPage="_paginationDTO.Page"
+                   TotalAmountPages="_totalAmountPages"
+                   PageSelected="OnPageSelected" />
 
 @code {
     private List<BlogDTO> _blogDTOs { get; set; }
 
+    private PaginationDTO _paginationDTO = new PaginationDTO();
+    private int _totalAmountPages;
+
     protected async override Task OnInitializedAsync()
     {
-        _blogDTOs = await BlogClient.GetAllAsync();
+        await LoadPage();
+    }
+
+    private async Task OnPageSelected(int page)
+    {
+        _paginationDTO.Page = page;
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        var paginatedResponse = await BlogClient.GetAllPaginatedAsync(_paginationDTO);
+
+        _blogDTOs = paginatedResponse.Response;
+        _totalAmountPages = paginatedResponse.TotalAmountPages;
     }
 }

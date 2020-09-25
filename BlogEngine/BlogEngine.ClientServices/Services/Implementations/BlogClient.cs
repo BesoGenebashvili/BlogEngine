@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogEngine.ClientServices.Extensions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.ClientServices.Helpers;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {
@@ -24,6 +25,11 @@ namespace BlogEngine.ClientServices.Services.Implementations
         public async Task<List<BlogDTO>> GetAllAsync()
         {
             return await _httpService.GetHelperAsync<List<BlogDTO>>(Url);
+        }
+
+        public async Task<PaginatedResponse<List<BlogDTO>>> GetAllPaginatedAsync(PaginationDTO paginationDTO)
+        {
+            return await _httpService.GetHelperAsync<List<BlogDTO>>(Url, paginationDTO);
         }
 
         public async Task<BlogEditPageDTO> GetEditPageDTOAsync(int id)

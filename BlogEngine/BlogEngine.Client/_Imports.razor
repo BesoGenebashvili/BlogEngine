@@ -1,5 +1,7 @@
-﻿@using System.Net.Http
-@using System.IO
+﻿@using System.IO
+@using System.Net.Http
+@using System.ComponentModel
+@using System.Security.Claims
 @using Microsoft.JSInterop
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
@@ -19,8 +21,6 @@
 @using BlogEngine.Client
 @using BlogEngine.Client.Shared
 @using BlogEngine.Client.Shared.Blog
-@using BlogEngine.Shared
-@using BlogEngine.Shared.DTOs
 @using BlogEngine.Client.Shared.Widgets
 @using BlogEngine.Client.Shared.Layouts
 @using BlogEngine.Client.Shared.Notification
@@ -28,6 +28,8 @@
 @using BlogEngine.Client.Shared.Category
 @using BlogEngine.Client.Shared.Account
 @using BlogEngine.Client.Extensions
-@using System.ComponentModel
-@using System.Security.Claims
+@using BlogEngine.Client.Shared
+@using BlogEngine.Client.Helpers
+@using BlogEngine.Shared
+@using BlogEngine.Shared.DTOs
 @using BlogEngine.Shared.Helpers

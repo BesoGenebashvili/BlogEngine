@@ -3,13 +3,12 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Extensions
 {
     public static class HttpContextExtensions
     {
-        public const string TotalAmountPagesHeaderKey = "totalAmountPages";
-
         public async static Task InsertPaginationParametersInResponseAsync<T>(
             this HttpContext httpContext, IEnumerable<T> enumerable, int recordsPerPage)
         {
@@ -38,7 +37,7 @@ namespace BlogEngine.Server.Extensions
             double count = enumerable.Count();
             double totalAmountPages = Math.Ceiling(count / recordsPerPage);
 
-            httpContext.Response.Headers.Add(TotalAmountPagesHeaderKey, totalAmountPages.ToString());
+            httpContext.Response.Headers.Add(Pagination.TotalAmountPagesHeaderKey, totalAmountPages.ToString());
         }
     }
 }

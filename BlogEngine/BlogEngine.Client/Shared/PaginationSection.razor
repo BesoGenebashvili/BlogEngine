@@ -1,0 +1,69 @@
+﻿@if (TotalAmountPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center @WrapperCssClass">
+            @foreach (var link in paginationLinks)
+            {
+                <li @onclick="@(() => SelectedPageInternal(link))" style="cursor: pointer;"
+                    class="page-item @(link.Enabled ? null : "disabled") @(link.Active ? "active" : null)">
+                    <span class="page-link" href="#">@link.Text</span>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+    [Parameter] public int CurrentPage { get; set; } = 1;
+    [Parameter] public int TotalAmountPages { get; set; }
+    [Parameter] public int Radius { get; set; } = 3;
+    [Parameter] public EventCallback<int> PageSelected { get; set; }
+    [Parameter] public string WrapperCssClass { get; set; }
+
+    private List<PaginationLink> paginationLinks;
+
+    private async Task SelectedPageInternal(PaginationLink link)
+    {
+        if (link.Page == CurrentPage)
+        {
+            return;
+        }
+
+        if (!link.Enabled)
+        {
+            return;
+        }
+
+        CurrentPage = link.Page;
+
+        await PageSelected.InvokeAsync(link.Page);
+    }
+
+    protected override void OnParametersSet()
+    {
+        LoadPages();
+    }
+
+    private void LoadPages()
+    {
+        paginationLinks = new List<PaginationLink>();
+
+        var isPreviousPageLinkEnabled = CurrentPage != 1;
+        var previousPage = CurrentPage - 1;
+
+        paginationLinks.Add(new PaginationLink(previousPage, isPreviousPageLinkEnabled, "Previous"));
+
+        for (int i = 1; i <= TotalAmountPages; i++)
+        {
+            if (i >= CurrentPage - Radius && i <= CurrentPage + Radius)
+            {
+                paginationLinks.Add(new PaginationLink(i) { Active = CurrentPage == i });
+            }
+        }
+
+        var isNextPageLinkEnabled = CurrentPage != TotalAmountPages;
+        var nextPage = CurrentPage + 1;
+
+        paginationLinks.Add(new PaginationLink(nextPage, isNextPageLinkEnabled, "Next"));
+    }
+}

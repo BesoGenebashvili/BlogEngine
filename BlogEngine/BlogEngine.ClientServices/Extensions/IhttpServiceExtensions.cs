@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using BlogEngine.ClientServices.Helpers;
 using BlogEngine.ClientServices.Services.Abstractions;
+using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.ClientServices.Extensions
 {
@@ -13,6 +17,43 @@ namespace BlogEngine.ClientServices.Extensions
             if (!response.Success) throw new ApplicationException(await response.GetBody());
 
             return response.Response;
+        }
+
+        public static async Task<PaginatedResponse<TResponse>> GetHelperAsync<TResponse>(
+            this IHttpService httpService,
+            string url,
+            PaginationDTO paginationDTO)
+        {
+            string newUrl;
+
+            var paginationDTOQueryString = paginationDTO.ToQueryString();
+
+            if (url.Contains("?"))
+            {
+                newUrl = $"{url}&{paginationDTOQueryString}";
+            }
+            else
+            {
+                newUrl = $"{url}?{paginationDTOQueryString}";
+            }
+
+            var httpResponse = await httpService.Get<TResponse>(newUrl);
+
+            if (!httpResponse.Success) throw new ApplicationException(await httpResponse.GetBody());
+
+            var totalAmoutPagesString = httpResponse
+                .HttpResponseMessage
+                .Headers
+                .GetValues(Pagination.TotalAmountPagesHeaderKey)
+                .FirstOrDefault();
+
+            int totalAmountPages = int.Parse(totalAmoutPagesString);
+
+            return new PaginatedResponse<TResponse>()
+            {
+                Response = httpResponse.Response,
+                TotalAmountPages = totalAmountPages
+            };
         }
 
         public static async Task<TResponse> PostHelperAsync<TData, TResponse>(this IHttpService httpService, string url, TData data)

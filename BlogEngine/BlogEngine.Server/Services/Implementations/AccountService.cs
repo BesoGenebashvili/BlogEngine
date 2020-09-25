@@ -7,9 +7,9 @@ using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using BlogEngine.Core.Data.DatabaseContexts;
 using System.Security.Claims;
 using BlogEngine.Server.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -17,18 +17,15 @@ namespace BlogEngine.Server.Services.Implementations
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ApplicationDbContext _applicationDbContext;
         private readonly IMapper _mapper;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ApplicationDbContext applicationDbContext,
             IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _applicationDbContext = applicationDbContext;
             _mapper = mapper;
         }
 
@@ -49,23 +46,20 @@ namespace BlogEngine.Server.Services.Implementations
                 .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
         }
 
-        public Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
+        public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
         {
-            // TODO: Fix thread issue
+            var applicationUsers = await _userManager.Users.ToListAsync();
 
-            var userInfoDetailDTOs = _applicationDbContext.Users
-                .AsEnumerable()
-                .OrderBy(u => u.Email)
-                .Select(user =>
-                {
-                    var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(user);
-                    // userInfoDetailDTO.Roles = await GetUserRoles(user);
-                    return userInfoDetailDTO;
-                }).ToList();
+            var userInfoDetalDTOs = new List<UserInfoDetailDTO>();
 
-            // var userInfoDetailDTOs = await Task.WhenAll(userInfoDetailDTOsTasks);
+            // Because of threading issue...
+            foreach (var applicationUser in applicationUsers)
+            {
+                // We should use Task.Whenall there but we can not
+                userInfoDetalDTOs.Add(await MapWithRolesAsync(applicationUser));
+            }
 
-            return Task.FromResult(userInfoDetailDTOs);
+            return userInfoDetalDTOs;
         }
 
         public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
@@ -138,7 +132,16 @@ namespace BlogEngine.Server.Services.Implementations
             };
         }
 
-        public async Task<List<string>> GetUserRoles(ApplicationUser applicationUser)
+        protected async Task<UserInfoDetailDTO> MapWithRolesAsync(ApplicationUser applicationUser)
+        {
+            var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(applicationUser);
+
+            userInfoDetailDTO.Roles = await GetUserRoles(applicationUser);
+
+            return userInfoDetailDTO;
+        }
+
+        protected async Task<List<string>> GetUserRoles(ApplicationUser applicationUser)
         {
             var claims = await _userManager.GetClaimsAsync(applicationUser);
 

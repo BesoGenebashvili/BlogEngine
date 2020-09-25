@@ -25,6 +25,10 @@ else
 
     private async Task OnValidSubmit(BlogCreationDTO blogCreationDTO)
     {
+        #region Temporary
+        blogCreationDTO.ApplicationUserID = 6;
+        #endregion
+
         var blogDTO = await BlogClient.CreateAsync(blogCreationDTO);
         NavigationManager.NavigateTo($"blog/view/{blogDTO.ID}");
     }
