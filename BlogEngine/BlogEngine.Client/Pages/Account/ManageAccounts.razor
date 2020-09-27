@@ -5,24 +5,31 @@
 
 <TextCenter Text="Manage Accounts" />
 
-<AccountsDataGrid UserInfoDetailDTOs="_userInfoDetailDTOs" UserDelete="OnUserDelete" />
+<AccountsDataGrid UserInfoDetailDTOs="_userInfoDetailDTOs"
+                  UserDelete="OnUserDelete"
+                  UserAssignAdminRole="OnUserAssignAdminRole"
+                  UserRemoveAdminRole="OnUserRemoveAdminRole" />
 
-<ConfirmationModal @ref="confirmationModal"
-                   Confirm="OnModalConfirm"
-                   Cancel="OnModalCancel"
+<ConfirmationModal @ref="_deleteConfirmationModal"
+                   Confirm="OnDeleteModalConfirm"
+                   Cancel="OnDeleteModalCancel"
                    Centered="true">
     <ModalBodyTemplate>
         <p>Do you want to permanently delete User with Email Adress : @_userToDelete.EmailAddress ?</p>
     </ModalBodyTemplate>
 </ConfirmationModal>
 
+<ConfirmationModal @ref="_assignRoleConfirmationModal"
+                   Confirm="OnUserAssignAdminRoleModalConfirm"
+                   Cancel="OnUserAssignAdminRoleModalCancel"
+                   Centered="true">
+    <ModalBodyTemplate>
+        <p>Do you want to Assign ADMIN ROLE to User with Email Adress : @_userToAssignRole.EmailAddress ?</p>
+    </ModalBodyTemplate>
+</ConfirmationModal>
+
 @code{
-    // TODO : add role editor
-
     private List<UserInfoDetailDTO> _userInfoDetailDTOs;
-
-    private ConfirmationModal confirmationModal;
-    private UserInfoDetailDTO _userToDelete = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,25 +41,81 @@
         _userInfoDetailDTOs = await AccountClient.GetUserInfoDetailDTOsAsync();
     }
 
+    #region Delete
+
+    private ConfirmationModal _deleteConfirmationModal;
+    private UserInfoDetailDTO _userToDelete = null;
+
     private void OnUserDelete(UserInfoDetailDTO userInfoDetailDTO)
     {
         _userToDelete = userInfoDetailDTO;
 
-        confirmationModal.Show();
+        _deleteConfirmationModal.Show();
     }
 
-    public async Task OnModalConfirm()
+    public async Task OnDeleteModalConfirm()
     {
         await AccountClient.DeleteUserAsync(_userToDelete.ID);
         _userToDelete = null;
 
-        confirmationModal.Hide();
+        _deleteConfirmationModal.Hide();
         await LoadPage();
     }
 
-    public void OnModalCancel()
+    public void OnDeleteModalCancel()
     {
         _userToDelete = null;
-        confirmationModal.Hide();
+        _deleteConfirmationModal.Hide();
     }
+
+    #endregion
+
+    #region Role Assign/Remove
+
+    private ConfirmationModal _assignRoleConfirmationModal;
+    private UserInfoDetailDTO _userToAssignRole = null;
+
+    private void OnUserAssignAdminRole(UserInfoDetailDTO userInfoDetailDTO)
+    {
+        _userToAssignRole = userInfoDetailDTO;
+
+        _assignRoleConfirmationModal.Show();
+    }
+
+    public async Task OnUserAssignAdminRoleModalConfirm()
+    {
+        var userRoleDTO = new UserRoleDTO()
+        {
+            UserID = _userToAssignRole.ID,
+            RoleName = UserRole.Admin
+        };
+
+        await AccountClient.AssignRoleAsync(userRoleDTO);
+
+        _userToAssignRole = null;
+
+        _assignRoleConfirmationModal.Hide();
+        await LoadPage();
+    }
+
+    public void OnUserAssignAdminRoleModalCancel()
+    {
+        _userToAssignRole = null;
+        _assignRoleConfirmationModal.Hide();
+    }
+
+    public async Task OnUserRemoveAdminRole(UserInfoDetailDTO userInfoDetailDTO)
+    {
+        var userRoleDTO = new UserRoleDTO()
+        {
+            UserID = userInfoDetailDTO.ID,
+            RoleName = UserRole.Admin
+        };
+
+        await AccountClient.RemoveRoleAsync(userRoleDTO);
+
+        await LoadPage();
+    }
+
+    #endregion
 }

@@ -62,5 +62,14 @@ namespace BlogEngine.Client.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddEncrypterServices(this IServiceCollection services)
+        {
+            services.AddTransient<IEncrypter, SimpleEncrypter>();
+
+            services.AddTransient<IAsyncEncrypter, SimpleEncrypter>();
+
+            return services;
+        }
     }
 }

@@ -8,6 +8,7 @@ using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using Blazor.FileReader;
 using BlogEngine.Client.Extensions;
+using BlogEngine.ClientServices.Services.Abstractions;
 
 namespace BlogEngine.Client
 {
@@ -28,7 +29,7 @@ namespace BlogEngine.Client
 
             services.AddHttpClientService();
 
-            services.AddSyncfusionBlazor();
+            services.AddEncrypterServices();
 
             services.AddFileReaderService();
 
@@ -37,14 +38,20 @@ namespace BlogEngine.Client
             services.AddJSInteropServices();
 
             services.AddJWTAuthenticationServices();
+
+            services.AddSyncfusionBlazor();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (File.Exists(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt"))
             {
+                var encriptor = app.ApplicationServices.GetRequiredService<IEncrypter>();
+
                 string licenseKey = File.ReadAllText(Directory.GetCurrentDirectory() + "/SyncfusionLicense.txt");
-                SyncfusionLicenseProvider.RegisterLicense(licenseKey);
+                var operationResult = encriptor.Decrypt(licenseKey);
+
+                SyncfusionLicenseProvider.RegisterLicense(operationResult.Result);
             }
 
             if (env.IsDevelopment())

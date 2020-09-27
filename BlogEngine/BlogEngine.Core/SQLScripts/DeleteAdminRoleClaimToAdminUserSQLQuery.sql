@@ -1,0 +1,1 @@
+﻿DELETE AspNetUserClaims WHERE id = 1

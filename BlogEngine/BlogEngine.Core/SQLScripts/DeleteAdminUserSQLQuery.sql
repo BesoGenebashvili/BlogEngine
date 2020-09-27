@@ -1,0 +1,1 @@
+﻿DELETE AspNetUsers WHERE id = 1

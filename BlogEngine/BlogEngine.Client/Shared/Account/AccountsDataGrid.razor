@@ -33,10 +33,19 @@ else
                     <td>
                         @foreach (var role in userInfoDetailDTO.Roles)
                         {
-                            <span>@role ,</span>
+                            <span class="mr-1">@role</span>
                         }
                     </td>
                     <td>
+                        @if (userInfoDetailDTO.Roles.Contains(UserRole.Admin))
+                        {
+                            <button @onclick="(async() => await UserRemoveAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Remove As Admin</button>
+                        }
+                        else
+                        {
+                            <button @onclick="(async() => await UserAssignAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-success btn-sm">Make Admin</button>
+                        }
+
                         <button @onclick="(async() => await UserDelete.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Delete</button>
                     </td>
                 </tr>
@@ -49,6 +58,8 @@ else
 @code{
     [Parameter] public List<UserInfoDetailDTO> UserInfoDetailDTOs { get; set; }
     [Parameter] public EventCallback<UserInfoDetailDTO> UserDelete { get; set; }
+    [Parameter] public EventCallback<UserInfoDetailDTO> UserAssignAdminRole { get; set; }
+    [Parameter] public EventCallback<UserInfoDetailDTO> UserRemoveAdminRole { get; set; }
 
     private int _modelCount;
 }

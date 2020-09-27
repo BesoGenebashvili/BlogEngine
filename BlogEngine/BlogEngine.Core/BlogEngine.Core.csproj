@@ -23,7 +23,16 @@
 	  <None Update="SQLScripts\DeleteAdminRoleSQLQuery.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="SQLScripts\DeleteAdminUserSQLQuery.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="SQLScripts\InsertAdminRoleClaimToAdminUserSQLQuery.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	  <None Update="SQLScripts\InsertAdminRoleSQLQuery.sql">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="SQLScripts\InsertAdminUserSQLQuery.sql">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
