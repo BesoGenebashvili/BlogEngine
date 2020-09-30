@@ -4,7 +4,7 @@ A blogging engine based on ASP.NET Core
 
 <img src="BlogEngine/BlogEngine.Client/wwwroot/css/Images/project_diagram.png" width="800">
 
-### Technologies
+## Technologies
 The project based on modern front edge technologies:
  - Asp.Net Core
  - Blazor Server
@@ -16,7 +16,7 @@ The project based on modern front edge technologies:
  - Bootstrap 5
  - BlazorFileReader
  
- ### Features
+ ## Features
  - Ability to create and manage
    - Blog
    - Category
@@ -32,3 +32,10 @@ The project based on modern front edge technologies:
  - Real-Time commenting system with replies
  - Swagger API documentation
  - HATEOAS
+ 
+## Run on local
+- Clone the repository
+- To create the database for this project, open it in Visual Studio and set the **BlogEngine.Core** project as the default project in **Package Manager Console**. Then enter `Update-Database`. This should create and setup your database for the project.
+- Login with the default admin account:
+  - **Email**: Admin@gmail.com
+  - **Password**: Admin
