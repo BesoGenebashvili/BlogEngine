@@ -43,6 +43,8 @@ namespace BlogEngine.Server
             services.AddMailServices(Configuration);
 
             services.AddNotificationServices();
+
+            services.AddUserProviders();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

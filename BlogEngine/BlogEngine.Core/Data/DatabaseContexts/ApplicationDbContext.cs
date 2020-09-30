@@ -80,9 +80,14 @@ namespace BlogEngine.Core.Data.DatabaseContexts
 
             editedEntities.ForEach(e =>
             {
-                var originalValue = e.GetDatabaseValues().GetValue<DateTime>(BaseEntityFields.DateCreated);
+                var dateCreatedOriginalValue = e.GetDatabaseValues().GetValue<DateTime>(BaseEntityFields.DateCreated);
 
-                e.Property(BaseEntityFields.DateCreated).CurrentValue = originalValue;
+                #region Need better solution
+                var createdByoriginalValue = e.GetDatabaseValues().GetValue<string>(BaseEntityFields.CreatedBy);
+                e.Property(BaseEntityFields.CreatedBy).CurrentValue = createdByoriginalValue;
+                #endregion
+
+                e.Property(BaseEntityFields.DateCreated).CurrentValue = dateCreatedOriginalValue;
 
                 e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = DateTime.Now;
             });

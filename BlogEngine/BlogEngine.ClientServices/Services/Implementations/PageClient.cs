@@ -2,22 +2,22 @@
 using BlogEngine.Shared.DTOs;
 using BlogEngine.ClientServices.Services.Abstractions;
 using BlogEngine.ClientServices.Extensions;
+using BlogEngine.ClientServices.Helpers;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {
-    public class PagesClient : IPagesClient
+    public class PageClient : IPageClient
     {
         private readonly IHttpService _httpService;
-        private const string Url = "api/pages";
 
-        public PagesClient(IHttpService httpService)
+        public PageClient(IHttpService httpService)
         {
             _httpService = httpService;
         }
 
         public async Task<IndexPageDTO> GetIndexPageDTOAsync()
         {
-            return await _httpService.GetHelperAsync<IndexPageDTO>($"{Url}/index");
+            return await _httpService.GetHelperAsync<IndexPageDTO>(PageClientEndpoints.Index);
         }
     }
 }

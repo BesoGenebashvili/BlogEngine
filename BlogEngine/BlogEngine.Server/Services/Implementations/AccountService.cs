@@ -10,23 +10,28 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using BlogEngine.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogEngine.Server.Services.Implementations
 {
-    public class AccountService : IAccountService
+    public class AccountService : IAccountService, ICurrentUserProvider
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper)
+            IMapper mapper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO)
@@ -131,6 +136,24 @@ namespace BlogEngine.Server.Services.Implementations
                 Errors = string.Join(", ", identityResult.Errors)
             };
         }
+
+        public async Task<ApplicationUser> GetCurrentUser()
+        {
+            var user = _httpContextAccessor.HttpContext.User;
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("User is not logged in");
+            }
+
+            var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email));
+
+            var email = emailClaim.Value;
+
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<int> GetCurrentUserID() => (await GetCurrentUser()).Id;
 
         protected async Task<UserInfoDetailDTO> MapWithRolesAsync(ApplicationUser applicationUser)
         {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.ClientServices.Services.Abstractions
 {
-    public interface IPagesClient
+    public interface IPageClient
     {
         Task<IndexPageDTO> GetIndexPageDTOAsync();
     }

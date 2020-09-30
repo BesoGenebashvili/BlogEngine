@@ -19,10 +19,6 @@ namespace BlogEngine.Shared.DTOs
         [Required(ErrorMessage = "HTML Content is required")]
         public string HTMLContent { get; set; }
 
-        [DataType(DataType.Text)]
-        [MaxLength(50, ErrorMessage = "Last Update By should not be more than 50 Characters")]
-        public string LastUpdateBy { get; set; }
-
         public byte[] Cover { get; set; }
         public List<int> CategoryIDs { get; set; } = new List<int>();
     }

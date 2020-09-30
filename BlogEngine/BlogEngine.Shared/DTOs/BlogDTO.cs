@@ -5,6 +5,7 @@ namespace BlogEngine.Shared.DTOs
     public class BlogDTO : ReadDataDTOBase
     {
         public int ID { get; set; }
+        public int ApplicationUserID { get; set; }
 
         public string Title { get; set; }
         public string ShortDescription { get; set; }

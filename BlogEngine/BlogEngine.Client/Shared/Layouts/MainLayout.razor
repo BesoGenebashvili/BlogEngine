@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@inject IPagesClient PagesClient
+@inject IPageClient PageClient
 
 <Navigation />
 
@@ -47,6 +47,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _indexPageDTO = await PagesClient.GetIndexPageDTOAsync();
+        _indexPageDTO = await PageClient.GetIndexPageDTOAsync();
     }
 }

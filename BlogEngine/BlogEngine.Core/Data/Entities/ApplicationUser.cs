@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogEngine.Core.Data.Entities
 {
@@ -12,6 +13,9 @@ namespace BlogEngine.Core.Data.Entities
 
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; }
+
+        [NotMapped]
+        public string FullName => $"{FirstName} {LastName}";
 
         public List<Blog> Blogs { get; set; } = new List<Blog>();
     }

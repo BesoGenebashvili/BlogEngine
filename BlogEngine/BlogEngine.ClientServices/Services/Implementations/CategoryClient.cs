@@ -1,4 +1,5 @@
 ﻿using BlogEngine.ClientServices.Extensions;
+using BlogEngine.ClientServices.Helpers;
 using BlogEngine.ClientServices.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using System.Collections.Generic;
@@ -9,7 +10,6 @@ namespace BlogEngine.ClientServices.Services.Implementations
     public class CategoryClient : ICategoryClient
     {
         private readonly IHttpService _httpService;
-        private const string Url = "api/Categories";
 
         public CategoryClient(IHttpService httpService)
         {
@@ -18,32 +18,32 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public async Task<CategoryDTO> GetAsync(int id)
         {
-            return await _httpService.GetHelperAsync<CategoryDTO>($"{Url}/{id}");
+            return await _httpService.GetHelperAsync<CategoryDTO>($"{CategoryClientEndpoints.Base}/{id}");
         }
 
         public async Task<CategoryEditPageDTO> GetEditPageDTOAsync(int id)
         {
-            return await _httpService.GetHelperAsync<CategoryEditPageDTO>($"{Url}/edit/{id}");
+            return await _httpService.GetHelperAsync<CategoryEditPageDTO>($"{CategoryClientEndpoints.Edit}/{id}");
         }
 
         public async Task<List<CategoryDTO>> GetAllAsync()
         {
-            return await _httpService.GetHelperAsync<List<CategoryDTO>>(Url);
+            return await _httpService.GetHelperAsync<List<CategoryDTO>>(CategoryClientEndpoints.Base);
         }
 
         public async Task<CategoryDTO> CreateAsync(CategoryCreationDTO categoryCreationDTO)
         {
-            return await _httpService.PostHelperAsync<CategoryCreationDTO, CategoryDTO>(Url, categoryCreationDTO);
+            return await _httpService.PostHelperAsync<CategoryCreationDTO, CategoryDTO>(CategoryClientEndpoints.Base, categoryCreationDTO);
         }
 
         public async Task<CategoryDTO> UpdateAsync(int id, CategoryUpdateDTO categoryUpdateDTO)
         {
-            return await _httpService.PutHelperAsync<CategoryUpdateDTO, CategoryDTO>($"{Url}/{id}", categoryUpdateDTO);
+            return await _httpService.PutHelperAsync<CategoryUpdateDTO, CategoryDTO>($"{CategoryClientEndpoints.Base}/{id}", categoryUpdateDTO);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            return await _httpService.DeleteHelperAsync<bool>($"{Url}/{id}");
+            return await _httpService.DeleteHelperAsync<bool>($"{CategoryClientEndpoints.Base}/{id}");
         }
     }
 }

@@ -4,14 +4,25 @@
 @inject IAccountClient AccountClient
 @inject NavigationManager NavigationManager
 
-<LoginForm ValidSubmit="OnValidSubmit"/>
+<LoginForm ValidSubmit="OnValidSubmit" 
+           @ref="_loginform"/>
 
 @code{
+    private LoginForm _loginform;
+
     private async Task OnValidSubmit(UserLoginDTO userLoginDTO)
     {
-        var userTokenDTO = await AccountClient.LoginAsync(userLoginDTO);
-        await LoginService.LoginAsync(userTokenDTO.Token);
-
-        NavigationManager.NavigateTo("");
+        try
+        {
+            var userTokenDTO = await AccountClient.LoginAsync(userLoginDTO);
+            await LoginService.LoginAsync(userTokenDTO.Token);
+            _loginform.ShowIncorrectCredentials = false;
+            StateHasChanged();
+            NavigationManager.NavigateTo("");
+        }
+        catch (Exception)
+        {
+            _loginform.ShowIncorrectCredentials = true;
+        }
     }
 }

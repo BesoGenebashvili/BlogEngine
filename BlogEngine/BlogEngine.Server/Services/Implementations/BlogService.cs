@@ -15,17 +15,20 @@ namespace BlogEngine.Server.Services.Implementations
         private ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
         private readonly IReadingTimeEstimator _readingTimeEstimator;
+        private readonly ICurrentUserProvider _currentUserProvider;
 
         public BlogService(
             IBlogRepository blogRepository,
             ICategoryRepository categoryRepository,
             IMapper mapper,
-            IReadingTimeEstimator readingTimeEstimator)
+            IReadingTimeEstimator readingTimeEstimator,
+            ICurrentUserProvider currentUserProvider)
         {
             _blogRepository = blogRepository;
             _categoryRepository = categoryRepository;
             _mapper = mapper;
             _readingTimeEstimator = readingTimeEstimator;
+            _currentUserProvider = currentUserProvider;
         }
 
         public async Task<BlogDTO> GetByIdAsync(int id)
@@ -57,7 +60,7 @@ namespace BlogEngine.Server.Services.Implementations
             var selectedCategories = allCategories
                 .Where(c => blogEntity.CategoryIDs.Contains(c.ID))
                 .ToList();
-            
+
             //
             //var notSelectedCategories = allCategories
             //    .Where(c => !blogEntity.CategoryIDs.Contains(c.ID))
@@ -84,6 +87,8 @@ namespace BlogEngine.Server.Services.Implementations
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogEntity.HTMLContent);
 
+            await AssignIdentityFields(blogEntity);
+
             var insertedEntity = await _blogRepository.InsertAsync(blogEntity);
 
             return ToDTO(insertedEntity);
@@ -99,6 +104,8 @@ namespace BlogEngine.Server.Services.Implementations
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogUpdateDTO.HTMLContent);
 
+            await AssignIdentityFields(blogEntity);
+
             var updatedEntity = await _blogRepository.UpdateAsync(blogEntity);
 
             return ToDTO(updatedEntity);
@@ -111,6 +118,15 @@ namespace BlogEngine.Server.Services.Implementations
             if (blogEntity == null) return false;
 
             return await _blogRepository.DeleteAsync(blogEntity.ID);
+        }
+
+        private async Task AssignIdentityFields(Blog blog)
+        {
+            var currentUser = await _currentUserProvider.GetCurrentUser();
+
+            blog.ApplicationUserID = currentUser.Id;
+            blog.CreatedBy = currentUser.FullName;
+            blog.LastUpdateBy = currentUser.FullName;
         }
 
         private Blog ToEntity(BlogCreationDTO blogCreationDTO) => _mapper.Map<Blog>(blogCreationDTO);

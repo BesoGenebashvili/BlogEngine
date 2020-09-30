@@ -26,7 +26,12 @@
             <label class="form-check-label" for="remember">Remember Me</label>
         </div>
 
-        <button disabled="@_actionsDisabled" type="submit" class="btn btn-success mb-3 w-100">Login</button>
+        @if (ShowIncorrectCredentials)
+        {
+            <div class="validation-message">Incorrect email or password</div>
+        }
+
+        <button disabled="@(ShowIncorrectCredentials ? false : _actionsDisabled)" type="submit" class="btn btn-success mb-3 w-100">Login</button>
 
         <div class="text-center">
             <p>Don't have an account? <a href="account/register" class="text-decoration-none">Create One</a> </p>
@@ -36,6 +41,7 @@
 
 @code {
     [Parameter] public EventCallback<UserLoginDTO> ValidSubmit { get; set; }
+    public bool ShowIncorrectCredentials { get; set; }
     private UserLoginDTO _userLoginDTO = new UserLoginDTO();
     private bool _actionsDisabled = false;
 

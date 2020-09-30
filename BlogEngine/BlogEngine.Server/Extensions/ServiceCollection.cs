@@ -158,6 +158,11 @@ namespace BlogEngine.Server.Extensions
             return services;
         }
 
+        public static IServiceCollection AddUserProviders(this IServiceCollection services)
+        {
+            return services.AddScoped<ICurrentUserProvider, AccountService>();
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             return services.AddSwaggerGen(config =>
