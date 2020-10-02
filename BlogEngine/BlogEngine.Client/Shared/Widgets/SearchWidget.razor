@@ -2,9 +2,9 @@
     <h5 class="card-header">Search</h5>
     <div class="card-body">
         <div class="input-group">
-            <input class="form-control" placeholder="Search for...">
+            <input @bind-value="_searchString" class="form-control" placeholder="Search for...">
             <span class="input-group-append">
-                <button class="btn btn-secondary rounded-0 rounded-right">Go!</button>
+                <a href="blog/search/@_searchString" class="btn btn-secondary rounded-0 rounded-right">Go!</a>
             </span>
         </div>
     </div>
@@ -12,4 +12,5 @@
 
 @code{
     [Parameter] public string CardCss { get; set; }
+    private string _searchString = string.Empty;
 }

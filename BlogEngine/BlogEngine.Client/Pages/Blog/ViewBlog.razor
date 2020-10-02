@@ -47,7 +47,7 @@ else
         Categories:
         @foreach (var categoryDTO in _blogDTO.CategoryDTOs)
         {
-            <a href="#" class="btn-link mx-2">@categoryDTO.Name</a>
+            <a href="category/view/@categoryDTO.ID/@categoryDTO.Name" class="btn-link mx-2">@categoryDTO.Name</a>
         }
     </div>
 

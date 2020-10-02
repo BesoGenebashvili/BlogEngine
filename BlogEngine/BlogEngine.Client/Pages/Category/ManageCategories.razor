@@ -1,8 +1,9 @@
 ﻿@page "/category/manage"
+@page "/category/list"
 @layout NavigationLayout
 @inject ICategoryClient CategoryClient
 
-<TextCenter Text="Manage Categories" />
+<TextCenter Text="Categories" />
 
 <CategoryList CategoryDTOs="_categoryDTOs"
               CategoryDelete="OnCategoryDelete" />

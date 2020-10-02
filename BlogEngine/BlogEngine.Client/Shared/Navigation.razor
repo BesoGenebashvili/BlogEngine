@@ -10,25 +10,24 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog/create">Create Blog</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="blog-dropdown" data-toggle="dropdown"
+                       aria-expanded="false">Blog</a>
+                    <ul class="dropdown-menu" aria-labelledby="blog-dropdown">
+                        <li><a class="dropdown-item" href="blog/articles">Articles</a></li>
+                        <li><a class="dropdown-item" href="blog/create">Create</a></li>
+                        <li><a class="dropdown-item" href="blog/search">Filter</a></li>
+                        <li><a class="dropdown-item" href="blog/manage">Manage</a></li>
+                    </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog/search">Search Blogs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog/articles">Blog Articles</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog/manage">Manage Blogs</a>
-                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="category-dropdown" data-toggle="dropdown"
                        aria-expanded="false">Category</a>
                     <ul class="dropdown-menu" aria-labelledby="category-dropdown">
                         <li><a class="dropdown-item" href="category/create">Create</a></li>
-                        <li><a class="dropdown-item" href="#">Filter</a></li>
-                        <li><a class="dropdown-item" href="category/manage">Manage</a></li>
+                        <li><a class="dropdown-item" href="category/manage">All Categories</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

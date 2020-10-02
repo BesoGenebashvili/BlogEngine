@@ -25,7 +25,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public EncrypterOperationResult Encrypt(string text)
         {
-            ValidateParameterThrowArgumentNullException(text);
+            NullCheckThrowArgumentNullException(text);
 
             try
             {
@@ -39,7 +39,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public EncrypterOperationResult Decrypt(string text)
         {
-            ValidateParameterThrowArgumentNullException(text);
+            NullCheckThrowArgumentNullException(text);
 
             try
             {
@@ -83,7 +83,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return new EncrypterOperationResult(Encoding.Unicode.GetString(outputBuffer), true);
         }
 
-        protected void ValidateParameterThrowArgumentNullException(string text)
+        protected void NullCheckThrowArgumentNullException(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
             {

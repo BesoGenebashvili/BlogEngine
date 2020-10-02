@@ -1,0 +1,39 @@
+﻿@page "/category/view/{ID:int}"
+@page "/category/view/{ID:int}/{Name}"
+@inject ICategoryClient CategoryClient
+
+<TextCenter Text="Page is under construction" />
+
+@if (_categoryDTO == null)
+{
+    <Loading />
+}
+else
+{
+    @if (_categoryDTO.GeneralCover is null)
+    {
+        <img src="css/Images/image_not_available_template.png">
+    }
+    else
+    {
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(_categoryDTO.GeneralCover))">
+    }
+
+    <h1>Name : @_categoryDTO.Name</h1>
+    <h1>Created By : @_categoryDTO.CreatedBy</h1>
+    <h6>Created @_categoryDTO.DateCreated.Value.GetRelativeTime() ago</h6>
+    <h1>Last Updated By : @_categoryDTO.LastUpdateBy</h1>
+    <h6>Updated @_categoryDTO.LastUpdateDate.Value.GetRelativeTime() ago</h6>
+}
+
+@code{
+    [Parameter] public int ID { get; set; }
+    [Parameter] public string Name { get; set; }
+
+    private CategoryDTO _categoryDTO { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        _categoryDTO = await CategoryClient.GetAsync(ID);
+    }
+}

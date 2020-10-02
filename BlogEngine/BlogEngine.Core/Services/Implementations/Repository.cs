@@ -1,16 +1,16 @@
 ﻿using System;
-using BlogEngine.Core.Helpers;
-using BlogEngine.Core.Services.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Helpers;
+using BlogEngine.Core.Services.Abstractions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class Repository<TEntity> : IRepository<TEntity>, IAsyncRepository<TEntity> where TEntity : BaseEntity
     {
         private readonly DbContext _context;
         private readonly DbSet<TEntity> _dbSet;
@@ -67,7 +67,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             if (string.IsNullOrWhiteSpace(query))
             {
-                ThrowHelper.ThrowArgumentNullException(nameof(query));
+                Throw.ArgumentNullException(nameof(query));
             }
 
             return _dbSet.FromSqlRaw(query, parameters);
@@ -144,29 +144,19 @@ namespace BlogEngine.Core.Services.Implementations
 
         protected void NullCheckThrowNotFoundException(TEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
-                ThrowHelper.ThrowEntityNotFoundException(typeof(TEntity).Name);
+                Throw.EntityNotFoundException(typeof(TEntity).Name);
             }
         }
 
         protected void NullCheckThrowEntityNullException(TEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
             {
-                ThrowHelper.ThrowEntityNullException(typeof(TEntity).Name);
+                Throw.EntityNullException(typeof(TEntity).Name);
             }
         }
-
-        /*
-        protected void NullCheckThrowArgumentNullException(TEntity entity)
-        {
-            if (entity == null)
-            {
-                ThrowHelper.ThrowArgumentNullException(typeof(TEntity).Name);
-            }
-        }
-        */
 
         protected async Task<bool> SaveChangesAsync()
         {

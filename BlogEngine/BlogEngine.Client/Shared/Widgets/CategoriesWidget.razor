@@ -1,4 +1,6 @@
-﻿<div class="card @CardCss">
+﻿@inject NavigationManager NavigationManager
+
+<div class="card @CardCss">
     <h5 class="card-header">@CardHeader</h5>
     <div class="card-body">
         <div class="row">
@@ -16,7 +18,7 @@
 
                     <!-- Featured categories -->
 
-                    @{ 
+                    @{
                         var half = (int)Math.Ceiling(CategoryDTOs.Count / (decimal)2);
                     }
 
@@ -27,7 +29,7 @@
                                 var iterator = i;
 
                                 <li>
-                                    <a href="category/manage">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
+                                    <a class="link-primary pointer" @onclick="() => NavigateTo(CategoryDTOs[iterator])">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
                                 </li>
                             }
                         </ul>
@@ -40,7 +42,7 @@
                                 var iterator = i;
 
                                 <li>
-                                    <a href="category/manage">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
+                                    <a class="link-primary pointer" @onclick="() => NavigateTo(CategoryDTOs[iterator])">@CategoryDTOs[iterator].Name.GetStringBrief(30)</a>
                                 </li>
                             }
                         </ul>
@@ -57,4 +59,9 @@
     [Parameter] public List<CategoryDTO> CategoryDTOs { get; set; }
     [Parameter] public string CardHeader { get; set; } = "Featured Categories";
     [Parameter] public string CardCss { get; set; }
+
+    private void NavigateTo(CategoryDTO categoryDTO)
+    {
+        NavigationManager.NavigateTo($"category/view/{categoryDTO.ID}/{categoryDTO.Name}", true);
+    }
 }

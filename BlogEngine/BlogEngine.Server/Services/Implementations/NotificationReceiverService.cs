@@ -10,8 +10,11 @@ namespace BlogEngine.Server.Services.Implementations
         DataServiceBase<NotificationReceiver, NotificationReceiverDTO, NotificationReceiverCreationDTO, NotificationReceiverCreationDTO>,
         INotificationReceiverService
     {
-        public NotificationReceiverService(INotificationReceiverRepository notificationReceiverRepository, IMapper mapper)
-            : base(notificationReceiverRepository, mapper)
+        public NotificationReceiverService(
+            INotificationReceiverRepository notificationReceiverRepository,
+            IMapper mapper,
+            ICurrentUserProvider currentUserProvider)
+            : base(notificationReceiverRepository, mapper, currentUserProvider)
         {
         }
     }

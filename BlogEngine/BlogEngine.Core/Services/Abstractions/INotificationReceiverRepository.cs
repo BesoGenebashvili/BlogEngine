@@ -2,7 +2,6 @@
 
 namespace BlogEngine.Core.Services.Abstractions
 {
-    public interface INotificationReceiverRepository : IRepository<NotificationReceiver>
-    {
-    }
+    public interface INotificationReceiverRepository : IRepository<NotificationReceiver>, IAsyncRepository<NotificationReceiver>
+    { }
 }

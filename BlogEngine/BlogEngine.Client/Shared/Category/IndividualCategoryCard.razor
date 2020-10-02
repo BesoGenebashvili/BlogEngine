@@ -12,9 +12,15 @@
     <div class="card-body">
         <h5 class="card-title">@CategoryDTO.Name</h5>
 
-        <a href="#" class="btn btn-primary">Details</a>
-        <a href="category/edit/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-warning">Edit</a>
-        <button @onclick="(async() => await CategoryDelete.InvokeAsync(CategoryDTO))" class="btn btn-danger">Delete</button>
+        <a href="category/view/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-primary">Details</a>
+
+        <AuthorizeView>
+            <Authorized>
+                <a href="category/edit/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-warning">Edit</a>
+                <button @onclick="(async() => await CategoryDelete.InvokeAsync(CategoryDTO))" class="btn btn-danger">Delete</button>
+            </Authorized>
+        </AuthorizeView>
+
     </div>
 </div>
 

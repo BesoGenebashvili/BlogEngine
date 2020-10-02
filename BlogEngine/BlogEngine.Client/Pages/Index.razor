@@ -1,15 +1,36 @@
 ﻿@page "/"
-@inject IBlogClient _blogClient
+@inject IBlogClient BlogClient
 
-<h1 class="my-4">Latest Posts</h1>
+<TextCenter Text="Latest Posts" />
 
 <BlogArticleList BlogDTOs="_blogDTOs" />
 
-@code{
-    private List<BlogDTO> _blogDTOs;
+<PaginationSection CurrentPage="_paginationDTO.Page"
+                   TotalAmountPages="_totalAmountPages"
+                   PageSelected="OnPageSelected" />
+
+@code {
+    private List<BlogDTO> _blogDTOs { get; set; }
+
+    private PaginationDTO _paginationDTO = new PaginationDTO();
+    private int _totalAmountPages;
 
     protected async override Task OnInitializedAsync()
     {
-        _blogDTOs = await _blogClient.GetAllAsync();
+        await LoadPage();
+    }
+
+    private async Task OnPageSelected(int page)
+    {
+        _paginationDTO.Page = page;
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        var paginatedResponse = await BlogClient.GetAllPaginatedAsync(_paginationDTO);
+
+        _blogDTOs = paginatedResponse.Response;
+        _totalAmountPages = paginatedResponse.TotalAmountPages;
     }
 }

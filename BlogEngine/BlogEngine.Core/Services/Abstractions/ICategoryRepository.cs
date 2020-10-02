@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.Core.Services.Abstractions
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface ICategoryRepository : IRepository<Category>, IAsyncRepository<Category>
     {
         Task<IEnumerable<Category>> GetAllWithReferences();
     }
