@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Moq" Version="4.14.6" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
@@ -14,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlogEngine.ClientServices\BlogEngine.ClientServices.csproj" />
+    <ProjectReference Include="..\BlogEngine.Core\BlogEngine.Core.csproj" />
   </ItemGroup>
 
 </Project>

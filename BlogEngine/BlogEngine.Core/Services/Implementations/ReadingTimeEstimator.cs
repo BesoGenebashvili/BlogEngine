@@ -18,7 +18,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public int GetEstimatedReadingTime(string rawHtmlContent)
         {
-            if (string.IsNullOrEmpty(rawHtmlContent))
+            if (string.IsNullOrWhiteSpace(rawHtmlContent))
             {
                 Throw.ArgumentNullException(nameof(rawHtmlContent));
             }
@@ -31,7 +31,7 @@ namespace BlogEngine.Core.Services.Implementations
             int minutes = int.Parse(timeParts[0]);
             int seconds = int.Parse(timeParts[1]);
 
-            seconds = (int)Math.Round((seconds * 0.60));
+            seconds = (int)Math.Round(seconds * 0.60);
 
             if (minutes > 0 && seconds < 30)
                 return minutes;
