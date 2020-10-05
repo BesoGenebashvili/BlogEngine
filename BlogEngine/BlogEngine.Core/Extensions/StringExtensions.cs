@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using BlogEngine.Core.Helpers;
+using System.Text.RegularExpressions;
 
 namespace BlogEngine.Core.Extensions
 {
@@ -6,12 +7,22 @@ namespace BlogEngine.Core.Extensions
     {
         public static string StripHtmlTagsWithRegex(this string rawHtmlContent)
         {
+            if (string.IsNullOrWhiteSpace(rawHtmlContent))
+            {
+                Throw.ArgumentNullException(nameof(rawHtmlContent));
+            }
+
             Regex regex = new Regex("\\<[^\\>]*\\>");
             return regex.Replace(rawHtmlContent, string.Empty);
         }
 
         public static string StripHtmlTagsWithCharArray(this string rawHtmlContent)
         {
+            if (string.IsNullOrWhiteSpace(rawHtmlContent))
+            {
+                Throw.ArgumentNullException(nameof(rawHtmlContent));
+            }
+
             char[] array = new char[rawHtmlContent.Length];
             int arrayIndex = 0;
             bool inside = false;

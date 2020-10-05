@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BlogEngine.Shared.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngine.Shared.DTOs
 {
@@ -11,8 +12,11 @@ namespace BlogEngine.Shared.DTOs
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Confirm Password is required")]
-        [Compare(nameof(Password), ErrorMessage = "Password is incorrect")]
+        [CompareValues(nameof(Password), ErrorMessage = "Passwords does not match")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        // Compare attribute not working.
+        public bool PasswordsMuch => ConfirmPassword.Equals(Password);
     }
 }

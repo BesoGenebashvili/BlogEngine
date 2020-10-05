@@ -43,10 +43,11 @@
                 <AuthorizeView>
                     <Authorized Context="authState">
                         <p class="my-0 mr-2">Hello <a href="account/personal">@authState.User.Identity.Name</a></p>
-                        <a class="btn btn-outline-primary" href="account/logout">Log out</a>
+                        <a class="btn btn-outline-primary btn-sm" href="account/logout">Log out</a>
                     </Authorized>
                     <NotAuthorized>
-                        <a class="btn btn-outline-primary" href="account/login">Log in</a>
+                        <a class="btn btn-outline-primary btn-sm mr-1" href="account/login">Log in</a>
+                        <a class="btn btn-outline-primary btn-sm ml-1" href="account/register">Register</a>
                     </NotAuthorized>
                 </AuthorizeView>
             </div>

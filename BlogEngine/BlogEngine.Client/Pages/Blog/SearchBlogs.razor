@@ -19,8 +19,8 @@
 
     protected async override Task OnInitializedAsync()
     {
-        await LoadPage();
         _blogSearchDTO.Title = SearchString ?? default;
+        await LoadPage();
     }
 
     private async Task LoadPage()

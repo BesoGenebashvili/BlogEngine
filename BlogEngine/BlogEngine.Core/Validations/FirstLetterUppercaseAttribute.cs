@@ -2,7 +2,7 @@
 
 namespace BlogEngine.Core.Validations
 {
-    public class FirstLetterUppercaseAttribute : ValidationAttribute
+    public sealed class FirstLetterUppercaseAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {

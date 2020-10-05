@@ -23,24 +23,32 @@
         </div>
 
         <div class="mb-3">
-            <label for="email" class="form-label">E-Mail Address</label>
-            <input @bind-value="_userRegisterDTO.EmailAddress" type="email" id="email" class="form-control">
+            <label for="r-email" class="form-label">E-Mail Address</label>
+            <input @bind-value="_userRegisterDTO.EmailAddress" autocomplete="new-email"
+                   type="email" id="r-email" class="form-control">
             <ValidationMessage For="(() => _userRegisterDTO.EmailAddress)" />
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input @bind-value="_userRegisterDTO.Password" type="password" id="password" class="form-control">
+            <label for="r-password" class="form-label">Password</label>
+            <input @bind-value="_userRegisterDTO.Password" autocomplete="new-password"
+                   type="password" id="r-password" class="form-control">
             <ValidationMessage For="(() => _userRegisterDTO.Password)" />
         </div>
 
         <div class="mb-3">
             <label for="confirm-password" class="form-label">Confirm Password</label>
-            <input @bind-value="_userRegisterDTO.ConfirmPassword" type="password" id="confirm-password" class="form-control">
+            <input @bind-value="_userRegisterDTO.ConfirmPassword" autocomplete="new-password"
+                   type="password" id="confirm-password" class="form-control">
             <ValidationMessage For="(() => _userRegisterDTO.ConfirmPassword)" />
         </div>
 
-        <button disabled="@_actionsDisabled" type="submit" class="btn btn-success mb-3 w-100">Register</button>
+        @if (ShowIncorrectCredentials)
+        {
+            <div class="validation-message">Credentials are invalid</div>
+        }
+
+        <button disabled="@(ShowIncorrectCredentials ? false : _actionsDisabled)" type="submit" class="btn btn-success mb-3 w-100">Register</button>
 
         <div class="text-center">
             <p>Already have an account? <a href="account/login" class="text-decoration-none">Login</a> </p>
@@ -50,6 +58,8 @@
 
 @code {
     [Parameter] public EventCallback<UserRegisterDTO> ValidSubmit { get; set; }
+    public bool ShowIncorrectCredentials { get; set; }
+
     private UserRegisterDTO _userRegisterDTO = new UserRegisterDTO();
     private bool _actionsDisabled = false;
 

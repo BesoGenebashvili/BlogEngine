@@ -4,14 +4,25 @@
 @inject ILoginService LoginService
 @inject NavigationManager NavigationManager
 
-<RegisterForm ValidSubmit="OnValidSubmit"/>
+<RegisterForm ValidSubmit="OnValidSubmit" @ref="_registerForm"/>
 
 @code{
+    private RegisterForm _registerForm;
+
     private async Task OnValidSubmit(UserRegisterDTO userRegisterDTO)
     {
-        var userTokenDTO = await AccountClient.RegisterAsync(userRegisterDTO);
-        await LoginService.LoginAsync(userTokenDTO.Token);
+        try
+        {
+            var userTokenDTO = await AccountClient.RegisterAsync(userRegisterDTO);
+            await LoginService.LoginAsync(userTokenDTO.Token);
 
-        NavigationManager.NavigateTo("");
+            _registerForm.ShowIncorrectCredentials = false;
+            StateHasChanged();
+            NavigationManager.NavigateTo("");
+        }
+        catch (Exception)
+        {
+            _registerForm.ShowIncorrectCredentials = true;
+        }
     }
 }

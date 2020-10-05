@@ -68,7 +68,7 @@ namespace BlogEngine.Tests.BlogEngine.Core.Services
         [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
-        public void GetByRawSql_QueryIsNotValid_ArgumentNullException(string query)
+        public void GetByRawSql_QueryIsNotValid_ThrowArgumentNullException(string query)
         {
             var repository = new Repository<BaseEntity>(_context.Object);
 
