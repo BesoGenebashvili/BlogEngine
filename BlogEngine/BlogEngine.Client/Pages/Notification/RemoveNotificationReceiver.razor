@@ -1,0 +1,33 @@
+﻿@page "/notificationReceiver/delete/{Id:int}"
+@layout NavigationLayout
+@inject INotificationReceiverClient NotificationReceiverClient
+
+@if (!_deleted.HasValue)
+{
+    <Loading />
+}
+else if (_deleted.Value)
+{
+    <TextCenter Text="Unsubscribed successfully" />
+}
+else
+{
+    <TextCenter Text="Subscriber not found" />
+}
+
+@code {
+    [Parameter] public int ID { get; set; }
+
+    private bool? _deleted;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _deleted = await NotificationReceiverClient.DeleteAsync(ID);
+        }
+        catch (Exception)
+        {
+        }
+    }
+}

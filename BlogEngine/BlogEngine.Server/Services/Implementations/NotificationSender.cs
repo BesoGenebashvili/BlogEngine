@@ -41,21 +41,21 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var notificationReceivers = await _notificationReceiverRepository.GetAllAsync();
 
-            var notificationBody = await _notificationBodyBuilder.BuildBlogPostNotificationBodyAsync(blogDTO);
-
-            var mailModels = notificationReceivers.Select(n =>
+            var mailModelsTasks = notificationReceivers.Select(async n =>
             {
                 return new MailModel()
                 {
                     EmailAddress = n.EmailAddress,
                     DisplayName = n.DisplayName,
-                    Body = notificationBody,
-                    IsBodyHtml = false,
+                    Body = await _notificationBodyBuilder.BuildBlogPostNotificationBodyAsync(n, blogDTO),
+                    IsBodyHtml = true,
                     Subject = "Blog Post Notification"
                 };
-            }).ToList();
+            });
 
-            mailModels.ForEach(m => _mailService.SendAsync(m));
+            var mailModels = await Task.WhenAll(mailModelsTasks);
+
+            mailModels.ToList().ForEach(m => _mailService.SendAsync(m));
         }
     }
 }

@@ -7,10 +7,23 @@
 
 <NotificationReceiverCreateForm ValidSubmit="OnValidSubmit" />
 
+<ConfirmationModal @ref="_confirmationModal" ModalTitle="Successfully Subscribed" Centered="true" ConfirmOnly="true" Confirm="OnModalConfirm">
+    <ModalBodyTemplate>Thank you @(_createdNotificationReceiverDTO?.DisplayName) for subscribing!</ModalBodyTemplate>
+</ConfirmationModal>
+
 @code {
+    private ConfirmationModal _confirmationModal;
+    private NotificationReceiverDTO _createdNotificationReceiverDTO;
+
     private async Task OnValidSubmit(NotificationReceiverCreationDTO notificationReceiverCreationDTO)
     {
-        await NotificationReceiverClient.CreateAsync(notificationReceiverCreationDTO);
-        NavigationManager.NavigateTo("notificationReceivers/manage");
+        _createdNotificationReceiverDTO = await NotificationReceiverClient.CreateAsync(notificationReceiverCreationDTO);
+        _confirmationModal.Show();
+    }
+
+    private void OnModalConfirm()
+    {
+        _confirmationModal.Hide();
+        NavigationManager.NavigateTo("/");
     }
 }

@@ -2,6 +2,7 @@
 @layout NavigationLayout
 @inject NavigationManager NavigationManager
 @inject INotificationReceiverClient NotificationReceiverClient
+@attribute [Authorize(Roles = UserRole.Admin)]
 
 <TextCenter Text="Manage Notification Receivers" />
 

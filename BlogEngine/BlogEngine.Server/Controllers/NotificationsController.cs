@@ -24,7 +24,6 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<NotificationReceiverDTO>))]
         public async Task<ActionResult<List<NotificationReceiverDTO>>> Get()
         {
@@ -32,7 +31,6 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("{id:int}", Name = "getNotificationReceiver")]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NotificationReceiverDTO))]
         public async Task<ActionResult<NotificationReceiverDTO>> Get(int id)
@@ -45,6 +43,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(NotificationReceiverDTO))]
         public async Task<ActionResult<NotificationReceiverDTO>> Post([FromBody] NotificationReceiverCreationDTO notificationReceiverCreationDTO)
@@ -60,6 +59,7 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Delete(int id)
         {

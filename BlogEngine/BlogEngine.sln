@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Shared", "BlogEn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Core", "BlogEngine.Core\BlogEngine.Core.csproj", "{AD1865C8-52E5-4C5E-B253-B24177D1ABEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogEngine.Tests", "BlogEngine.Tests\BlogEngine.Tests.csproj", "{AFA8CF99-502E-442C-AF23-BDE82235FA7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlogEngine.Tests", "BlogEngine.Tests\BlogEngine.Tests.csproj", "{AFA8CF99-502E-442C-AF23-BDE82235FA7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
