@@ -35,7 +35,10 @@ The project based on modern front edge technologies:
  
 ## Run on local
 - Clone the repository
-- To create the database for this project, open it in Visual Studio and set the **BlogEngine.Core** project as the default project in **Package Manager Console**. Then enter `Update-Database`. This should create and setup your database for the project.
+- To create the database for this project, open it in Visual Studio and set the **BlogEngine.Server** as startup project and **BlogEngine.Core** as the default project in **Package Manager Console**. Then enter `Update-Database`. This should create and setup your database for the project.
+- Set multiple startup projects in the following order
+  - **BlogEngine.Server**
+  - **BlogEngine.Client**
 - Login with the default admin account:
   - **Email**: Admin@gmail.com
   - **Password**: Admin
