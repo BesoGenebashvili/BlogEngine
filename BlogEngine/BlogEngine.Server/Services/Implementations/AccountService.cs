@@ -12,6 +12,7 @@ using BlogEngine.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
+using BlogEngine.Core.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -51,7 +52,20 @@ namespace BlogEngine.Server.Services.Implementations
                 .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
         }
 
-        public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs()
+        public async Task<UserProfileDTO> GetUserProfileDTOAsync(int id)
+        {
+            var applicationUser = await _userManager.FindByIdAsync(id.ToString());
+
+            if (applicationUser == null) return null;
+
+            var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
+
+            userProfileDTO.Roles = await GetUserRoles(applicationUser);
+
+            return userProfileDTO;
+        }
+
+        public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync()
         {
             var applicationUsers = await _userManager.Users.ToListAsync();
 
@@ -180,7 +194,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (userRegisterDTO == null)
             {
-                throw new ArgumentNullException(nameof(userRegisterDTO));
+                Throw.ArgumentNullException(nameof(userRegisterDTO));
             }
         }
 
@@ -188,7 +202,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (userLoginDTO == null)
             {
-                throw new ArgumentNullException(nameof(userLoginDTO));
+                Throw.ArgumentNullException(nameof(userLoginDTO));
             }
         }
 
@@ -196,7 +210,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (userRoleDTO == null)
             {
-                throw new ArgumentNullException(nameof(userRoleDTO));
+                Throw.ArgumentNullException(nameof(userRoleDTO));
             }
         }
     }

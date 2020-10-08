@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Helpers;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
@@ -24,6 +25,11 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<List<BlogDTO>> SearchAsync(BlogSearchDTO blogSearchDTO)
         {
+            if (blogSearchDTO == null)
+            {
+                Throw.ArgumentNullException(nameof(blogSearchDTO));
+            }
+
             var blogs = await _blogRepository.GetAllWithReferences();
 
             if (!string.IsNullOrWhiteSpace(blogSearchDTO.Title))

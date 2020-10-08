@@ -3,7 +3,7 @@ using BlogEngine.Core.Exceptions;
 
 namespace BlogEngine.Core.Helpers
 {
-    public static class Throw
+    public static partial class Throw
     {
         public static void EntityAlreadyExistsException(object id)
         {
@@ -38,6 +38,21 @@ namespace BlogEngine.Core.Helpers
         public static void ArgumentNullException(string paramName)
         {
             throw new ArgumentNullException(paramName);
+        }
+
+        public static void InvalidOperationException()
+        {
+            throw new InvalidOperationException();
+        }
+
+        public static void InvalidOperationException(string message)
+        {
+            throw new InvalidOperationException(message);
+        }
+
+        public static void InvalidOperationException(string message, Exception innerException)
+        {
+            throw new InvalidOperationException(message, innerException);
         }
     }
 }

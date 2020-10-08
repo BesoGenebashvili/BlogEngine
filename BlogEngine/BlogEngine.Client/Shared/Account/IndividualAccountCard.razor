@@ -1,0 +1,10 @@
+﻿<div class="card">
+    <div class="card-body text-center">
+        <h5 class="card-title">@UserInfoDetailDTO.FullName</h5>
+        <a href="account/view/@UserInfoDetailDTO.ID/@UserInfoDetailDTO.FullName" class="btn btn-primary">View Profile</a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public UserInfoDetailDTO UserInfoDetailDTO { get; set; }
+}

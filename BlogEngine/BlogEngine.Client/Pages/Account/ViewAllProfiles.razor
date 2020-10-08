@@ -1,0 +1,16 @@
+﻿@page "/account/profiles"
+@layout NavigationLayout
+@inject IAccountClient AccountClient
+
+<TextCenter Text="Profiles"/>
+
+<AccountsList UserInfoDetailDTOs="_userInfoDetailDTOs"/>
+
+@code{
+    private List<UserInfoDetailDTO> _userInfoDetailDTOs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userInfoDetailDTOs = await AccountClient.GetUserInfoDetailDTOsAsync();
+    }
+}

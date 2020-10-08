@@ -22,7 +22,7 @@
         @BlogDTO.DateCreated.Value.ToString("MMMM")
         @BlogDTO.DateCreated.Value.Month,
         @BlogDTO.DateCreated.Value.Year by
-        <a href="#">@(string.IsNullOrWhiteSpace(BlogDTO.CreatedBy) ? "Unknown" : BlogDTO.CreatedBy)</a>
+        <a href="account/view/@BlogDTO.ApplicationUserID/@BlogDTO.CreatedBy">@(string.IsNullOrWhiteSpace(BlogDTO.CreatedBy) ? "Unknown" : BlogDTO.CreatedBy)</a>
     </div>
 </div>
 

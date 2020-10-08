@@ -1,0 +1,64 @@
+﻿@page "/account/view/{ID:int}"
+@page "/account/view/{ID:int}/{Name}"
+@inject IAccountClient AccountClient
+@inject IBlogClient BlogClient
+
+@if (_userProfileDTO == null)
+{
+    <Loading />
+}
+else
+{
+    <h3 class="mt-3">First Name: @_userProfileDTO.FirstName</h3>
+    <h3>Last Name: @_userProfileDTO.LastName</h3>
+    <span class="badge rounded-pill bg-success">Member</span>
+    @if (_userProfileDTO.Roles.Any())
+    {
+        foreach (var role in _userProfileDTO.Roles)
+        {
+            <span class="badge rounded-pill bg-success">@role</span>
+        }
+    }
+
+    <br>
+
+    @if (articlesLoaded)
+    {
+        @if (_blogDTOs == null)
+        {
+            <Loading />
+        }
+        else if (!_blogDTOs.Any())
+        {
+            <h3>Articles not available</h3>
+        }
+        else
+        {
+            <BlogPostList BlogDTOs="_blogDTOs" />
+        }
+    }
+    else
+    {
+        <a @onclick="LoadArticles" class="mt-2 btn btn-primary">Load all articles by @_userProfileDTO.FirstName</a>
+    }
+}
+
+@code {
+    [Parameter] public int ID { get; set; }
+    [Parameter] public string Name { get; set; }
+
+    private UserProfileDTO _userProfileDTO;
+    private List<BlogDTO> _blogDTOs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userProfileDTO = await AccountClient.GetUserProfileDTOAsync(ID);
+    }
+
+    bool articlesLoaded;
+    private async Task LoadArticles()
+    {
+        _blogDTOs = await BlogClient.GetAllByUserIdAsync(ID);
+        articlesLoaded = true;
+    }
+}

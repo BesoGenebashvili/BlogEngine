@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
+using System.Runtime.CompilerServices;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -41,6 +42,16 @@ namespace BlogEngine.Core.Services.Implementations
                 .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
                 .Include(b => b.MainComments).ThenInclude(mc => mc.SubComments)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<Blog>> GetAllByUserIdAsync(int id)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id.Equals(id))
+                .Include(u => u.Blogs)
+                .FirstOrDefaultAsync();
+
+            return user.Blogs;
         }
 
         public override Blog Insert(Blog entity)

@@ -10,7 +10,8 @@ namespace BlogEngine.Server.Services.Abstractions
     {
         Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO);
         Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO);
-        Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOs();
+        Task<UserProfileDTO> GetUserProfileDTOAsync(int id);
+        Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync();
         Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO);
         Task<AccountOperationResult> RemoveRoleAsync(UserRoleDTO userRoleDTO);
         Task<AccountOperationResult> DeleteAsync(int id);

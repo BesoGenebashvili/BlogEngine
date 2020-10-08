@@ -26,6 +26,11 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.PostHelperAsync<UserRegisterDTO, UserTokenDTO>(AccountClientEndpoints.Register, userRegisterDTO);
         }
 
+        public async Task<UserProfileDTO> GetUserProfileDTOAsync(int id)
+        {
+            return await _httpService.GetHelperAsync<UserProfileDTO>($"{AccountClientEndpoints.UserProfile}/{id}");
+        }
+
         public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync()
         {
             return await _httpService.GetHelperAsync<List<UserInfoDetailDTO>>(AccountClientEndpoints.Users);

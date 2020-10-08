@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using System.Linq;
+using BlogEngine.Core.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -57,7 +58,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (!commentCreationDTO.IsMain)
             {
-                throw new InvalidOperationException("Can not insert the SubComment into MainComment Table");
+                Throw.InvalidOperationException("Can not insert the SubComment into MainComment Table");
             }
 
             var mainCommentEntity = _mapper.Map<MainComment>(commentCreationDTO);
@@ -71,7 +72,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (commentCreationDTO.IsMain)
             {
-                throw new InvalidOperationException("Can not insert the MainComment into SubComment Table");
+                Throw.InvalidOperationException("Can not insert the MainComment into SubComment Table");
             }
 
             var subCommentEntity = _mapper.Map<SubComment>(commentCreationDTO);

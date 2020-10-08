@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlogEngine.Core.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -34,7 +35,7 @@ namespace BlogEngine.Server.Services.Implementations
 
                 if (listOfModels == null)
                 {
-                    throw new ArgumentNullException($"Was expecting an instance of {typeof(T)}");
+                    Throw.ArgumentNullException($"Was expecting an instance of {typeof(T)}");
                 }
 
                 var instance = new T();

@@ -7,5 +7,6 @@ namespace BlogEngine.Core.Services.Abstractions
     public interface IBlogRepository : IRepository<Blog>, IAsyncRepository<Blog>
     {
         Task<IEnumerable<Blog>> GetAllWithReferences();
+        Task<IEnumerable<Blog>> GetAllByUserIdAsync(int id);
     }
 }

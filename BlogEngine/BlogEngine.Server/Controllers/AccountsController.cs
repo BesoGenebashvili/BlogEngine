@@ -27,7 +27,7 @@ namespace BlogEngine.Server.Controllers
 
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(UserTokenDTO), 200)]
+        [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserTokenDTO>> Register([FromBody] UserRegisterDTO userRegisterDTO)
         {
             var identityResult = await _accountService.RegisterAsync(userRegisterDTO);
@@ -39,7 +39,7 @@ namespace BlogEngine.Server.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(UserTokenDTO), 200)]
+        [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserLoginDTO userLoginDTO)
         {
             var signInResult = await _accountService.LoginAsync(userLoginDTO);
@@ -50,17 +50,29 @@ namespace BlogEngine.Server.Controllers
         }
 
         [HttpGet("users")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
-        [ProducesResponseType(typeof(List<UserInfoDetailDTO>), 200)]
+        [ProducesResponseType(typeof(List<UserInfoDetailDTO>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<UserInfoDetailDTO>>> GetUsers()
         {
-            return await _accountService.GetUserInfoDetailDTOs();
+            return await _accountService.GetUserInfoDetailDTOsAsync();
+        }
+
+        [HttpGet("user/profile/{id:int}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(UserProfileDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserProfileDTO>> GetUser(int id)
+        {
+            var userProfileDTO = await _accountService.GetUserProfileDTOAsync(id);
+
+            if (userProfileDTO == null) return NotFound();
+
+            return userProfileDTO;
         }
 
         [HttpPost("assignRole")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> AssignRole([FromBody] UserRoleDTO userRoleDTO)
         {
             var assignmentResult = await _accountService.AssignRoleAsync(userRoleDTO);
@@ -76,7 +88,7 @@ namespace BlogEngine.Server.Controllers
         [HttpPost("removeRole")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> RemoveRole([FromBody] UserRoleDTO userRoleDTO)
         {
             var assignationResult = await _accountService.RemoveRoleAsync(userRoleDTO);
@@ -92,7 +104,7 @@ namespace BlogEngine.Server.Controllers
         [HttpDelete("{id:int}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> DeleteUser(int id)
         {
             var deleteResult = await _accountService.DeleteAsync(id);

@@ -21,6 +21,16 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.GetHelperAsync<BlogDTO>($"{BlogClientEndpoints.Base}/{id}");
         }
 
+        public async Task<List<BlogDTO>> GetAllByUserIdAsync(int id)
+        {
+            return await _httpService.GetHelperAsync<List<BlogDTO>>($"{BlogClientEndpoints.ByUserId}/{id}");
+        }
+
+        public async Task<PaginatedResponse<List<BlogDTO>>> GetAllByUserIdPaginatedAsync(int id, PaginationDTO paginationDTO)
+        {
+            return await _httpService.GetHelperAsync<List<BlogDTO>>($"{BlogClientEndpoints.ByUserId}/{id}", paginationDTO);
+        }
+
         public async Task<List<BlogDTO>> GetAllAsync()
         {
             return await _httpService.GetHelperAsync<List<BlogDTO>>(BlogClientEndpoints.Base);

@@ -74,6 +74,13 @@ namespace BlogEngine.Server.Services.Implementations
             };
         }
 
+        public async Task<List<BlogDTO>> GetAllByUserIdAsync(int id)
+        {
+            var blogEntities = await _blogRepository.GetAllByUserIdAsync(id);
+
+            return _mapper.Map<List<BlogDTO>>(blogEntities.ToList());
+        }
+
         public async Task<List<BlogDTO>> GetAllAsync()
         {
             var blogEntities = await _blogRepository.GetAllWithReferences();

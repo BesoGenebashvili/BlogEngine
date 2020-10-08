@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Helpers;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +29,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             if (userInfoDTO == null)
             {
-                throw new ArgumentNullException(nameof(userInfoDTO));
+                Throw.ArgumentNullException(nameof(userInfoDTO));
             }
 
             var identityUser = await _userManager.FindByEmailAsync(userInfoDTO.EmailAddress);

@@ -6,6 +6,7 @@ namespace BlogEngine.ClientServices.Services.Abstractions
 {
     public interface IAccountClient
     {
+        Task<UserProfileDTO> GetUserProfileDTOAsync(int id);
         Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync();
         Task<UserTokenDTO> LoginAsync(UserLoginDTO userLoginDTO);
         Task<UserTokenDTO> RegisterAsync(UserRegisterDTO userRegisterDTO);

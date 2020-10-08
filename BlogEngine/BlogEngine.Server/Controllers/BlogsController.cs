@@ -41,6 +41,18 @@ namespace BlogEngine.Server.Controllers
             return blogDTOs.Paginate(paginationDTO).ToList();
         }
 
+        [HttpGet("byUserId/{id:int}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BlogDTO>))]
+        public async Task<ActionResult<List<BlogDTO>>> GetByUserId(int id, [FromQuery] PaginationDTO paginationDTO)
+        {
+            var blogDTOs = await _blogService.GetAllByUserIdAsync(id);
+
+            await HttpContext.InsertPaginationParametersInResponseAsync(blogDTOs, paginationDTO.RecordsPerPage);
+
+            return blogDTOs.Paginate(paginationDTO).ToList();
+        }
+
         [HttpGet("{id:int}", Name = "GetBlog")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

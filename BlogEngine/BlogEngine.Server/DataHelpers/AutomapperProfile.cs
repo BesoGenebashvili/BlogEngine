@@ -2,7 +2,6 @@
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Data.Entities.JoiningEntities;
 using BlogEngine.Shared.DTOs;
-using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -75,6 +74,9 @@ namespace BlogEngine.Server.DataHelpers
 
             CreateMap<ApplicationUser, UserInfoDetailDTO>()
                 .ForMember(ui => ui.EmailAddress, opt => opt.MapFrom(au => au.Email))
+                .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
+
+            CreateMap<ApplicationUser, UserProfileDTO>()
                 .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
 
             #endregion
