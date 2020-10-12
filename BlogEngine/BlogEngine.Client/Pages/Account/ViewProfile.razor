@@ -46,13 +46,16 @@ else
 @code {
     [Parameter] public int ID { get; set; }
     [Parameter] public string Name { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
     private UserProfileDTO _userProfileDTO;
     private List<BlogDTO> _blogDTOs;
+    private bool _loggedUserEqualProfile = false;
 
     protected override async Task OnInitializedAsync()
     {
         _userProfileDTO = await AccountClient.GetUserProfileDTOAsync(ID);
+        //_loggedUserEqualProfile = await LoggedUserIsEqualToProfile();
     }
 
     bool articlesLoaded;
@@ -60,5 +63,19 @@ else
     {
         _blogDTOs = await BlogClient.GetAllByUserIdAsync(ID);
         articlesLoaded = true;
+    }
+
+    // Added for future use
+    private async Task<bool> LoggedUserIsEqualToProfile()
+    {
+        var authenticationState = await AuthenticationStateTask;
+
+        if (authenticationState == null) return false;
+
+        var loggedUserEmail = authenticationState.GetClaimValue(ClaimTypes.Email);
+
+        if (loggedUserEmail == null) return false;
+
+        return _userProfileDTO.EmailAddress.Equals(loggedUserEmail);
     }
 }

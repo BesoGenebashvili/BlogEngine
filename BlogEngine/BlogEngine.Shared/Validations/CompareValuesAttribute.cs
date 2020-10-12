@@ -14,9 +14,9 @@ namespace BlogEngine.Shared.Validations
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            string confirmValue = validationContext.ObjectInstance.GetType()
+            string confirmValue = validationContext?.ObjectInstance.GetType()
                     .GetProperty(ConfirmProperty)
-                    .GetValue(validationContext.ObjectInstance)
+                    .GetValue(validationContext?.ObjectInstance)
                     .ToString();
 
             if (!value.Equals(confirmValue))

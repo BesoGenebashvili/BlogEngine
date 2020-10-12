@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BlogEngine.ClientServices\BlogEngine.ClientServices.csproj" />
     <ProjectReference Include="..\BlogEngine.Core\BlogEngine.Core.csproj" />
+    <ProjectReference Include="..\BlogEngine.Server\BlogEngine.Server.csproj" />
   </ItemGroup>
 
 </Project>

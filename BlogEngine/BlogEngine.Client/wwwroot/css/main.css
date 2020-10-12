@@ -48,3 +48,7 @@ body {
 .pointer {
     cursor: pointer;
 }
+
+.half-font-size {
+    font-size: 50%;
+}
