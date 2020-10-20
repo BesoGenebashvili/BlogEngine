@@ -61,8 +61,9 @@ namespace BlogEngine.Server
                 app.UseDeveloperExceptionPage();
             }
 
-            // custom exception handler
             app.ConfigureExceptionMiddleware();
+
+            app.ConfigureLoggingMiddleware();
 
             app.UseHttpsRedirection();
 

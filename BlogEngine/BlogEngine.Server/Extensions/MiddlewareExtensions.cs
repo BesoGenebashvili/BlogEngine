@@ -9,5 +9,10 @@ namespace BlogEngine.Server.Extensions
         {
             app.UseMiddleware<ExceptionMiddleware>();
         }
+
+        public static void ConfigureLoggingMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<LoggingMiddleware>();
+        }
     }
 }
