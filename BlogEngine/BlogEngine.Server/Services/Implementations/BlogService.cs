@@ -6,6 +6,7 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Core.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -13,6 +14,7 @@ namespace BlogEngine.Server.Services.Implementations
     {
         private readonly IBlogRepository _blogRepository;
         private ICategoryRepository _categoryRepository;
+        private IBlogRatingRepository _blogRatingRepository;
         private readonly IMapper _mapper;
         private readonly IReadingTimeEstimator _readingTimeEstimator;
         private readonly ICurrentUserProvider _currentUserProvider;
@@ -20,6 +22,7 @@ namespace BlogEngine.Server.Services.Implementations
         public BlogService(
             IBlogRepository blogRepository,
             ICategoryRepository categoryRepository,
+            IBlogRatingRepository blogRatingRepository,
             IMapper mapper,
             IReadingTimeEstimator readingTimeEstimator,
             ICurrentUserProvider currentUserProvider)
@@ -29,6 +32,7 @@ namespace BlogEngine.Server.Services.Implementations
             _mapper = mapper;
             _readingTimeEstimator = readingTimeEstimator;
             _currentUserProvider = currentUserProvider;
+            _blogRatingRepository = blogRatingRepository;
         }
 
         public async Task<BlogDTO> GetByIdAsync(int id)
@@ -37,7 +41,26 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (blogEntity == null) return null;
 
-            return ToDTO(blogEntity);
+            var blogDTO = ToDTO(blogEntity);
+
+            var ratings = await _blogRatingRepository.GetAllByBlogIdAsync(id);
+
+            if (ratings.Any())
+            {
+                blogDTO.AverageRating = ratings.Average(br => br.Rate);
+            }
+
+            var currentUser = await _currentUserProvider.GetCurrentUserAsync();
+
+            if (currentUser != null)
+            {
+                var blogRating = await _blogRatingRepository
+                    .GetByBlogIdAndUserIdAsync(id, currentUser.Id);
+
+                blogDTO.RatingByUser = blogRating is null ? default : blogRating.Rate;
+            }
+
+            return blogDTO;
         }
 
         public async Task<BlogUpdateDTO> GetUpdateDTOAsync(int id)
@@ -60,11 +83,6 @@ namespace BlogEngine.Server.Services.Implementations
             var selectedCategories = allCategories
                 .Where(c => blogEntity.CategoryIDs.Contains(c.ID))
                 .ToList();
-
-            //
-            //var notSelectedCategories = allCategories
-            //    .Where(c => !blogEntity.CategoryIDs.Contains(c.ID))
-            //    .ToList();
 
             return new BlogEditPageDTO()
             {
@@ -129,11 +147,18 @@ namespace BlogEngine.Server.Services.Implementations
 
         private async Task AssignIdentityFields(Blog blog)
         {
-            var currentUser = await _currentUserProvider.GetCurrentUser();
+            var currentUser = await _currentUserProvider.GetCurrentUserAsync();
 
-            blog.ApplicationUserID = currentUser.Id;
-            blog.CreatedBy = currentUser.FullName;
-            blog.LastUpdateBy = currentUser.FullName;
+            if (currentUser is null)
+            {
+                Throw.InvalidOperationException(nameof(AssignIdentityFields));
+            }
+            else
+            {
+                blog.ApplicationUserID = currentUser.Id;
+                blog.CreatedBy = currentUser.FullName;
+                blog.LastUpdateBy = currentUser.FullName;
+            }
         }
 
         private Blog ToEntity(BlogCreationDTO blogCreationDTO) => _mapper.Map<Blog>(blogCreationDTO);

@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
-    public class CommentsController : ControllerBase
+    public class CommentsController : BaseController
     {
         private readonly ICommentService _commentService;
 

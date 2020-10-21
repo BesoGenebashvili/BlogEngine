@@ -63,7 +63,13 @@ namespace BlogEngine.ClientServices.Extensions
             if (!response.Success) throw new ApplicationException(await response.GetBody());
 
             return response.Response;
+        }
 
+        public static async Task PostHelperAsync<TData>(this IHttpService httpService, string url, TData data)
+        {
+            var response = await httpService.Post(url, data);
+
+            if (!response.Success) throw new ApplicationException(await response.GetBody());
         }
 
         public static async Task<TResponse> PutHelperAsync<TData, TResponse>(this IHttpService httpService, string url, TData data)

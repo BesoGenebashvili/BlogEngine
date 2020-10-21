@@ -80,6 +80,12 @@ namespace BlogEngine.Server.DataHelpers
                 .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
 
             #endregion
+
+            #region BlogRating
+
+            CreateMap<BlogRatingDTO, BlogRating>();
+
+            #endregion
         }
 
         private List<BlogCategory> MapCategoryIDs(BlogCreationDTO blogCreationDTO, Blog blog)

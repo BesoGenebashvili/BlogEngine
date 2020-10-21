@@ -5,7 +5,7 @@ namespace BlogEngine.Server.Services.Abstractions
 {
     public interface ICurrentUserProvider
     {
-        Task<ApplicationUser> GetCurrentUser();
-        Task<int> GetCurrentUserID();
+        Task<ApplicationUser> GetCurrentUserAsync();
+        Task<int> GetCurrentUserIDAsync();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace BlogEngine.ClientServices.Helpers
 {
-    public class CommentClientEndpoints
+    public sealed class CommentClientEndpoints
     {
         public const string MainBase = "api/comments/main";
         public const string SubBase = "api/comments/sub";

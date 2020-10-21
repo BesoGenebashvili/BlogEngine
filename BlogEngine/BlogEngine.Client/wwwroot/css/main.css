@@ -52,3 +52,7 @@ body {
 .half-font-size {
     font-size: 50%;
 }
+
+.star-checked {
+    color: orange;
+}

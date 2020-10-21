@@ -12,6 +12,8 @@ namespace BlogEngine.Shared.DTOs
         public string HTMLContent { get; set; }
         public int EstimatedReadingTimeInMinutes { get; set; }
         public byte[] Cover { get; set; }
+        public double AverageRating { get; set; }
+        public int RatingByUser { get; set; }
 
         public List<MainCommentDTO> MainCommentDTOs { get; set; } = new List<MainCommentDTO>();
         public List<CategoryDTO> CategoryDTOs { get; set; } = new List<CategoryDTO>();

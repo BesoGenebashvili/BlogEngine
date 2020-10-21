@@ -1,6 +1,6 @@
 ﻿namespace BlogEngine.ClientServices.Helpers
 {
-    public class AccountClientEndpoints
+    public sealed class AccountClientEndpoints
     {
         public const string Base = "api/accounts";
         public const string Login = "api/accounts/login";

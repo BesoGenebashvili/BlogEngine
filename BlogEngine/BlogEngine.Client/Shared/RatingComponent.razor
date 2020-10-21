@@ -1,0 +1,39 @@
+﻿@for (int i = 1; i <= Maximum; i++)
+{
+    int starNumber = i;
+
+    <span @onclick="(async() => await OnStarClick(starNumber))"
+          @onmouseover="(() => OnStarHover(starNumber))"
+          @onmouseout="(() => _temporarySelected = Selected)"
+          class="fa fa-star pointer @(_temporarySelected >= starNumber ? "star-checked" : "")">
+    </span>
+}
+
+@code{
+    [Parameter] public int Maximum { get; set; }
+    [Parameter] public EventCallback<int> RatingSelected { get; set; }
+
+    private int _temporarySelected;
+    private int _selected;
+    [Parameter]
+    public int Selected
+    {
+        get => _selected;
+        set
+        {
+            _selected = value;
+            _temporarySelected = value;
+        }
+    }
+
+    private async Task OnStarClick(int starNumber)
+    {
+        Selected = starNumber;
+        await RatingSelected.InvokeAsync(Selected);
+    }
+
+    private void OnStarHover(int starNumber)
+    {
+        _temporarySelected = starNumber;
+    }
+}

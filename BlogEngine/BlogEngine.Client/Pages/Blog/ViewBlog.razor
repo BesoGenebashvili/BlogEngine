@@ -1,6 +1,7 @@
 ﻿@page "/blog/view/{ID:int}"
 @page "/blog/view/{ID:int}/{Title}"
 @inject IBlogClient BlogClient
+@inject IBlogRatingClient BlogRatingClient
 
 @if (_blogDTO == null)
 {
@@ -13,7 +14,11 @@ else
 
     <!-- Author -->
     <p class="lead">by<a href="account/view/@_blogDTO.ApplicationUserID/@_blogDTO.CreatedBy">@_blogDTO.CreatedBy</a></p>
-
+    <p>
+        Average Rating : @_blogDTO.AverageRating.ToString("0.#")/5 |
+        Vote :
+        <RatingComponent Selected="_blogDTO.RatingByUser" Maximum="5" RatingSelected="OnRatingSelected" />
+    </p>
     <hr>
 
     <!-- Date/Time -->
@@ -63,15 +68,45 @@ else
 
     <!-- Comments -->
     <CommentSection BlogID="ID" />
+
+    <ConfirmationModal @ref="_confirmationModal"
+                       Confirm="(() => _confirmationModal.Hide())"
+                       ConfirmOnly="true">
+        <ModalBodyTemplate>
+            Login to rate
+        </ModalBodyTemplate>
+    </ConfirmationModal>
 }
 
 @code{
     [Parameter] public int ID { get; set; }
     [Parameter] public string Title { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    private BlogDTO _blogDTO { get; set; }
+    private BlogDTO _blogDTO;
+    private ConfirmationModal _confirmationModal;
 
     protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task OnRatingSelected(int starNumber)
+    {
+        var isAuthenticated = (await AuthenticationStateTask).User.Identity.IsAuthenticated;
+
+        if (isAuthenticated)
+        {
+            await BlogRatingClient.CreateAsync(new BlogRatingDTO(_blogDTO.ID, starNumber));
+            await LoadPage();
+        }
+        else
+        {
+            _confirmationModal.Show();
+        }
+    }
+
+    private async Task LoadPage()
     {
         _blogDTO = await BlogClient.GetAsync(ID);
     }

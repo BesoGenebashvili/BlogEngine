@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using BlogEngine.Core.Helpers;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -151,13 +152,13 @@ namespace BlogEngine.Server.Services.Implementations
             };
         }
 
-        public async Task<ApplicationUser> GetCurrentUser()
+        public async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var user = _httpContextAccessor.HttpContext.User;
 
-            if (user == null)
+            if (!user.Identity.IsAuthenticated)
             {
-                throw new InvalidOperationException("User is not logged in");
+                return null;
             }
 
             var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email));
@@ -167,7 +168,12 @@ namespace BlogEngine.Server.Services.Implementations
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<int> GetCurrentUserID() => (await GetCurrentUser()).Id;
+        public async Task<int> GetCurrentUserIDAsync()
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            return currentUser is null ? default : currentUser.Id;
+        }
 
         protected async Task<UserInfoDetailDTO> MapWithRolesAsync(ApplicationUser applicationUser)
         {

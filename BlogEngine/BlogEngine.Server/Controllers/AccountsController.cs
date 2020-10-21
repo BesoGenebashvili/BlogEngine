@@ -6,15 +6,11 @@ using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
-using BlogEngine.Shared.Models;
 using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
-    public class AccountsController : ControllerBase
+    public class AccountsController : BaseController
     {
         private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;

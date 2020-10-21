@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
-using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using BlogEngine.Server.Extensions;
@@ -12,11 +11,8 @@ using System.Linq;
 
 namespace BlogEngine.Server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
-    public class BlogsController : ControllerBase
+    public class BlogsController : BaseController
     {
         private readonly IBlogService _blogService;
         private readonly IBlogSearchService _blogSearchService;

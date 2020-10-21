@@ -4,17 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
-using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BlogEngine.Server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
-    public class NotificationsController : ControllerBase
+    public class NotificationsController : BaseController
     {
         private readonly INotificationReceiverService _notificationReceiverService;
 

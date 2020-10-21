@@ -1,6 +1,6 @@
 ﻿namespace BlogEngine.ClientServices.Helpers
 {
-    public class BlogClientEndpoints
+    public sealed class BlogClientEndpoints
     {
         public const string Base = "api/blogs";
         public const string ByUserId = "api/blogs/byUserId";

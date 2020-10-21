@@ -1,7 +1,6 @@
 ﻿using BlogEngine.Server.Attributes;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
-using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,11 +10,8 @@ using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetails))]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseController
     {
         private readonly ICategoryService _categoryService;
 

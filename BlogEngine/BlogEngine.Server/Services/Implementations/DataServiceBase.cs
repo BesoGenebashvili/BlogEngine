@@ -92,16 +92,17 @@ namespace BlogEngine.Server.Services.Implementations
 
         protected virtual async Task AssignIdentityFields(TEntity entity)
         {
-            try
-            {
-                var currentUser = await _currentUserProvider.GetCurrentUser();
-                entity.CreatedBy = currentUser.FullName;
-                entity.LastUpdateBy = currentUser.FullName;
-            }
-            catch (Exception)
+            var currentUser = await _currentUserProvider.GetCurrentUserAsync();
+
+            if (currentUser is null)
             {
                 entity.CreatedBy = "Anonymous";
                 entity.LastUpdateBy = "Anonymous";
+            }
+            else
+            {
+                entity.CreatedBy = currentUser.FullName;
+                entity.LastUpdateBy = currentUser.FullName;
             }
         }
 

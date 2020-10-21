@@ -86,6 +86,8 @@ namespace BlogEngine.Server.Extensions
 
             services.AddScoped<INotificationReceiverRepository, NotificationReceiverRepository>();
 
+            services.AddScoped<IBlogRatingRepository, BlogRatingRepository>();
+
             return services;
         }
 
@@ -107,6 +109,8 @@ namespace BlogEngine.Server.Extensions
 
             // Should it be here?
             services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<IBlogRatingService, BlogRatingService>();
 
             return services;
         }

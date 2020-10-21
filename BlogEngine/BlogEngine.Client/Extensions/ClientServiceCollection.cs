@@ -35,6 +35,8 @@ namespace BlogEngine.Client.Extensions
 
             services.AddScoped<IAccountClient, AccountClient>();
 
+            services.AddScoped<IBlogRatingClient, BlogRatingClient>();
+
             return services;
         }
 
