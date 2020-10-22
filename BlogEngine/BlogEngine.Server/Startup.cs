@@ -45,6 +45,8 @@ namespace BlogEngine.Server
             services.AddNotificationServices();
 
             services.AddUserProviders();
+
+            services.AddPDFGenerator();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

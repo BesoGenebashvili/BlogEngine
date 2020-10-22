@@ -167,6 +167,11 @@ namespace BlogEngine.Server.Extensions
             return services.AddScoped<ICurrentUserProvider, AccountService>();
         }
 
+        public static IServiceCollection AddPDFGenerator(this IServiceCollection services)
+        {
+            return services.AddTransient<IPDFGenerator, PDFGenerator>();
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
         {
             return services.AddSwaggerGen(config =>

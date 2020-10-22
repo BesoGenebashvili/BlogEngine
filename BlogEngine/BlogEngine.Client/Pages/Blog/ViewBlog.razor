@@ -19,6 +19,11 @@ else
         Vote :
         <RatingComponent Selected="_blogDTO.RatingByUser" Maximum="5" RatingSelected="OnRatingSelected" />
     </p>
+
+    <p>
+        <a target="_blank" href="@(UtilityClientEndpoints.BlogContentPDFConverterFullAddress(_blogDTO.ID))" class="btn btn-success btn-sm">Download as PDF</a>
+    </p>
+
     <hr>
 
     <!-- Date/Time -->
