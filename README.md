@@ -6,9 +6,9 @@ A blogging engine based on ASP.NET Core
 
 ## Technologies
 The project based on modern front edge technologies:
- - Asp.Net Core
+ - ASP.NET Core
  - Blazor Server
- - ASP.NET Core WebAPI
+ - ASP.NET Core Web API
  - Entity Framework Core
  - AutoMapper
  - Syncfusion Blazor
@@ -25,11 +25,12 @@ The project based on modern front edge technologies:
  - Mobile friendly UI
  - Search page with sort functionality
  - Pagination
+ - Blog rating system
+ - Real-Time commenting system with replies
  - Register/Login system
  - JWT authentication
  - User’s personal account with the ability to edit user information and personal data (upcoming)
  - Administration through the admin panel  
- - Real-Time commenting system with replies
  - Swagger API documentation
  - HATEOAS
  
