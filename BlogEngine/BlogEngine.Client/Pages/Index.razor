@@ -12,7 +12,7 @@
 @code {
     private List<BlogDTO> _blogDTOs { get; set; }
 
-    private PaginationDTO _paginationDTO = new PaginationDTO();
+    private PaginationDTO _paginationDTO = new PaginationDTO() { RecordsPerPage = 5 };
     private int _totalAmountPages;
 
     protected async override Task OnInitializedAsync()

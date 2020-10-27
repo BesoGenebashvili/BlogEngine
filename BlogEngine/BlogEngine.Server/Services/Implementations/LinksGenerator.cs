@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;

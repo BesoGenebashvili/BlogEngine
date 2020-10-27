@@ -14,11 +14,11 @@ else
 
         @if (_categoryDTO.GeneralCover is null)
         {
-            <img src="css/Images/image_not_available_template.png">
+            <img class="w-50" src="css/Images/image_not_available_template.png">
         }
         else
         {
-            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(_categoryDTO.GeneralCover))">
+            <img class="w-50" src="data:image/jpeg;base64,@(Convert.ToBase64String(_categoryDTO.GeneralCover))">
         }
 
         <div class="my-4">

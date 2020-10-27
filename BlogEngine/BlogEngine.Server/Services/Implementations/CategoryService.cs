@@ -12,8 +12,8 @@ namespace BlogEngine.Server.Services.Implementations
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
 
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ICurrentUserProvider currentUserProvider)
-            : base(categoryRepository, mapper, currentUserProvider)
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+            : base(categoryRepository, mapper)
         {
             _categoryRepository = categoryRepository;
             _mapper = mapper;
@@ -22,8 +22,6 @@ namespace BlogEngine.Server.Services.Implementations
         public override async Task<CategoryDTO> InsertAsync(CategoryCreationDTO categoryCreationDTO)
         {
             var categoryEntity = ToEntity(categoryCreationDTO);
-
-            await AssignIdentityFields(categoryEntity);
 
             var insertedEntity = await _categoryRepository.InsertAsync(categoryEntity);
 
@@ -37,8 +35,6 @@ namespace BlogEngine.Server.Services.Implementations
             if (categoryEntity == null) return null;
 
             _mapper.Map(categoryUpdateDTO, categoryEntity);
-
-            await AssignIdentityFields(categoryEntity);
 
             var updatedEntity = await _categoryRepository.UpdateAsync(categoryEntity);
 

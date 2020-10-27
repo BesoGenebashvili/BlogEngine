@@ -12,9 +12,8 @@ namespace BlogEngine.Server.Services.Implementations
     {
         public NotificationReceiverService(
             INotificationReceiverRepository notificationReceiverRepository,
-            IMapper mapper,
-            ICurrentUserProvider currentUserProvider)
-            : base(notificationReceiverRepository, mapper, currentUserProvider)
+            IMapper mapper)
+            : base(notificationReceiverRepository, mapper)
         {
         }
     }

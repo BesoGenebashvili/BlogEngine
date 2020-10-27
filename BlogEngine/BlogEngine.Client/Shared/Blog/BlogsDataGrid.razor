@@ -13,7 +13,7 @@ else
     <table class="table table-hover mt-3">
         <thead>
             <tr>
-                <th scope="col">#</th>
+                @*<th scope="col">#</th>*@
                 <th scope="col">ID</th>
                 <th scope="col">Title</th>
                 <th scope="col">Short Description</th>
@@ -30,7 +30,7 @@ else
             @foreach (var blogDTO in BlogDTOs)
             {
                 <tr>
-                    <th scope="row">@(_modelCount++)</th>
+                    @*<th scope="row">@(_modelCount++)</th>*@
                     <td>@blogDTO.ID</td>
                     <td>@blogDTO.Title.GetStringBrief(20)</td>
                     <td>@blogDTO.ShortDescription.GetStringBrief(20)</td>

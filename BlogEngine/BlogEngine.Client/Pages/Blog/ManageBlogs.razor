@@ -7,11 +7,24 @@
 
 <BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete" />
 
+<PaginationSection CurrentPage="_paginationDTO.Page"
+                   TotalAmountPages="_totalAmountPages"
+                   PageSelected="OnPageSelected" />
+
 @code {
     private List<BlogDTO> _blogDTOs = null;
 
+    private PaginationDTO _paginationDTO = new PaginationDTO() { RecordsPerPage = 3 };
+    private int _totalAmountPages;
+
     protected async override Task OnInitializedAsync()
     {
+        await LoadPage();
+    }
+
+    private async Task OnPageSelected(int page)
+    {
+        _paginationDTO.Page = page;
         await LoadPage();
     }
 
@@ -23,6 +36,9 @@
 
     private async Task LoadPage()
     {
-        _blogDTOs = await BlogClient.GetAllAsync();
+        var paginatedResponse = await BlogClient.GetAllPaginatedAsync(_paginationDTO);
+
+        _blogDTOs = paginatedResponse.Response;
+        _totalAmountPages = paginatedResponse.TotalAmountPages;
     }
 }

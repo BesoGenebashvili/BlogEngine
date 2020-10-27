@@ -21,6 +21,8 @@ namespace BlogEngine.Core.Services.Implementations
         {
             return Task.FromResult(_context.Categories
                  .Include(c => c.BlogCategories).ThenInclude(bc => bc.Blog)
+                 .OrderByDescending(c => c.DateCreated)
+                 .ThenByDescending(c => c.LastUpdateDate)
                  .AsEnumerable());
         }
 

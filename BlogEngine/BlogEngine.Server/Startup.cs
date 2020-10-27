@@ -20,9 +20,11 @@ namespace BlogEngine.Server
         {
             services.AddControllers();
 
-            services.AddDataAcess(Configuration);
-
             services.AddIdentity();
+
+            services.AddUserProviders();
+
+            services.AddDataAcess(Configuration);
 
             services.AddJWTAuthentication(Configuration);
 
@@ -43,8 +45,6 @@ namespace BlogEngine.Server
             services.AddMailServices(Configuration);
 
             services.AddNotificationServices();
-
-            services.AddUserProviders();
 
             services.AddPDFGenerator();
         }

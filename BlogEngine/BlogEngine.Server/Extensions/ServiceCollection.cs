@@ -164,7 +164,7 @@ namespace BlogEngine.Server.Extensions
 
         public static IServiceCollection AddUserProviders(this IServiceCollection services)
         {
-            return services.AddScoped<ICurrentUserProvider, AccountService>();
+            return services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
         }
 
         public static IServiceCollection AddPDFGenerator(this IServiceCollection services)

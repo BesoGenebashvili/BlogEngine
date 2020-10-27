@@ -5,7 +5,6 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using AutoMapper;
-using System;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -18,16 +17,11 @@ namespace BlogEngine.Server.Services.Implementations
     {
         private readonly IAsyncRepository<TEntity> _repository;
         private readonly IMapper _mapper;
-        private readonly ICurrentUserProvider _currentUserProvider;
 
-        public DataServiceBase(
-            IAsyncRepository<TEntity> repository,
-            IMapper mapper,
-            ICurrentUserProvider currentUserProvider)
+        public DataServiceBase(IAsyncRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _currentUserProvider = currentUserProvider;
         }
 
         public virtual async Task<TDTO> GetByIdAsync(int id)
@@ -59,8 +53,6 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var entity = ToEntity(creationDTO);
 
-            await AssignIdentityFields(entity);
-
             var insertedEntity = await _repository.InsertAsync(entity);
 
             return ToDTO(insertedEntity);
@@ -74,8 +66,6 @@ namespace BlogEngine.Server.Services.Implementations
 
             _mapper.Map(updateDTO, entity);
 
-            await AssignIdentityFields(entity);
-
             var updatedEntity = await _repository.UpdateAsync(entity);
 
             return ToDTO(updatedEntity);
@@ -88,22 +78,6 @@ namespace BlogEngine.Server.Services.Implementations
             if (entity == null) return false;
 
             return await _repository.DeleteAsync(entity.ID);
-        }
-
-        protected virtual async Task AssignIdentityFields(TEntity entity)
-        {
-            var currentUser = await _currentUserProvider.GetCurrentUserAsync();
-
-            if (currentUser is null)
-            {
-                entity.CreatedBy = "Anonymous";
-                entity.LastUpdateBy = "Anonymous";
-            }
-            else
-            {
-                entity.CreatedBy = currentUser.FullName;
-                entity.LastUpdateBy = currentUser.FullName;
-            }
         }
 
         protected TEntity ToEntity(TCreationDTO creationDTO) => _mapper.Map<TEntity>(creationDTO);

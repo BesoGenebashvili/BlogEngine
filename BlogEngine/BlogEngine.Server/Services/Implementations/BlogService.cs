@@ -112,7 +112,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogEntity.HTMLContent);
 
-            await AssignIdentityFields(blogEntity);
+            await AssignUserID(blogEntity);
 
             var insertedEntity = await _blogRepository.InsertAsync(blogEntity);
 
@@ -129,7 +129,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogUpdateDTO.HTMLContent);
 
-            await AssignIdentityFields(blogEntity);
+            await AssignUserID(blogEntity);
 
             var updatedEntity = await _blogRepository.UpdateAsync(blogEntity);
 
@@ -145,19 +145,17 @@ namespace BlogEngine.Server.Services.Implementations
             return await _blogRepository.DeleteAsync(blogEntity.ID);
         }
 
-        private async Task AssignIdentityFields(Blog blog)
+        private async Task AssignUserID(Blog blog)
         {
             var currentUser = await _currentUserProvider.GetCurrentUserAsync();
 
             if (currentUser is null)
             {
-                Throw.InvalidOperationException(nameof(AssignIdentityFields));
+                Throw.InvalidOperationException(nameof(AssignUserID));
             }
             else
             {
                 blog.ApplicationUserID = currentUser.Id;
-                blog.CreatedBy = currentUser.FullName;
-                blog.LastUpdateBy = currentUser.FullName;
             }
         }
 

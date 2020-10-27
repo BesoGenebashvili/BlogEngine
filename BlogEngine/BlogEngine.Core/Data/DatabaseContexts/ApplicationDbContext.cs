@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BlogEngine.Core.Services.Abstractions;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace BlogEngine.Core.Data.DatabaseContexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
+        private readonly ICurrentUserProvider _currentUserProvider;
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<BlogCategory> BlogCategories { get; set; }
@@ -20,8 +25,10 @@ namespace BlogEngine.Core.Data.DatabaseContexts
         public DbSet<NotificationReceiver> NotificationReceivers { get; set; }
         public DbSet<BlogRating> BlogRatings { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
+            ICurrentUserProvider currentUserProvider) : base(options)
         {
+            _currentUserProvider = currentUserProvider;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,68 +36,80 @@ namespace BlogEngine.Core.Data.DatabaseContexts
             modelBuilder.Entity<BlogCategory>()
                 .HasKey(b => new { b.BlogID, b.CategoryID });
 
-            /*
-            modelBuilder.Entity<ApplicationUser>()
-                .Property(u => u.Id).HasColumnName("ID");
-            */
-
             base.OnModelCreating(modelBuilder);
         }
 
         public override int SaveChanges()
         {
-            AddTimestamps();
+            AddBaseEntityFields().GetAwaiter().GetResult();
             return base.SaveChanges();
         }
 
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            AddTimestamps();
-            return base.SaveChanges(acceptAllChangesOnSuccess);
+            await AddBaseEntityFields();
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        protected async Task AddBaseEntityFields()
         {
-            AddTimestamps();
-            return base.SaveChangesAsync(cancellationToken);
+            var addedEntities = GetAddedEntities();
+            var editedEntities = GetEditedEntities();
+
+            AddTimestamps(addedEntities, editedEntities);
+            await AddIdentityFields(addedEntities, editedEntities);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        private List<EntityEntry> GetEditedEntities()
         {
-            AddTimestamps();
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            return ChangeTracker.Entries()
+                   .Where(e => e.State == EntityState.Modified && e.Entity is BaseEntity)
+                   .ToList();
         }
 
-        protected virtual void AddTimestamps()
+        private List<EntityEntry> GetAddedEntities()
+        {
+            return ChangeTracker.Entries()
+                  .Where(e => e.State == EntityState.Added && e.Entity is BaseEntity)
+                  .ToList();
+        }
+
+        protected void AddTimestamps(List<EntityEntry> addedEntities, List<EntityEntry> editedEntities)
         {
             var now = DateTime.Now;
 
-            var addedEntities = ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Added && e.Entity is BaseEntity)
-                .ToList();
-
             addedEntities.ForEach(e =>
             {
-                e.Property(BaseEntityFields.DateCreated).CurrentValue = DateTime.Now;
-                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = DateTime.Now;
+                e.Property(BaseEntityFields.DateCreated).CurrentValue = now;
+                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = now;
             });
-
-            var editedEntities = ChangeTracker.Entries()
-                .Where(e => e.State == EntityState.Modified && e.Entity is BaseEntity)
-                .ToList();
 
             editedEntities.ForEach(e =>
             {
                 var dateCreatedOriginalValue = e.GetDatabaseValues().GetValue<DateTime>(BaseEntityFields.DateCreated);
-
-                #region Need better solution
-                var createdByoriginalValue = e.GetDatabaseValues().GetValue<string>(BaseEntityFields.CreatedBy);
-                e.Property(BaseEntityFields.CreatedBy).CurrentValue = createdByoriginalValue;
-                #endregion
-
                 e.Property(BaseEntityFields.DateCreated).CurrentValue = dateCreatedOriginalValue;
 
-                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = DateTime.Now;
+                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = now;
+            });
+        }
+
+        protected async Task AddIdentityFields(List<EntityEntry> addedEntities, List<EntityEntry> editedEntities)
+        {
+            var user = await _currentUserProvider.GetCurrentUserAsync();
+            string userName = user is null ? "Anonymous" : user.FullName;
+
+            addedEntities.ForEach(e =>
+            {
+                e.Property(BaseEntityFields.CreatedBy).CurrentValue = userName;
+                e.Property(BaseEntityFields.LastUpdateBy).CurrentValue = userName;
+            });
+
+            editedEntities.ForEach(e =>
+            {
+                var createdByoriginalValue = e.GetDatabaseValues().GetValue<string>(BaseEntityFields.CreatedBy);
+                e.Property(BaseEntityFields.CreatedBy).CurrentValue = createdByoriginalValue;
+
+                e.Property(BaseEntityFields.LastUpdateBy).CurrentValue = userName;
             });
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
@@ -10,30 +9,24 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using BlogEngine.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
-using Microsoft.AspNetCore.Http;
 using BlogEngine.Core.Helpers;
-using Microsoft.AspNetCore.Components.Server.Circuits;
 
 namespace BlogEngine.Server.Services.Implementations
 {
-    public class AccountService : IAccountService, ICurrentUserProvider
+    public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IMapper mapper,
-            IHttpContextAccessor httpContextAccessor)
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO)
@@ -150,29 +143,6 @@ namespace BlogEngine.Server.Services.Implementations
                 Successed = identityResult.Succeeded,
                 Errors = string.Join(", ", identityResult.Errors)
             };
-        }
-
-        public async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            var user = _httpContextAccessor.HttpContext.User;
-
-            if (!user.Identity.IsAuthenticated)
-            {
-                return null;
-            }
-
-            var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email));
-
-            var email = emailClaim.Value;
-
-            return await _userManager.FindByEmailAsync(email);
-        }
-
-        public async Task<int> GetCurrentUserIDAsync()
-        {
-            var currentUser = await GetCurrentUserAsync();
-
-            return currentUser is null ? default : currentUser.Id;
         }
 
         protected async Task<UserInfoDetailDTO> MapWithRolesAsync(ApplicationUser applicationUser)

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
-using System.Runtime.CompilerServices;
+using System;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -23,6 +23,8 @@ namespace BlogEngine.Core.Services.Implementations
             return Task.FromResult(_context.Blogs
                  .Include(b => b.BlogCategories).ThenInclude(bc => bc.Category)
                  .Include(b => b.MainComments).ThenInclude(mc => mc.SubComments)
+                 .OrderByDescending(b => b.DateCreated)
+                 .ThenByDescending(b => b.LastUpdateDate)
                  .AsEnumerable());
         }
 
@@ -51,7 +53,11 @@ namespace BlogEngine.Core.Services.Implementations
                 .Include(u => u.Blogs)
                 .FirstOrDefaultAsync();
 
-            return user.Blogs;
+            var blogs = user.Blogs
+                .OrderByDescending(b => b.DateCreated)
+                .ThenByDescending(b => b.LastUpdateDate);
+
+            return blogs;
         }
 
         public override Blog Insert(Blog entity)

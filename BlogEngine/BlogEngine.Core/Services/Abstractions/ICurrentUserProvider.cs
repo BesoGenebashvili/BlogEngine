@@ -1,11 +1,11 @@
 ﻿using BlogEngine.Core.Data.Entities;
 using System.Threading.Tasks;
 
-namespace BlogEngine.Server.Services.Abstractions
+namespace BlogEngine.Core.Services.Abstractions
 {
     public interface ICurrentUserProvider
     {
         Task<ApplicationUser> GetCurrentUserAsync();
-        Task<int> GetCurrentUserIDAsync();
+        Task<int> GetCurrentUserIDAsync() => Task.FromResult(GetCurrentUserAsync().GetAwaiter().GetResult().Id);
     }
 }

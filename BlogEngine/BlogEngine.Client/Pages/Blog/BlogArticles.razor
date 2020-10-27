@@ -1,7 +1,7 @@
 ﻿@page "/blog/articles"
 @inject IBlogClient BlogClient
 
-<TextCenter Text="Blog Articles"/>
+<TextCenter Text="Blog Articles" />
 
 <BlogArticleList BlogDTOs="_blogDTOs" />
 
@@ -10,9 +10,9 @@
                    PageSelected="OnPageSelected" />
 
 @code {
-    private List<BlogDTO> _blogDTOs { get; set; }
+    private List<BlogDTO> _blogDTOs;
 
-    private PaginationDTO _paginationDTO = new PaginationDTO();
+    private PaginationDTO _paginationDTO = new PaginationDTO() { RecordsPerPage = 5 };
     private int _totalAmountPages;
 
     protected async override Task OnInitializedAsync()
