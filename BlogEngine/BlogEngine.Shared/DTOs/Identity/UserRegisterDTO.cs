@@ -16,7 +16,6 @@ namespace BlogEngine.Shared.DTOs
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        // Compare attribute not working.
-        public bool PasswordsMuch => ConfirmPassword.Equals(Password);
+        public byte[] ProfilePicture { get; set; }
     }
 }

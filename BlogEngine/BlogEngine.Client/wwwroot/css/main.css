@@ -56,3 +56,11 @@ body {
 .star-checked {
     color: orange;
 }
+
+.user-profile-picture {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+}

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Core.Helpers;
-using BlogEngine.Server.Helpers;
 
 namespace BlogEngine.Server.Extensions
 {
@@ -22,9 +21,9 @@ namespace BlogEngine.Server.Extensions
             {
                 Throw.ArgumentNullException(nameof(enumerable));
             }
-            if (recordsPerPage < 0)
+            if (recordsPerPage <= 0)
             {
-                Throw.InvalidOperationException();
+                Throw.InvalidOperationException($"'{nameof(recordsPerPage)}' must be greater than zero");
             }
 
             await Task.Run(() =>

@@ -16,6 +16,7 @@ else
                 <th scope="col">Email Address</th>
                 <th scope="col">First Name</th>
                 <th scope="col">Last Name</th>
+                <th scope="col">Has Profile Picture</th>
                 <th scope="col">Roles</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -30,6 +31,7 @@ else
                     <td>@userInfoDetailDTO.EmailAddress</td>
                     <td>@userInfoDetailDTO.FirstName</td>
                     <td>@userInfoDetailDTO.LastName</td>
+                    <td>@(userInfoDetailDTO.ProfilePicture is null ? "No" : "Yes")</td>
                     <td>
                         @foreach (var role in userInfoDetailDTO.Roles)
                         {
@@ -37,16 +39,19 @@ else
                         }
                     </td>
                     <td>
-                        @if (userInfoDetailDTO.Roles.Contains(UserRole.Admin))
+                        @if (!userInfoDetailDTO.EmailAddress.Equals(adminEmail))
                         {
-                            <button @onclick="(async() => await UserRemoveAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Remove As Admin</button>
-                        }
-                        else
-                        {
-                            <button @onclick="(async() => await UserAssignAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-success btn-sm">Make Admin</button>
-                        }
+                            @if (userInfoDetailDTO.Roles.Contains(UserRole.Admin))
+                            {
+                                <button @onclick="(async() => await UserRemoveAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Remove As Admin</button>
+                            }
+                            else
+                            {
+                                <button @onclick="(async() => await UserAssignAdminRole.InvokeAsync(userInfoDetailDTO))" class="btn btn-success btn-sm">Make Admin</button>
+                            }
 
-                        <button @onclick="(async() => await UserDelete.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Delete</button>
+                            <button @onclick="(async() => await UserDelete.InvokeAsync(userInfoDetailDTO))" class="btn btn-danger btn-sm">Delete</button>
+                        }
                     </td>
                 </tr>
             }
@@ -56,6 +61,14 @@ else
 
 
 @code{
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private string adminEmail = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        adminEmail = (await AuthenticationStateTask).GetClaimValue(ClaimTypes.Email);
+    }
+
     [Parameter] public List<UserInfoDetailDTO> UserInfoDetailDTOs { get; set; }
     [Parameter] public EventCallback<UserInfoDetailDTO> UserDelete { get; set; }
     [Parameter] public EventCallback<UserInfoDetailDTO> UserAssignAdminRole { get; set; }

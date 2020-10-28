@@ -15,8 +15,6 @@ namespace BlogEngine.Core.Data.Entities
 
         public byte[] GeneralCover { get; set; }
 
-        // TODO: add rate column
-
         public List<BlogCategory> BlogCategories { get; set; } = new List<BlogCategory>();
     }
 }

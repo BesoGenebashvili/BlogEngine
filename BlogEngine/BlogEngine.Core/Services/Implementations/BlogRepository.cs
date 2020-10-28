@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
-using System;
+using BlogEngine.Core.Helpers;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -53,6 +53,12 @@ namespace BlogEngine.Core.Services.Implementations
                 .Include(u => u.Blogs)
                 .FirstOrDefaultAsync();
 
+            if (user is null)
+            {
+                Throw.EntityNotFoundException(nameof(user));
+            }
+
+
             var blogs = user.Blogs
                 .OrderByDescending(b => b.DateCreated)
                 .ThenByDescending(b => b.LastUpdateDate);
@@ -65,10 +71,10 @@ namespace BlogEngine.Core.Services.Implementations
             entity = base.Insert(entity);
 
             _context.Entry(entity)
-             .Collection(b => b.BlogCategories)
-             .Query()
-             .Include(b => b.Category)
-             .Load();
+                .Collection(b => b.BlogCategories)
+                .Query()
+                .Include(b => b.Category)
+                .Load();
 
             return entity;
         }
@@ -78,10 +84,10 @@ namespace BlogEngine.Core.Services.Implementations
             entity = await base.InsertAsync(entity);
 
             _context.Entry(entity)
-             .Collection(b => b.BlogCategories)
-             .Query()
-             .Include(b => b.Category)
-             .Load();
+                .Collection(b => b.BlogCategories)
+                .Query()
+                .Include(b => b.Category)
+                .Load();
 
             return entity;
         }
@@ -91,10 +97,10 @@ namespace BlogEngine.Core.Services.Implementations
             entity = base.Update(entity);
 
             _context.Entry(entity)
-             .Collection(b => b.BlogCategories)
-             .Query()
-             .Include(b => b.Category)
-             .Load();
+                .Collection(b => b.BlogCategories)
+                .Query()
+                .Include(b => b.Category)
+                .Load();
 
             return entity;
         }
@@ -104,10 +110,10 @@ namespace BlogEngine.Core.Services.Implementations
             entity = await base.UpdateAsync(entity);
 
             _context.Entry(entity)
-             .Collection(b => b.BlogCategories)
-             .Query()
-             .Include(b => b.Category)
-             .Load();
+                .Collection(b => b.BlogCategories)
+                .Query()
+                .Include(b => b.Category)
+                .Load();
 
             return entity;
         }

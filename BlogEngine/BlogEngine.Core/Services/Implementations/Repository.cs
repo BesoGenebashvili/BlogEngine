@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -41,28 +40,6 @@ namespace BlogEngine.Core.Services.Implementations
             return Task.FromResult(_dbSet.AsEnumerable());
         }
 
-        public virtual IEnumerable<TEntity> GetByQuery(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
-        {
-            IQueryable<TEntity> query = _dbSet.AsQueryable();
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-
-            return query.AsEnumerable();
-        }
-
-        public virtual Task<IEnumerable<TEntity>> GetByQueryAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
-        {
-            return Task.FromResult(GetByQuery(filter, orderBy));
-        }
-
         public virtual IEnumerable<TEntity> GetByRawSql(string query, params object[] parameters)
         {
             if (string.IsNullOrWhiteSpace(query))
@@ -80,7 +57,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Insert(TEntity entity)
         {
-            NullCheckThrowEntityNullException(entity);
+            NullCheckThrowArgumentNullException(entity);
 
             _dbSet.Add(entity);
             SaveChanges();
@@ -90,7 +67,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
-            NullCheckThrowEntityNullException(entity);
+            NullCheckThrowArgumentNullException(entity);
 
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
@@ -100,7 +77,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Update(TEntity entity)
         {
-            NullCheckThrowEntityNullException(entity);
+            NullCheckThrowArgumentNullException(entity);
 
             _dbSet.Update(entity);
             SaveChanges();
@@ -110,7 +87,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            NullCheckThrowEntityNullException(entity);
+            NullCheckThrowArgumentNullException(entity);
 
             _dbSet.Update(entity);
             await SaveChangesAsync();
@@ -150,11 +127,11 @@ namespace BlogEngine.Core.Services.Implementations
             }
         }
 
-        protected void NullCheckThrowEntityNullException(TEntity entity)
+        protected void NullCheckThrowArgumentNullException(TEntity entity)
         {
             if (entity is null)
             {
-                Throw.EntityNullException(typeof(TEntity).Name);
+                Throw.ArgumentNullException(typeof(TEntity).Name);
             }
         }
 

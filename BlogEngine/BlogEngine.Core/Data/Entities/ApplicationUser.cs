@@ -14,6 +14,7 @@ namespace BlogEngine.Core.Data.Entities
         [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; }
 
+        public byte[] ProfilePicture { get; set; }
         public List<Blog> Blogs { get; set; } = new List<Blog>();
 
         [NotMapped]

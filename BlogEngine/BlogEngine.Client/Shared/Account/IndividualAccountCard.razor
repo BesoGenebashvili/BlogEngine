@@ -1,5 +1,13 @@
 ﻿<div class="card">
     <div class="card-body text-center">
+        @if (UserInfoDetailDTO.ProfilePicture is null)
+        {
+            <img class="user-profile-picture" src="css/Images/user_template_128px.png" alt="user icon">
+        }
+        else
+        {
+            <img class="user-profile-picture" src="data:image/jpeg;base64,@(Convert.ToBase64String(UserInfoDetailDTO.ProfilePicture))">
+        }
         <h5 class="card-title">@UserInfoDetailDTO.FullName</h5>
         <a href="account/view/@UserInfoDetailDTO.ID/@UserInfoDetailDTO.FullName" class="btn btn-primary">View Profile</a>
     </div>

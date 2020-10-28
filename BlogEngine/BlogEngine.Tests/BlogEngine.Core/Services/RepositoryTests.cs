@@ -56,12 +56,12 @@ namespace BlogEngine.Tests.BlogEngine.Core.Services
         }
 
         [Test]
-        public void Insert_EntityIsNull_ThrowEntityNullException()
+        public void Insert_EntityIsNull_ThrowArgumentNullException()
         {
             var repository = new Repository<BaseEntity>(_context.Object);
 
             Assert.That(() => repository.Insert(null),
-                Throws.Exception.TypeOf<EntityNullException>());
+                Throws.Exception.TypeOf<ArgumentNullException>());
         }
 
         [Test]
@@ -90,12 +90,12 @@ namespace BlogEngine.Tests.BlogEngine.Core.Services
         }
 
         [Test]
-        public void Update_EntityIsNull_ThrowEntityNullException()
+        public void Update_EntityIsNull_ThrowArgumentNullException()
         {
             var repository = new Repository<BaseEntity>(_context.Object);
 
             Assert.That(() => repository.Update(null),
-                Throws.Exception.TypeOf<EntityNullException>());
+                Throws.Exception.TypeOf<ArgumentNullException>());
         }
 
         [Test]

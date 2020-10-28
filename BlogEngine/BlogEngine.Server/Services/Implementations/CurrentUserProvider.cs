@@ -29,6 +29,11 @@ namespace BlogEngine.Server.Services.Implementations
 
             var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email));
 
+            if (emailClaim is null)
+            {
+                return null;
+            }
+
             var email = emailClaim.Value;
 
             // Do not use a constructor injection for UserManager because of circular dependency

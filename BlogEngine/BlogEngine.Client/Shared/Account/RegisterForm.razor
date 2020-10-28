@@ -22,6 +22,12 @@
             <ValidationMessage For="(() => _userRegisterDTO.LastName)" />
         </div>
 
+        <InputImage Image="_userRegisterDTO.ProfilePicture"
+                    LabelText="Choose Profile Picture"
+                    ImageSelected="((imageBytes) => _userRegisterDTO.ProfilePicture = imageBytes)"
+                    ImageRemoved="(() => _userRegisterDTO.ProfilePicture = null)"
+                    WrapperCssClass="mb-3" />
+
         <div class="mb-3">
             <label for="r-email" class="form-label">E-Mail Address</label>
             <input @bind-value="_userRegisterDTO.EmailAddress" autocomplete="new-email"

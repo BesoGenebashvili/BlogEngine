@@ -41,75 +41,47 @@ namespace BlogEngine.Core.Data.DatabaseContexts
 
         public override int SaveChanges()
         {
-            AddBaseEntityFields().GetAwaiter().GetResult();
+            FillBaseEntityFields().GetAwaiter().GetResult();
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await AddBaseEntityFields();
+            await FillBaseEntityFields();
             return await base.SaveChangesAsync(cancellationToken);
         }
 
-        protected async Task AddBaseEntityFields()
-        {
-            var addedEntities = GetAddedEntities();
-            var editedEntities = GetEditedEntities();
-
-            AddTimestamps(addedEntities, editedEntities);
-            await AddIdentityFields(addedEntities, editedEntities);
-        }
-
-        private List<EntityEntry> GetEditedEntities()
-        {
-            return ChangeTracker.Entries()
-                   .Where(e => e.State == EntityState.Modified && e.Entity is BaseEntity)
-                   .ToList();
-        }
-
-        private List<EntityEntry> GetAddedEntities()
-        {
-            return ChangeTracker.Entries()
-                  .Where(e => e.State == EntityState.Added && e.Entity is BaseEntity)
-                  .ToList();
-        }
-
-        protected void AddTimestamps(List<EntityEntry> addedEntities, List<EntityEntry> editedEntities)
-        {
-            var now = DateTime.Now;
-
-            addedEntities.ForEach(e =>
-            {
-                e.Property(BaseEntityFields.DateCreated).CurrentValue = now;
-                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = now;
-            });
-
-            editedEntities.ForEach(e =>
-            {
-                var dateCreatedOriginalValue = e.GetDatabaseValues().GetValue<DateTime>(BaseEntityFields.DateCreated);
-                e.Property(BaseEntityFields.DateCreated).CurrentValue = dateCreatedOriginalValue;
-
-                e.Property(BaseEntityFields.LastUpdateDate).CurrentValue = now;
-            });
-        }
-
-        protected async Task AddIdentityFields(List<EntityEntry> addedEntities, List<EntityEntry> editedEntities)
+        private async Task FillBaseEntityFields()
         {
             var user = await _currentUserProvider.GetCurrentUserAsync();
-            string userName = user is null ? "Anonymous" : user.FullName;
+            string userFullName = user is null ? "Anonymous" : user.FullName;
 
-            addedEntities.ForEach(e =>
+            var now = DateTime.Now;
+
+            var entityEntries = ChangeTracker
+                .Entries<BaseEntity>()
+                .ToList();
+
+            entityEntries.ForEach(e =>
             {
-                e.Property(BaseEntityFields.CreatedBy).CurrentValue = userName;
-                e.Property(BaseEntityFields.LastUpdateBy).CurrentValue = userName;
-            });
+                var entity = e.Entity;
 
-            editedEntities.ForEach(e =>
-            {
-                var createdByoriginalValue = e.GetDatabaseValues().GetValue<string>(BaseEntityFields.CreatedBy);
-                e.Property(BaseEntityFields.CreatedBy).CurrentValue = createdByoriginalValue;
+                entity.LastUpdateDate = now;
+                entity.LastUpdateBy = userFullName;
 
-                e.Property(BaseEntityFields.LastUpdateBy).CurrentValue = userName;
+                switch (e.State)
+                {
+                    case EntityState.Added:
+                        entity.DateCreated = now;
+                        entity.CreatedBy = userFullName;
+                        break;
+                    case EntityState.Modified:
+                        #region DateCreated and CreatedBy value should not be changed
+                        entity.DateCreated = e.GetDatabaseValues().GetValue<DateTime>(BaseEntityFields.DateCreated);
+                        entity.CreatedBy = e.GetDatabaseValues().GetValue<string>(BaseEntityFields.CreatedBy);
+                        #endregion
+                        break;
+                }
             });
         }
     }

@@ -27,7 +27,6 @@ namespace BlogEngine.Core.Data.Entities
         public int EstimatedReadingTimeInMinutes { get; set; }
         public byte[] Cover { get; set; }
 
-        // TODO: add rate column
         // TODO: add publish date column
 
         public List<MainComment> MainComments { get; set; } = new List<MainComment>();
