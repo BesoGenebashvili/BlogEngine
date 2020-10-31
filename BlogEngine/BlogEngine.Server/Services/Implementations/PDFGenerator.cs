@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Server.Services.Abstractions;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 using System.IO;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -10,10 +10,7 @@ namespace BlogEngine.Server.Services.Implementations
     {
         public async Task<byte[]> GeneratePDFAsync(string htmlContent)
         {
-            if (string.IsNullOrWhiteSpace(htmlContent))
-            {
-                Throw.ArgumentNullException(nameof(htmlContent));
-            }
+            Preconditions.NotNullOrWhiteSpace(htmlContent, nameof(htmlContent));
 
             return await Task.Run(() => ProcessGeneratePDF(htmlContent));
         }

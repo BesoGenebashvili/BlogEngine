@@ -8,6 +8,7 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Helpers;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -27,10 +28,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<UserTokenDTO> BuildToken(UserInfoDTO userInfoDTO)
         {
-            if (userInfoDTO == null)
-            {
-                Throw.ArgumentNullException(nameof(userInfoDTO));
-            }
+            Preconditions.NotNull(userInfoDTO, nameof(userInfoDTO));
 
             var identityUser = await _userManager.FindByEmailAsync(userInfoDTO.EmailAddress);
 

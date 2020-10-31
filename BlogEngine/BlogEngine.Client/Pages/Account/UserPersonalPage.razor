@@ -1,29 +1,109 @@
 ﻿@page "/account/personal"
+@inject IAccountClient AccountClient
 
 <TextCenter Text="Page is under construction" />
 
-@if (_authenticationState != null && _authenticationState.User != null)
+@if (_userProfileDTO == null)
 {
-    <h3>First Name : @_authenticationState.GetClaimValue(ClaimTypes.Name)</h3>
-    <h3>Last Name : @_authenticationState.GetClaimValue(ClaimTypes.Surname)</h3>
-    <h3>E-Mail Address : @_authenticationState.GetClaimValue(ClaimTypes.Email)</h3>
+    <TextCenter Text="Sorry, something went wrong" />
+}
+else
+{
+    <div class="text-center">
+
+        @if (_userProfileDTO.ProfilePicture is null)
+        {
+            <img class="user-profile-picture" style="width: 400px; height:400px;"
+                 src="css/Images/user_template_128px.png" alt="user icon">
+        }
+        else
+        {
+            <img class="user-profile-picture" style="width: 400px; height:400px;"
+                 src="data:image/jpeg;base64,@(Convert.ToBase64String(_userProfileDTO.ProfilePicture))">
+        }
+
+        <div class="my-4">
+            <h1 class="my-2">Hello @_userProfileDTO.FullName</h1>
+
+            <button @onclick="OnUserUpdateButtonClick" class="my-2 btn btn-success">Edit Information</button>
+
+            <AuthorizeView Roles="@UserRole.Admin">
+                <Authorized>
+                    <a class="my-2 btn btn-primary" href="accounts/manage">Manage Accounts</a>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>
 }
 
-<AuthorizeView Roles="@UserRole.Admin">
-    <Authorized>
-        <a class="mt-2 btn btn-primary" href="accounts/manage">Manage Accounts</a>
-    </Authorized>
-</AuthorizeView>
+<ConfirmationModal @ref="_updateUserModal"
+                   Confirm="(()=>_updateUserModal.Hide())"
+                   Cancel="(() => _updateUserModal.Hide())"
+                   Centered="true"
+                   WithoutButtons="true"
+                   ModalTitle="Update Information">
+    <ModalBodyTemplate>
 
-@* TODO: Implement *@
+        @if (_userProfileDTO != null)
+        {
+            <UserUpdateForm @ref="_userUpdateForm"
+                            ValidSubmit="OnUserUpdateValidSubmit"
+                            UserUpdateDTO="_userUpdateDTO" />
+        }
+
+    </ModalBodyTemplate>
+</ConfirmationModal>
 
 @code{
     [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-    private AuthenticationState _authenticationState;
+    private ConfirmationModal _updateUserModal;
+    private UserUpdateForm _userUpdateForm;
+
+    private UserProfileDTO _userProfileDTO;
+    private UserUpdateDTO _userUpdateDTO;
+
 
     protected override async Task OnInitializedAsync()
     {
-        _authenticationState = await AuthenticationStateTask;
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        try
+        {
+            var _authenticationState = await AuthenticationStateTask;
+            _userProfileDTO = await AccountClient.GetUserProfileDTOAsync(_authenticationState.GetClaimValue(ClaimTypes.Email));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+
+    private void OnUserUpdateButtonClick()
+    {
+        _userUpdateDTO = new UserUpdateDTO()
+        {
+            FirstName = _userProfileDTO.FirstName,
+            LastName = _userProfileDTO.LastName,
+            ProfilePicture = _userProfileDTO.ProfilePicture
+        };
+
+        _updateUserModal.Show();
+    }
+
+    private async Task OnUserUpdateValidSubmit(UserUpdateDTO userUpdateDTO)
+    {
+        try
+        {
+            _userProfileDTO = await AccountClient.UpdateUserAsync(_userProfileDTO.EmailAddress, userUpdateDTO);
+            _updateUserModal.Hide();
+        }
+        catch (Exception)
+        {
+            _userUpdateForm.ShowErrorMessage = true;
+        }
     }
 }

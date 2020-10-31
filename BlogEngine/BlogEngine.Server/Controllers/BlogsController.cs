@@ -75,8 +75,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(BlogDTO))]
         public async Task<ActionResult> Post([FromBody] BlogCreationDTO blogCreationDTO)
         {
-            if (blogCreationDTO == null) return BadRequest();
-
             var insertedBlog = await _blogService.InsertAsync(blogCreationDTO);
 
             await _notificationSender.SendBlogPostNotificationsAsync(insertedBlog);
@@ -102,8 +100,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BlogDTO))]
         public async Task<ActionResult<BlogDTO>> Put(int id, [FromBody] BlogUpdateDTO blogUpdateDTO)
         {
-            if (blogUpdateDTO == null) return BadRequest();
-
             var blogDTO = await _blogService.UpdateAsync(id, blogUpdateDTO);
 
             if (blogDTO == null) return NotFound();

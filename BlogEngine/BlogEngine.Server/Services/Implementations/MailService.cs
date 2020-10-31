@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -20,10 +21,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<bool> SendAsync(MailModel mailModel)
         {
-            if (mailModel == null)
-            {
-                throw new ArgumentNullException(nameof(mailModel));
-            }
+            Preconditions.NotNull(mailModel, nameof(mailModel));
 
             return await Task.Run(() => Send(mailModel));
         }
@@ -45,24 +43,23 @@ namespace BlogEngine.Server.Services.Implementations
                     Credentials = new NetworkCredential(_SMTPConfig.SMTPFrom, _SMTPConfig.Password)
                 };
 
-                using (MailMessage mailMessage = new MailMessage(fromMailAdress, toMailAddress)
+                using MailMessage mailMessage = new MailMessage(fromMailAdress, toMailAddress)
                 {
                     IsBodyHtml = mailModel.IsBodyHtml,
                     Subject = mailModel.Subject,
                     Body = mailModel.Body
-                })
-                {
-                    var bccAdresses = _SMTPConfig
-                        .BCCRecipientList.Split(",")
-                        .Select(e => new MailAddress(e.Trim()))
-                        .ToList();
+                };
 
-                    bccAdresses.ForEach(bcc => mailMessage.Bcc.Add(bcc));
+                var bccAdresses = _SMTPConfig
+                    .BCCRecipientList.Split(",")
+                    .Select(e => new MailAddress(e.Trim()))
+                    .ToList();
 
-                    smtpClient.Send(mailMessage);
+                bccAdresses.ForEach(bcc => mailMessage.Bcc.Add(bcc));
 
-                    return true;
-                }
+                smtpClient.Send(mailMessage);
+
+                return true;
             }
             catch (Exception)
             {

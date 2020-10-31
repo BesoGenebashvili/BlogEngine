@@ -1,0 +1,46 @@
+﻿<div class="container d-flex align-items-center flex-column">
+    <EditForm Model="UserUpdateDTO" OnValidSubmit="DataAnnotationsValidated">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label for="first-name" class="form-label">First Name</label>
+            <input @bind-value="UserUpdateDTO.FirstName" type="text" id="first-name" class="form-control">
+            <ValidationMessage For="(() => UserUpdateDTO.FirstName)" />
+        </div>
+
+        <div class="mb-4">
+            <label for="last-name" class="form-label">Last Name</label>
+            <input @bind-value="UserUpdateDTO.LastName" type="text" id="last-name" class="form-control">
+            <ValidationMessage For="(() => UserUpdateDTO.LastName)" />
+        </div>
+
+        <InputImage Image="UserUpdateDTO.ProfilePicture"
+                    LabelText="Choose Profile Picture"
+                    ImageSelected="((imageBytes) => UserUpdateDTO.ProfilePicture = imageBytes)"
+                    ImageRemoved="(() => UserUpdateDTO.ProfilePicture = null)"
+                    WrapperCssClass="mb-3" />
+
+        @if (ShowErrorMessage)
+        {
+            <div class="validation-message">Sorry, something went wrong</div>
+        }
+
+        <button disabled="@(ShowErrorMessage ? false : _actionsDisabled)" type="submit" class="btn btn-success w-100">Update</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public EventCallback<UserUpdateDTO> ValidSubmit { get; set; }
+    [Parameter] public UserUpdateDTO UserUpdateDTO { get; set; }
+
+    public bool ShowErrorMessage { get; set; }
+    private bool _actionsDisabled = false;
+
+    private async Task DataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(UserUpdateDTO);
+    }
+}

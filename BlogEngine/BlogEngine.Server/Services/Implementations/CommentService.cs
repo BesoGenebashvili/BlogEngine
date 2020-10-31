@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using System.Linq;
 using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -56,6 +56,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<MainCommentDTO> InsertMainCommentAsync(CommentCreationDTO commentCreationDTO)
         {
+            Preconditions.NotNull(commentCreationDTO, nameof(commentCreationDTO));
+
             if (!commentCreationDTO.IsMain)
             {
                 Throw.InvalidOperationException("Can not insert the SubComment into MainComment Table");
@@ -70,6 +72,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<SubCommentDTO> InsertSubCommentAsync(CommentCreationDTO commentCreationDTO)
         {
+            Preconditions.NotNull(commentCreationDTO, nameof(commentCreationDTO));
+
             if (commentCreationDTO.IsMain)
             {
                 Throw.InvalidOperationException("Can not insert the MainComment into SubComment Table");

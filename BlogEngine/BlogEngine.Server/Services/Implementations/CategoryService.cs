@@ -3,6 +3,7 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Implementations
@@ -21,6 +22,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public override async Task<CategoryDTO> InsertAsync(CategoryCreationDTO categoryCreationDTO)
         {
+            Preconditions.NotNull(categoryCreationDTO, nameof(categoryCreationDTO));
+
             var categoryEntity = ToEntity(categoryCreationDTO);
 
             var insertedEntity = await _categoryRepository.InsertAsync(categoryEntity);
@@ -30,6 +33,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public override async Task<CategoryDTO> UpdateAsync(int id, CategoryUpdateDTO categoryUpdateDTO)
         {
+            Preconditions.NotNull(categoryUpdateDTO, nameof(categoryUpdateDTO));
+
             var categoryEntity = await _categoryRepository.GetByIdAsync(id);
 
             if (categoryEntity == null) return null;

@@ -5,6 +5,8 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using AutoMapper;
+using BlogEngine.Shared.Helpers;
+using Microsoft.AspNetCore.Connections;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -51,6 +53,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public virtual async Task<TDTO> InsertAsync(TCreationDTO creationDTO)
         {
+            Preconditions.NotNull(creationDTO, nameof(creationDTO));
+
             var entity = ToEntity(creationDTO);
 
             var insertedEntity = await _repository.InsertAsync(entity);
@@ -60,6 +64,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public virtual async Task<TDTO> UpdateAsync(int id, TUpdateDTO updateDTO)
         {
+            Preconditions.NotNull(updateDTO, nameof(updateDTO));
+
             var entity = await _repository.GetByIdAsync(id);
 
             if (entity == null) return null;

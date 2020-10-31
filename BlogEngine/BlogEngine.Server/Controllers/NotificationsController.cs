@@ -44,11 +44,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(NotificationReceiverDTO))]
         public async Task<ActionResult<NotificationReceiverDTO>> Post([FromBody] NotificationReceiverCreationDTO notificationReceiverCreationDTO)
         {
-            if (notificationReceiverCreationDTO == null)
-            {
-                return BadRequest();
-            }
-
             var notificationReceiverDTO = await _notificationReceiverService.InsertAsync(notificationReceiverCreationDTO);
 
             return new CreatedAtRouteResult("getNotificationReceiver", new { notificationReceiverDTO.ID }, notificationReceiverDTO);

@@ -77,7 +77,8 @@ namespace BlogEngine.Server.DataHelpers
                 .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
 
             CreateMap<ApplicationUser, UserProfileDTO>()
-                .ForMember(ui => ui.ID, opt => opt.MapFrom(au => au.Id));
+                .ForMember(up => up.ID, opt => opt.MapFrom(au => au.Id))
+                .ForMember(up => up.EmailAddress, opt => opt.MapFrom(au => au.Email));
 
             #endregion
 

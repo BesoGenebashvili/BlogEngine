@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,5 +20,15 @@ namespace BlogEngine.Core.Data.Entities
 
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ApplicationUser applicationUser)
+            {
+                return Email.Equals(applicationUser.Email) && Id.Equals(applicationUser.Id);
+            }
+
+            return base.Equals(obj);
+        }
     }
 }

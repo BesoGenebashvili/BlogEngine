@@ -31,9 +31,19 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.GetHelperAsync<UserProfileDTO>($"{AccountClientEndpoints.UserProfile}/{id}");
         }
 
+        public async Task<UserProfileDTO> GetUserProfileDTOAsync(string email)
+        {
+            return await _httpService.GetHelperAsync<UserProfileDTO>($"{AccountClientEndpoints.UserProfile}/{email}");
+        }
+
         public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync()
         {
             return await _httpService.GetHelperAsync<List<UserInfoDetailDTO>>(AccountClientEndpoints.Users);
+        }
+
+        public async Task<UserProfileDTO> UpdateUserAsync(string email, UserUpdateDTO userUpdateDTO)
+        {
+            return await _httpService.PutHelperAsync<UserUpdateDTO, UserProfileDTO>($"{AccountClientEndpoints.Update}/{email}", userUpdateDTO);
         }
 
         public async Task<bool> AssignRoleAsync(UserRoleDTO userRoleDTO)

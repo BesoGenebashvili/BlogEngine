@@ -60,8 +60,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CategoryDTO))]
         public async Task<ActionResult> Post([FromBody] CategoryCreationDTO categoryCreationDTO)
         {
-            if (categoryCreationDTO == null) return BadRequest();
-
             var categoryDTO = await _categoryService.InsertAsync(categoryCreationDTO);
 
             return new CreatedAtRouteResult("getCategory", new { categoryDTO.ID }, categoryDTO);
@@ -73,8 +71,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CategoryDTO))]
         public async Task<ActionResult<CategoryDTO>> Put(int id, [FromBody] CategoryUpdateDTO categoryUpdateDTO)
         {
-            if (categoryUpdateDTO == null) return BadRequest();
-
             var categoryDTO = await _categoryService.UpdateAsync(id, categoryUpdateDTO);
 
             if (categoryDTO == null) return NotFound();

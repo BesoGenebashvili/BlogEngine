@@ -7,6 +7,7 @@ using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
 using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -108,6 +109,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<BlogDTO> InsertAsync(BlogCreationDTO blogCreationDTO)
         {
+            Preconditions.NotNull(blogCreationDTO, nameof(blogCreationDTO));
+
             var blogEntity = ToEntity(blogCreationDTO);
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogEntity.HTMLContent);
@@ -121,6 +124,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<BlogDTO> UpdateAsync(int id, BlogUpdateDTO blogUpdateDTO)
         {
+            Preconditions.NotNull(blogUpdateDTO, nameof(blogUpdateDTO));
+
             var blogEntity = await _blogRepository.GetByIdAsync(id);
 
             if (blogEntity == null) return null;
@@ -147,6 +152,8 @@ namespace BlogEngine.Server.Services.Implementations
 
         private async Task AssignUserID(Blog blog)
         {
+            Preconditions.NotNull(blog, nameof(blog));
+
             var currentUser = await _currentUserProvider.GetCurrentUserAsync();
 
             if (currentUser is null)

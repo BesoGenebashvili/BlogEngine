@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
@@ -10,6 +11,8 @@ using System.Security.Claims;
 using BlogEngine.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
+using BlogEngine.Core.Services.Abstractions;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -17,21 +20,24 @@ namespace BlogEngine.Server.Services.Implementations
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ICurrentUserProvider _currentUserProvider;
         private readonly IMapper _mapper;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ICurrentUserProvider currentUserProvider,
             IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _currentUserProvider = currentUserProvider;
         }
 
         public async Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO)
         {
-            NullCheckThrowArgumentNullException(userRegisterDTO);
+            Preconditions.NotNull(userRegisterDTO, nameof(userRegisterDTO));
 
             var applicationUser = _mapper.Map<ApplicationUser>(userRegisterDTO);
 
@@ -40,7 +46,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO)
         {
-            NullCheckThrowArgumentNullException(userLoginDTO);
+            Preconditions.NotNull(userLoginDTO, nameof(userLoginDTO));
 
             return await _signInManager
                 .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
@@ -49,6 +55,21 @@ namespace BlogEngine.Server.Services.Implementations
         public async Task<UserProfileDTO> GetUserProfileDTOAsync(int id)
         {
             var applicationUser = await _userManager.FindByIdAsync(id.ToString());
+
+            if (applicationUser == null) return null;
+
+            var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
+
+            userProfileDTO.Roles = await GetUserRoles(applicationUser);
+
+            return userProfileDTO;
+        }
+
+        public async Task<UserProfileDTO> GetUserProfileDTOAsync(string email)
+        {
+            Preconditions.NotNull(email, nameof(email));
+
+            var applicationUser = await _userManager.FindByEmailAsync(email);
 
             if (applicationUser == null) return null;
 
@@ -75,9 +96,51 @@ namespace BlogEngine.Server.Services.Implementations
             return userInfoDetalDTOs;
         }
 
+        public async Task<UserProfileDTO> UpdateUserAsync(string email, UserUpdateDTO userUpdateDTO)
+        {
+            Preconditions.NotNullOrWhiteSpace(email, nameof(email));
+            Preconditions.NotNull(userUpdateDTO, nameof(userUpdateDTO));
+
+            var applicationUser = await _userManager.FindByEmailAsync(email);
+
+            if (applicationUser is null)
+            {
+                Throw.EntityNotFoundException(nameof(ApplicationUser));
+            }
+
+            var currentUser = await _currentUserProvider.GetCurrentUserAsync();
+
+            if (currentUser is null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            if (!applicationUser.Equals(currentUser))
+            {
+                throw new InvalidOperationException();
+            }
+
+            applicationUser.FirstName = userUpdateDTO.FirstName;
+            applicationUser.LastName = userUpdateDTO.LastName;
+            applicationUser.ProfilePicture = userUpdateDTO.ProfilePicture;
+
+            var identityResult = await _userManager.UpdateAsync(applicationUser);
+
+            if (identityResult.Succeeded)
+            {
+                var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
+
+                userProfileDTO.Roles = await GetUserRoles(applicationUser);
+
+                return userProfileDTO;
+            }
+
+            return null;
+        }
+
         public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
         {
-            NullCheckThrowArgumentNullException(userRoleDTO);
+            Preconditions.NotNull(userRoleDTO, nameof(userRoleDTO));
 
             var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
 
@@ -101,7 +164,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<AccountOperationResult> RemoveRoleAsync(UserRoleDTO userRoleDTO)
         {
-            NullCheckThrowArgumentNullException(userRoleDTO);
+            Preconditions.NotNull(userRoleDTO, nameof(userRoleDTO));
 
             var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
 
@@ -164,30 +227,6 @@ namespace BlogEngine.Server.Services.Implementations
                 .ToList();
 
             return roles;
-        }
-
-        protected void NullCheckThrowArgumentNullException(UserRegisterDTO userRegisterDTO)
-        {
-            if (userRegisterDTO == null)
-            {
-                Throw.ArgumentNullException(nameof(userRegisterDTO));
-            }
-        }
-
-        protected void NullCheckThrowArgumentNullException(UserLoginDTO userLoginDTO)
-        {
-            if (userLoginDTO == null)
-            {
-                Throw.ArgumentNullException(nameof(userLoginDTO));
-            }
-        }
-
-        protected void NullCheckThrowArgumentNullException(UserRoleDTO userRoleDTO)
-        {
-            if (userRoleDTO == null)
-            {
-                Throw.ArgumentNullException(nameof(userRoleDTO));
-            }
         }
     }
 }

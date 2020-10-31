@@ -65,6 +65,27 @@ namespace BlogEngine.Server.Controllers
             return userProfileDTO;
         }
 
+        [HttpGet("user/profile/{email}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(UserProfileDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserProfileDTO>> GetUser(string email)
+        {
+            var userProfileDTO = await _accountService.GetUserProfileDTOAsync(email);
+
+            if (userProfileDTO == null) return NotFound();
+
+            return userProfileDTO;
+        }
+
+        [HttpPut("update/{email}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ProducesResponseType(typeof(UserProfileDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserProfileDTO>> UpdateUser(string email, [FromBody] UserUpdateDTO userUpdateDTO)
+        {
+            return await _accountService.UpdateUserAsync(email, userUpdateDTO);
+        }
+
         [HttpPost("assignRole")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = UserRole.Admin)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

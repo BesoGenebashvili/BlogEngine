@@ -4,6 +4,7 @@ using BlogEngine.Core.Helpers;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Implementations
@@ -26,10 +27,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task InsertAsync(BlogRatingDTO blogRatingDTO)
         {
-            if (blogRatingDTO is null)
-            {
-                Throw.ArgumentNullException(nameof(blogRatingDTO));
-            }
+            Preconditions.NotNull(blogRatingDTO, nameof(blogRatingDTO));
 
             var user = await _currentUserProvider.GetCurrentUserAsync();
 

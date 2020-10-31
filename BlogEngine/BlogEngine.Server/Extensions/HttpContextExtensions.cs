@@ -13,14 +13,9 @@ namespace BlogEngine.Server.Extensions
         public async static Task InsertPaginationParametersInResponseAsync<T>(
             this HttpContext httpContext, IEnumerable<T> enumerable, int recordsPerPage)
         {
-            if (httpContext == null)
-            {
-                Throw.ArgumentNullException(nameof(httpContext));
-            }
-            if (enumerable == null)
-            {
-                Throw.ArgumentNullException(nameof(enumerable));
-            }
+            Preconditions.NotNull(httpContext, nameof(httpContext));
+            Preconditions.NotNull(enumerable, nameof(enumerable));
+
             if (recordsPerPage <= 0)
             {
                 Throw.InvalidOperationException($"'{nameof(recordsPerPage)}' must be greater than zero");

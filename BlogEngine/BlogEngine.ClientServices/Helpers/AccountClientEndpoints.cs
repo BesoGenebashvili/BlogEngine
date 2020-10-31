@@ -3,6 +3,7 @@
     public sealed class AccountClientEndpoints
     {
         public const string Base = "api/accounts";
+        public const string Update = "api/accounts/update";
         public const string Login = "api/accounts/login";
         public const string Register = "api/accounts/register";
         public const string Users = "api/accounts/users";

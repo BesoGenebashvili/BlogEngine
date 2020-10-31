@@ -61,8 +61,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MainCommentDTO))]
         public async Task<ActionResult<MainCommentDTO>> PostMain(CommentCreationDTO commentCreationDTO)
         {
-            if (commentCreationDTO == null) return BadRequest();
-
             if (commentCreationDTO.IsMain)
             {
                 var mainCommentDTO = await _commentService.InsertMainCommentAsync(commentCreationDTO);
@@ -79,8 +77,6 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(SubCommentDTO))]
         public async Task<ActionResult<SubCommentDTO>> PostSub(CommentCreationDTO commentCreationDTO)
         {
-            if (commentCreationDTO == null) return BadRequest();
-
             if (commentCreationDTO.IsMain)
             {
                 return BadRequest();

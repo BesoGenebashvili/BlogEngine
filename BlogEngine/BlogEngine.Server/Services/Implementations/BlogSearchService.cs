@@ -25,10 +25,7 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<List<BlogDTO>> SearchAsync(BlogSearchDTO blogSearchDTO)
         {
-            if (blogSearchDTO == null)
-            {
-                Throw.ArgumentNullException(nameof(blogSearchDTO));
-            }
+            Preconditions.NotNull(blogSearchDTO, nameof(blogSearchDTO));
 
             var blogs = await _blogRepository.GetAllWithReferences();
 

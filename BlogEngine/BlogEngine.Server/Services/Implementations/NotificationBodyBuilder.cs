@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -10,6 +11,9 @@ namespace BlogEngine.Server.Services.Implementations
     {
         public Task<string> BuildBlogPostNotificationBodyAsync(NotificationReceiver notificationReceiver, BlogDTO blogDTO)
         {
+            Preconditions.NotNull(notificationReceiver, nameof(notificationReceiver));
+            Preconditions.NotNull(blogDTO, nameof(blogDTO));
+
             // TODO : use template.txt for body building
             #region Temporary Code
 
