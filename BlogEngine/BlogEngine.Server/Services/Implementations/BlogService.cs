@@ -5,9 +5,10 @@ using AutoMapper;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Shared.Helpers;
+using System;
+using BlogEngine.Shared.DTOs.Blog;
+using BlogEngine.Shared.DTOs.Category;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -158,7 +159,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (currentUser is null)
             {
-                Throw.InvalidOperationException(nameof(AssignUserID));
+                throw new InvalidOperationException(nameof(AssignUserID));
             }
             else
             {

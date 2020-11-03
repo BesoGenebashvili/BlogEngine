@@ -1,4 +1,4 @@
-﻿namespace BlogEngine.Shared.DTOs
+﻿namespace BlogEngine.Shared.DTOs.Notification
 {
     public class NotificationReceiverDTO : ReadDataDTOBase
     {

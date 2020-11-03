@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using BlogEngine.Shared.DTOs;
-using BlogEngine.ClientServices.Extensions;
 using BlogEngine.ClientServices.Services.Abstractions;
 using System.Collections.Generic;
-using BlogEngine.ClientServices.Helpers;
+using BlogEngine.ClientServices.Common.Endpoints;
+using BlogEngine.ClientServices.Common.Extensions;
+using BlogEngine.Shared.DTOs.Identity;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations

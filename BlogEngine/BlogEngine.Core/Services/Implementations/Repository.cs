@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Core.Services.Abstractions;
+using BlogEngine.Shared.Helpers;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -42,10 +43,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual IEnumerable<TEntity> GetByRawSql(string query, params object[] parameters)
         {
-            if (string.IsNullOrWhiteSpace(query))
-            {
-                Throw.ArgumentNullException(nameof(query));
-            }
+            Preconditions.NotNullOrWhiteSpace(query, nameof(query));
 
             return _dbSet.FromSqlRaw(query, parameters);
         }
@@ -57,7 +55,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Insert(TEntity entity)
         {
-            NullCheckThrowArgumentNullException(entity);
+            Preconditions.NotNull(entity, typeof(TEntity).Name);
 
             _dbSet.Add(entity);
             SaveChanges();
@@ -67,7 +65,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> InsertAsync(TEntity entity)
         {
-            NullCheckThrowArgumentNullException(entity);
+            Preconditions.NotNull(entity, typeof(TEntity).Name);
 
             await _dbSet.AddAsync(entity);
             await SaveChangesAsync();
@@ -77,7 +75,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual TEntity Update(TEntity entity)
         {
-            NullCheckThrowArgumentNullException(entity);
+            Preconditions.NotNull(entity, typeof(TEntity).Name);
 
             _dbSet.Update(entity);
             SaveChanges();
@@ -87,7 +85,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            NullCheckThrowArgumentNullException(entity);
+            Preconditions.NotNull(entity, typeof(TEntity).Name);
 
             _dbSet.Update(entity);
             await SaveChangesAsync();
@@ -123,15 +121,7 @@ namespace BlogEngine.Core.Services.Implementations
         {
             if (entity is null)
             {
-                Throw.EntityNotFoundException(typeof(TEntity).Name);
-            }
-        }
-
-        protected void NullCheckThrowArgumentNullException(TEntity entity)
-        {
-            if (entity is null)
-            {
-                Throw.ArgumentNullException(typeof(TEntity).Name);
+                throw new EntityNotFoundException(typeof(TEntity).Name);
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using BlogEngine.Server.Attributes;
+﻿using BlogEngine.Server.Common.Attributes;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Category;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

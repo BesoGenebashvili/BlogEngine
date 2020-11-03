@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using System.Linq;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Shared.Helpers;
+using System;
+using BlogEngine.Shared.DTOs.Comment;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -60,7 +60,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (!commentCreationDTO.IsMain)
             {
-                Throw.InvalidOperationException("Can not insert the SubComment into MainComment Table");
+                throw new InvalidOperationException("Can not insert the SubComment into MainComment Table");
             }
 
             var mainCommentEntity = _mapper.Map<MainComment>(commentCreationDTO);
@@ -76,7 +76,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (commentCreationDTO.IsMain)
             {
-                Throw.InvalidOperationException("Can not insert the MainComment into SubComment Table");
+                throw new InvalidOperationException("Can not insert the MainComment into SubComment Table");
             }
 
             var subCommentEntity = _mapper.Map<SubComment>(commentCreationDTO);

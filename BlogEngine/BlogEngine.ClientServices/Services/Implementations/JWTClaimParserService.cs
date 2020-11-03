@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Collections.Generic;
 using BlogEngine.ClientServices.Services.Abstractions;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {
     public class JWTClaimParserService : IJWTClaimParserService
     {
-        public virtual async Task<IEnumerable<Claim>> Parse(string jwtToken)
+        public virtual async Task<IEnumerable<Claim>> ParseAsync(string jwtToken)
         {
+            Preconditions.NotNullOrWhiteSpace(jwtToken, nameof(jwtToken));
+
             return await Task.Run(() => ProcessParse(jwtToken));
         }
 

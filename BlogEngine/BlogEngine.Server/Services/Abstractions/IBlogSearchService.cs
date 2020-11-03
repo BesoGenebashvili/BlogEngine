@@ -1,4 +1,4 @@
-﻿using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.Shared.DTOs.Blog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

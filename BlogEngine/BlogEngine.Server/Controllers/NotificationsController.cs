@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using BlogEngine.Shared.DTOs.Notification;
 
 namespace BlogEngine.Server.Controllers
 {

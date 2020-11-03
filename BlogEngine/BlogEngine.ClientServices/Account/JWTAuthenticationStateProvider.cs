@@ -43,7 +43,7 @@ namespace BlogEngine.ClientServices.Account
 
         public async Task<AuthenticationState> BuildAuthenticationStateAsync(string token)
         {
-            var claims = await _JWTClaimParserService.Parse(token);
+            var claims = await _JWTClaimParserService.ParseAsync(token);
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 

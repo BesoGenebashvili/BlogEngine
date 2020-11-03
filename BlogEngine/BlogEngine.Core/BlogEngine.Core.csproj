@@ -8,6 +8,8 @@
 	<ItemGroup>
 	  <Compile Remove="Migrations\20200915175408_AddedIdentity.cs" />
 	  <Compile Remove="Migrations\20200915175408_AddedIdentity.Designer.cs" />
+	  <Compile Remove="Migrations\20201103155724_Test.cs" />
+	  <Compile Remove="Migrations\20201103155724_Test.Designer.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -17,6 +19,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\BlogEngine.Shared\BlogEngine.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

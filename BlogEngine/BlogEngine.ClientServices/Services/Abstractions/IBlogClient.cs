@@ -1,5 +1,6 @@
-﻿using BlogEngine.ClientServices.Helpers;
+﻿using BlogEngine.ClientServices.Common.Models;
 using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Blog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

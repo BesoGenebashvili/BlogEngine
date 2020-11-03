@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.Helpers;
 using System.Threading.Tasks;
 

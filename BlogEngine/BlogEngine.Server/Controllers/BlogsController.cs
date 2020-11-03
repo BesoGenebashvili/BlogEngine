@@ -6,8 +6,9 @@ using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using BlogEngine.Server.Extensions;
 using System.Linq;
+using BlogEngine.Server.Common.Extensions;
+using BlogEngine.Shared.DTOs.Blog;
 
 namespace BlogEngine.Server.Controllers
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Identity
 {
     public class UserInfoDetailDTO
     {

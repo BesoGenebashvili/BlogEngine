@@ -6,6 +6,6 @@ namespace BlogEngine.ClientServices.Services.Abstractions
 {
     public interface IJWTClaimParserService
     {
-        Task<IEnumerable<Claim>> Parse(string jwtToken);
+        Task<IEnumerable<Claim>> ParseAsync(string jwtToken);
     }
 }

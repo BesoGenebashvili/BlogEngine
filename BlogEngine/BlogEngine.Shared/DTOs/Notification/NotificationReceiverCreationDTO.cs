@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Notification
 {
     public class NotificationReceiverCreationDTO
     {

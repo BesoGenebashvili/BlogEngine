@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BlogEngine.Shared.DTOs.Blog;
+using BlogEngine.Shared.DTOs.Category;
+using System.Collections.Generic;
 
 namespace BlogEngine.Shared.DTOs
 {

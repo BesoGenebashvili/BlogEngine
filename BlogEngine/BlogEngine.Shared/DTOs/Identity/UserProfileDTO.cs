@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using BlogEngine.Core.Data.Entities;
+﻿using BlogEngine.Shared.DTOs.Blog;
+using System.Collections.Generic;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Identity
 {
     public class UserProfileDTO : UserInfoDetailDTO
     {
-        public List<Blog> Blogs { get; set; } = new List<Blog>();
+        public List<BlogDTO> BlogDTOs { get; set; } = new List<BlogDTO>();
     }
 }

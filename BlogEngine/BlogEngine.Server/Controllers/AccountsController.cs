@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
 using BlogEngine.Shared.Helpers;
+using BlogEngine.Shared.DTOs.Identity;
 
 namespace BlogEngine.Server.Controllers
 {

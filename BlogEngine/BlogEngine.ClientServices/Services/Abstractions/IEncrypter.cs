@@ -1,4 +1,4 @@
-﻿using BlogEngine.ClientServices.ServiceHelpers;
+﻿using BlogEngine.ClientServices.Common.Models;
 
 namespace BlogEngine.ClientServices.Services.Abstractions
 {

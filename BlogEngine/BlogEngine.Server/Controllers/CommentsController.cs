@@ -1,5 +1,5 @@
 ﻿using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Comment;
 using BlogEngine.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

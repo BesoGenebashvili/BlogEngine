@@ -1,4 +1,4 @@
-using BlogEngine.Server.Extensions;
+using BlogEngine.Server.Common.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,33 +20,7 @@ namespace BlogEngine.Server
         {
             services.AddControllers();
 
-            services.AddIdentity();
-
-            services.AddUserProviders();
-
-            services.AddDataAcess(Configuration);
-
-            services.AddJWTAuthentication(Configuration);
-
-            services.AddJWTServices();
-
-            services.AddRepositories();
-
-            services.AddBLLServices();
-
-            services.AddJson();
-
-            services.AddMapper();
-
-            services.AddSwagger();
-
-            services.AddHATEOASServices();
-
-            services.AddMailServices(Configuration);
-
-            services.AddNotificationServices();
-
-            services.AddPDFGenerator();
+            services.AddServerServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

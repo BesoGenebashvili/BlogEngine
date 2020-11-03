@@ -1,7 +1,6 @@
 ﻿using BlogEngine.Shared.Helpers;
-using Microsoft.Data.SqlClient;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Blog
 {
     public class BlogSearchDTO
     {

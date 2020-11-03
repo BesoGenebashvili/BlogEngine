@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogEngine.Core.Data.Entities
 {
@@ -18,7 +16,6 @@ namespace BlogEngine.Core.Data.Entities
         public byte[] ProfilePicture { get; set; }
         public List<Blog> Blogs { get; set; } = new List<Blog>();
 
-        [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
 
         public override bool Equals(object obj)
@@ -30,5 +27,7 @@ namespace BlogEngine.Core.Data.Entities
 
             return base.Equals(obj);
         }
+
+        public override int GetHashCode() => base.GetHashCode();
     }
 }

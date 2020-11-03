@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Identity
 {
     public class UserTokenDTO
     {

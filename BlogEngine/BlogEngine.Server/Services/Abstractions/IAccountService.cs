@@ -1,5 +1,5 @@
-﻿using BlogEngine.Server.Helpers;
-using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.Server.Common.Models;
+using BlogEngine.Shared.DTOs.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;

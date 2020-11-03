@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using BlogEngine.Shared.DTOs;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using BlogEngine.Shared.DTOs.Blog;
 
 namespace BlogEngine.Server.Controllers
 {

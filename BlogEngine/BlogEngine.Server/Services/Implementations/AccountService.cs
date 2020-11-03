@@ -4,15 +4,15 @@ using AutoMapper;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Security.Claims;
-using BlogEngine.Server.Helpers;
 using Microsoft.EntityFrameworkCore;
-using BlogEngine.Core.Helpers;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Core.Services.Abstractions;
+using BlogEngine.Server.Common.Models;
+using BlogEngine.Shared.DTOs.Identity;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -105,7 +105,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (applicationUser is null)
             {
-                Throw.EntityNotFoundException(nameof(ApplicationUser));
+                throw new EntityNotFoundException(nameof(ApplicationUser));
             }
 
             var currentUser = await _currentUserProvider.GetCurrentUserAsync();

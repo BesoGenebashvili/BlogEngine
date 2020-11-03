@@ -6,7 +6,8 @@ using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Core.Data.DatabaseContexts;
 using Microsoft.EntityFrameworkCore;
-using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -48,17 +49,14 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<MainComment> InsertMainCommentAsync(MainComment mainComment)
         {
-            if (mainComment is null)
-            {
-                Throw.ArgumentNullException(nameof(mainComment));
-            }
+            Preconditions.NotNull(mainComment, nameof(mainComment));
 
             var blogExists = await _context.Blogs
                 .AnyAsync(b => b.ID.Equals(mainComment.BlogID));
 
             if (!blogExists)
             {
-                Throw.EntityNotFoundException(nameof(Blog));
+                throw new EntityNotFoundException(nameof(Blog));
             }
 
             await _context.MainComments.AddAsync(mainComment);
@@ -69,17 +67,14 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<SubComment> InsertSubCommentAsync(SubComment subComment)
         {
-            if (subComment is null)
-            {
-                Throw.ArgumentNullException(nameof(subComment));
-            }
+            Preconditions.NotNull(subComment, nameof(subComment));
 
             var blogExists = await _context.Blogs
                 .AnyAsync(b => b.ID.Equals(subComment.BlogID));
 
             if (!blogExists)
             {
-                Throw.EntityNotFoundException(nameof(Blog));
+                throw new EntityNotFoundException(nameof(Blog));
             }
 
             var mainCommentExists = await _context.MainComments
@@ -87,7 +82,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             if (!mainCommentExists)
             {
-                Throw.EntityNotFoundException(nameof(MainComment));
+                throw new EntityNotFoundException(nameof(MainComment));
             }
 
             await _context.SubComments.AddAsync(subComment);
@@ -104,7 +99,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             if (entityFromDb is null)
             {
-                Throw.EntityNotFoundException(nameof(MainComment));
+                throw new EntityNotFoundException(nameof(MainComment));
             }
 
             _context.MainComments.Remove(entityFromDb);
@@ -118,7 +113,7 @@ namespace BlogEngine.Core.Services.Implementations
 
             if (entityFromDb is null)
             {
-                Throw.EntityNotFoundException(nameof(SubComment));
+                throw new EntityNotFoundException(nameof(SubComment));
             }
 
             _context.SubComments.Remove(entityFromDb);

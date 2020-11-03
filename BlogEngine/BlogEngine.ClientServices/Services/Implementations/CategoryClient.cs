@@ -1,7 +1,7 @@
-﻿using BlogEngine.ClientServices.Extensions;
-using BlogEngine.ClientServices.Helpers;
+﻿using BlogEngine.ClientServices.Common.Endpoints;
+using BlogEngine.ClientServices.Common.Extensions;
 using BlogEngine.ClientServices.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Category;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

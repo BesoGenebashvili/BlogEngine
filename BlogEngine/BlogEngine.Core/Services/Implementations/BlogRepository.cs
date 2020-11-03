@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BlogEngine.Core.Data.DatabaseContexts;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
-using BlogEngine.Core.Helpers;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -55,9 +55,8 @@ namespace BlogEngine.Core.Services.Implementations
 
             if (user is null)
             {
-                Throw.EntityNotFoundException(nameof(user));
+                throw new EntityNotFoundException(nameof(user));
             }
-
 
             var blogs = user.Blogs
                 .OrderByDescending(b => b.DateCreated)

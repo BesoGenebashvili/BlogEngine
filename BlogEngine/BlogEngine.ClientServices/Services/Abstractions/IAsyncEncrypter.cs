@@ -1,4 +1,4 @@
-﻿using BlogEngine.ClientServices.ServiceHelpers;
+﻿using BlogEngine.ClientServices.Common.Models;
 using System.Threading.Tasks;
 
 namespace BlogEngine.ClientServices.Services.Abstractions

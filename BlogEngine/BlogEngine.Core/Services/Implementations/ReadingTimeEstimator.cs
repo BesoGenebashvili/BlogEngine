@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Globalization;
-using BlogEngine.Core.Extensions;
 using BlogEngine.Core.Services.Abstractions;
-using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
+using BlogEngine.Core.Common.Extensions;
 
 namespace BlogEngine.Core.Services.Implementations
 {
@@ -18,10 +18,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public int GetEstimatedReadingTime(string rawHtmlContent)
         {
-            if (string.IsNullOrWhiteSpace(rawHtmlContent))
-            {
-                Throw.ArgumentNullException(nameof(rawHtmlContent));
-            }
+            Preconditions.NotNullOrWhiteSpace(rawHtmlContent, nameof(rawHtmlContent));
 
             int totalWordCount = GetWordsCount(rawHtmlContent);
             decimal resultTime = (decimal)totalWordCount / _WPM;

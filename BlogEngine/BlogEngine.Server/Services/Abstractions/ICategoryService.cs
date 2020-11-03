@@ -1,4 +1,4 @@
-﻿using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.Shared.DTOs.Category;
 using System.Threading.Tasks;
 
 namespace BlogEngine.Server.Services.Abstractions

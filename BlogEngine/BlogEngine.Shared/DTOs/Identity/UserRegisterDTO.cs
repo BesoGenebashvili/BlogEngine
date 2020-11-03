@@ -1,7 +1,7 @@
 ﻿using BlogEngine.Shared.Validations;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Identity
 {
     public class UserRegisterDTO : UserInfoDTO
     {

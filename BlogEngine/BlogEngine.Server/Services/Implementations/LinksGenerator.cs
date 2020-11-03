@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlogEngine.Core.Helpers;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -32,10 +32,7 @@ namespace BlogEngine.Server.Services.Implementations
             {
                 var listOfModels = objectResult.Value as List<T>;
 
-                if (listOfModels == null)
-                {
-                    Throw.ArgumentNullException($"Was expecting an instance of {typeof(T)}");
-                }
+                Preconditions.NotNull(listOfModels, typeof(T).Name);
 
                 var instance = new T();
 

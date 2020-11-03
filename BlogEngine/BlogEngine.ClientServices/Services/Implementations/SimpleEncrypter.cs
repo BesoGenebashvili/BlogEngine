@@ -2,8 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using BlogEngine.ClientServices.ServiceHelpers;
 using BlogEngine.ClientServices.Services.Abstractions;
+using BlogEngine.ClientServices.Common.Models;
+using BlogEngine.Shared.Helpers;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {
@@ -25,7 +26,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public EncrypterOperationResult Encrypt(string text)
         {
-            NullCheckThrowArgumentNullException(text);
+            Preconditions.NotNullOrWhiteSpace(text, nameof(text));
 
             try
             {
@@ -39,7 +40,7 @@ namespace BlogEngine.ClientServices.Services.Implementations
 
         public EncrypterOperationResult Decrypt(string text)
         {
-            NullCheckThrowArgumentNullException(text);
+            Preconditions.NotNullOrWhiteSpace(text, nameof(text));
 
             try
             {
@@ -81,14 +82,6 @@ namespace BlogEngine.ClientServices.Services.Implementations
             byte[] outputBuffer = decryptor.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
 
             return new EncrypterOperationResult(Encoding.Unicode.GetString(outputBuffer), true);
-        }
-
-        protected void NullCheckThrowArgumentNullException(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
         }
     }
 }

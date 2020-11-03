@@ -1,9 +1,11 @@
 ﻿using BlogEngine.ClientServices.Services.Abstractions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlogEngine.ClientServices.Extensions;
 using BlogEngine.Shared.DTOs;
-using BlogEngine.ClientServices.Helpers;
+using BlogEngine.ClientServices.Common.Endpoints;
+using BlogEngine.ClientServices.Common.Models;
+using BlogEngine.ClientServices.Common.Extensions;
+using BlogEngine.Shared.DTOs.Blog;
 
 namespace BlogEngine.ClientServices.Services.Implementations
 {

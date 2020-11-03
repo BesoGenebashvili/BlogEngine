@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Shared.DTOs.Abstractions;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Category
 {
     public class CategoryDTO : ReadDataDTOBase, IGenerateHATEOASLinks
     {

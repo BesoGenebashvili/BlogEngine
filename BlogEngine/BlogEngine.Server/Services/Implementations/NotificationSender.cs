@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs;
+using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.Models;
 
 namespace BlogEngine.Server.Services.Implementations

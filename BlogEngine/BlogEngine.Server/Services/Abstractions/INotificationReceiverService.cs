@@ -1,4 +1,4 @@
-﻿using BlogEngine.Shared.DTOs;
+﻿using BlogEngine.Shared.DTOs.Notification;
 
 namespace BlogEngine.Server.Services.Abstractions
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using BlogEngine.Core.Data.Entities.JoiningEntities;
-using BlogEngine.Core.Validations;
+using BlogEngine.Shared.Validations;
 
 namespace BlogEngine.Core.Data.Entities
 {

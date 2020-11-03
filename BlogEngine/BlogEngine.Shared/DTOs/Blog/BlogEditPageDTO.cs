@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using BlogEngine.Shared.DTOs.Category;
+using System.Collections.Generic;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Blog
 {
     public class BlogEditPageDTO
     {

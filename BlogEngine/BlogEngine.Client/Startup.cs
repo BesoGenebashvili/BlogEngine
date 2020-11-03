@@ -7,8 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using Syncfusion.Licensing;
 using Blazor.FileReader;
-using BlogEngine.Client.Extensions;
 using BlogEngine.ClientServices.Services.Abstractions;
+using BlogEngine.ClientServices;
 
 namespace BlogEngine.Client
 {
@@ -27,17 +27,9 @@ namespace BlogEngine.Client
 
             services.AddServerSideBlazor();
 
-            services.AddHttpClientService();
-
-            services.AddEncrypterServices();
+            services.AddClientServices();
 
             services.AddFileReaderService();
-
-            services.AddClientAPIServices();
-
-            services.AddJSInteropServices();
-
-            services.AddJWTAuthenticationServices();
 
             services.AddSyncfusionBlazor();
         }

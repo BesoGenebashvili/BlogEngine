@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using BlogEngine.Core.Services.Implementations;
-using BlogEngine.Core.Exceptions;
 using BlogEngine.Core.Data.Entities;
 using Moq;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Tests.BlogEngine.Core.Services
 {
