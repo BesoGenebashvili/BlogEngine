@@ -1,4 +1,4 @@
-﻿namespace BlogEngine.Core.Data.Entities
+﻿namespace BlogEngine.Core.Data.Entities.Common
 {
     public class BaseEntityFields
     {

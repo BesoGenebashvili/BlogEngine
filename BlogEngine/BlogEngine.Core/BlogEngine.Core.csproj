@@ -10,6 +10,8 @@
 	  <Compile Remove="Migrations\20200915175408_AddedIdentity.Designer.cs" />
 	  <Compile Remove="Migrations\20201103155724_Test.cs" />
 	  <Compile Remove="Migrations\20201103155724_Test.Designer.cs" />
+	  <Compile Remove="Migrations\20201103212942_AddedForeignKeyToApplicationUserForComment.cs" />
+	  <Compile Remove="Migrations\20201103212942_AddedForeignKeyToApplicationUserForComment.Designer.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

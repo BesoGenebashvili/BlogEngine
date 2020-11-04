@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Core.Services.Abstractions
 {

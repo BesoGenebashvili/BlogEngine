@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using AutoMapper;
 using BlogEngine.Shared.Helpers;
 using Microsoft.AspNetCore.Connections;
+using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Server.Services.Implementations
 {

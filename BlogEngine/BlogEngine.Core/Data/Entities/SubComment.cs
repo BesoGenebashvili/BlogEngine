@@ -1,4 +1,6 @@
-﻿namespace BlogEngine.Core.Data.Entities
+﻿using BlogEngine.Core.Data.Entities.Common;
+
+namespace BlogEngine.Core.Data.Entities
 {
     public class SubComment : BaseComment
     {

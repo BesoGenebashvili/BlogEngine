@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BlogEngine.Core.Data.Entities.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogEngine.Core.Data.Entities
 {

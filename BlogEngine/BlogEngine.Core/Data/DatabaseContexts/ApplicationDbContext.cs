@@ -8,8 +8,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BlogEngine.Core.Services.Abstractions;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Core.Data.DatabaseContexts
 {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BlogEngine.Core.Data.Entities.Common;
 using BlogEngine.Core.Data.Entities.JoiningEntities;
 
 namespace BlogEngine.Core.Data.Entities

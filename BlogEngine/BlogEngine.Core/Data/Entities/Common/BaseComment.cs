@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlogEngine.Core.Data.Entities
+namespace BlogEngine.Core.Data.Entities.Common
 {
     public class BaseComment : BaseEntity
     {

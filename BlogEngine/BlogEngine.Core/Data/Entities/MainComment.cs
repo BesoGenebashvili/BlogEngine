@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BlogEngine.Core.Data.Entities.Common;
+using System.Collections.Generic;
 
 namespace BlogEngine.Core.Data.Entities
 {

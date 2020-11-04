@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlogEngine.Core.Data.Entities;
+using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Core.Services.Abstractions
 {

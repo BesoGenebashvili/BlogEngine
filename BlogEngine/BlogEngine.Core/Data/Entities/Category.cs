@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BlogEngine.Core.Data.Entities.Common;
 using BlogEngine.Core.Data.Entities.JoiningEntities;
 using BlogEngine.Shared.Validations;
 

@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Core.Common.Exceptions;
+using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Core.Services.Implementations
 {
