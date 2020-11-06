@@ -23,10 +23,7 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Post([FromBody] BlogRatingDTO blogRatingDTO)
         {
-            if (blogRatingDTO is null)
-            {
-                return BadRequest();
-            }
+            if (blogRatingDTO is null) return BadRequest();
 
             await _blogRatingService.InsertAsync(blogRatingDTO);
 

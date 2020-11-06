@@ -1,5 +1,6 @@
 ﻿using BlogEngine.Shared.DTOs.Category;
 using BlogEngine.Shared.DTOs.Comment;
+using BlogEngine.Shared.DTOs.Common;
 using System.Collections.Generic;
 
 namespace BlogEngine.Shared.DTOs.Blog

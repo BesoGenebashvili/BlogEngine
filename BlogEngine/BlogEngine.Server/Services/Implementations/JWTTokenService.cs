@@ -47,7 +47,7 @@ namespace BlogEngine.Server.Services.Implementations
             var securityKey = new SymmetricSecurityKey(JWTKey);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var expirationDate = DateTime.Now.AddDays(1);
+            var expirationDate = DateTime.Now.AddDays(7);
 
             JwtSecurityToken JWTToken =
                 new JwtSecurityToken(

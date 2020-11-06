@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using BlogEngine.Shared.DTOs;
@@ -6,7 +7,6 @@ using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using System.Linq;
 using BlogEngine.Server.Common.Extensions;
 using BlogEngine.Shared.DTOs.Blog;
 
@@ -58,7 +58,7 @@ namespace BlogEngine.Server.Controllers
         {
             var blogDTO = await _blogService.GetByIdAsync(id);
 
-            if (blogDTO == null) return NotFound();
+            if (blogDTO is null) return NotFound();
 
             return blogDTO;
         }
@@ -90,7 +90,7 @@ namespace BlogEngine.Server.Controllers
         {
             var editPageDTO = await _blogService.GetEditPageDTOAsync(id);
 
-            if (editPageDTO == null) return NotFound();
+            if (editPageDTO is null) return NotFound();
 
             return editPageDTO;
         }
@@ -103,7 +103,7 @@ namespace BlogEngine.Server.Controllers
         {
             var blogDTO = await _blogService.UpdateAsync(id, blogUpdateDTO);
 
-            if (blogDTO == null) return NotFound();
+            if (blogDTO is null) return NotFound();
 
             return blogDTO;
         }

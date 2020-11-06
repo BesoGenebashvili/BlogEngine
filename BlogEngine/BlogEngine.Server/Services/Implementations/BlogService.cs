@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.Helpers;
-using System;
 using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.DTOs.Category;
 
@@ -41,7 +41,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var blogEntity = await _blogRepository.GetByIdAsync(id);
 
-            if (blogEntity == null) return null;
+            if (blogEntity is null) return null;
 
             var blogDTO = ToDTO(blogEntity);
 
@@ -78,7 +78,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var blogEntity = await GetUpdateDTOAsync(id);
 
-            if (blogEntity == null) return null;
+            if (blogEntity is null) return null;
 
             var allCategories = await _categoryRepository.GetAllWithReferences();
 
@@ -129,7 +129,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var blogEntity = await _blogRepository.GetByIdAsync(id);
 
-            if (blogEntity == null) return null;
+            if (blogEntity is null) return null;
 
             _mapper.Map(blogUpdateDTO, blogEntity);
 
@@ -146,7 +146,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var blogEntity = await _blogRepository.GetByIdAsync(id);
 
-            if (blogEntity == null) return false;
+            if (blogEntity is null) return false;
 
             return await _blogRepository.DeleteAsync(blogEntity.ID);
         }

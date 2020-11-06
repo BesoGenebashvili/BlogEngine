@@ -60,7 +60,7 @@ namespace BlogEngine.Server.Controllers
         {
             var userProfileDTO = await _accountService.GetUserProfileDTOAsync(id);
 
-            if (userProfileDTO == null) return NotFound();
+            if (userProfileDTO is null) return NotFound();
 
             return userProfileDTO;
         }
@@ -73,7 +73,7 @@ namespace BlogEngine.Server.Controllers
         {
             var userProfileDTO = await _accountService.GetUserProfileDTOAsync(email);
 
-            if (userProfileDTO == null) return NotFound();
+            if (userProfileDTO is null) return NotFound();
 
             return userProfileDTO;
         }
@@ -94,10 +94,7 @@ namespace BlogEngine.Server.Controllers
         {
             var assignmentResult = await _accountService.AssignRoleAsync(userRoleDTO);
 
-            if (assignmentResult.UserNotFound)
-            {
-                return NotFound();
-            }
+            if (assignmentResult.UserNotFound) return NotFound();
 
             return assignmentResult.Successed;
         }
@@ -110,10 +107,7 @@ namespace BlogEngine.Server.Controllers
         {
             var assignationResult = await _accountService.RemoveRoleAsync(userRoleDTO);
 
-            if (assignationResult.UserNotFound)
-            {
-                return NotFound();
-            }
+            if (assignationResult.UserNotFound) return NotFound();
 
             return assignationResult.Successed;
         }
@@ -126,10 +120,7 @@ namespace BlogEngine.Server.Controllers
         {
             var deleteResult = await _accountService.DeleteAsync(id);
 
-            if (deleteResult.UserNotFound)
-            {
-                return NotFound();
-            }
+            if (deleteResult.UserNotFound) return NotFound();
 
             return deleteResult.Successed;
         }

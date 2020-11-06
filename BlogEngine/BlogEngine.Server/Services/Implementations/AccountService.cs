@@ -56,7 +56,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var applicationUser = await _userManager.FindByIdAsync(id.ToString());
 
-            if (applicationUser == null) return null;
+            if (applicationUser is null) return null;
 
             var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
@@ -71,13 +71,26 @@ namespace BlogEngine.Server.Services.Implementations
 
             var applicationUser = await _userManager.FindByEmailAsync(email);
 
-            if (applicationUser == null) return null;
+            if (applicationUser is null) return null;
 
             var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
             userProfileDTO.Roles = await GetUserRoles(applicationUser);
 
             return userProfileDTO;
+        }
+
+        public async Task<UserInfoDetailDTO> GetUserInfoDetailDTOAsync(int id)
+        {
+            var applicationUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
+
+            if (applicationUser is null) return null;
+
+            var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(applicationUser);
+
+            userInfoDetailDTO.Roles = await GetUserRoles(applicationUser);
+
+            return userInfoDetailDTO;
         }
 
         public async Task<List<UserInfoDetailDTO>> GetUserInfoDetailDTOsAsync()
@@ -103,22 +116,13 @@ namespace BlogEngine.Server.Services.Implementations
 
             var applicationUser = await _userManager.FindByEmailAsync(email);
 
-            if (applicationUser is null)
-            {
-                throw new EntityNotFoundException(nameof(ApplicationUser));
-            }
+            if (applicationUser is null) throw new EntityNotFoundException(nameof(ApplicationUser));
 
             var currentUser = await _currentUserProvider.GetCurrentUserAsync();
 
-            if (currentUser is null)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            if (currentUser is null) throw new UnauthorizedAccessException();
 
-            if (!applicationUser.Equals(currentUser))
-            {
-                throw new InvalidOperationException();
-            }
+            if (!applicationUser.Equals(currentUser)) throw new InvalidOperationException();
 
             applicationUser.FirstName = userUpdateDTO.FirstName;
             applicationUser.LastName = userUpdateDTO.LastName;
@@ -126,16 +130,13 @@ namespace BlogEngine.Server.Services.Implementations
 
             var identityResult = await _userManager.UpdateAsync(applicationUser);
 
-            if (identityResult.Succeeded)
-            {
-                var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
+            if (!identityResult.Succeeded) return null;
 
-                userProfileDTO.Roles = await GetUserRoles(applicationUser);
+            var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
-                return userProfileDTO;
-            }
+            userProfileDTO.Roles = await GetUserRoles(applicationUser);
 
-            return null;
+            return userProfileDTO;
         }
 
         public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
@@ -144,7 +145,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
 
-            if (user == null)
+            if (user is null)
             {
                 return new AccountOperationResult()
                 {
@@ -168,7 +169,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
 
-            if (user == null)
+            if (user is null)
             {
                 return new AccountOperationResult()
                 {
@@ -190,7 +191,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
 
-            if (user == null)
+            if (user is null)
             {
                 return new AccountOperationResult()
                 {

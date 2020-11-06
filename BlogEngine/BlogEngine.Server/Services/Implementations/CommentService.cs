@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
-using System.Linq;
 using BlogEngine.Shared.Helpers;
-using System;
 using BlogEngine.Shared.DTOs.Comment;
 
 namespace BlogEngine.Server.Services.Implementations
@@ -14,12 +14,20 @@ namespace BlogEngine.Server.Services.Implementations
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly ICurrentUserProvider _currentUserProvider;
+        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepository, IMapper mapper)
+        public CommentService(
+            ICommentRepository commentRepository,
+            ICurrentUserProvider currentUserProvider,
+            IAccountService accountService,
+            IMapper mapper)
         {
             _commentRepository = commentRepository;
             _mapper = mapper;
+            _currentUserProvider = currentUserProvider;
+            _accountService = accountService;
         }
 
         public async Task<MainCommentDTO> GetMainCommentByIdAsync(int id)
@@ -28,7 +36,11 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (mainCommentEntity == null) return null;
 
-            return _mapper.Map<MainCommentDTO>(mainCommentEntity);
+            var mainCommentDTO = _mapper.Map<MainCommentDTO>(mainCommentEntity);
+
+            await BindUserInfoDetailDTOAsync(mainCommentDTO);
+
+            return mainCommentDTO;
         }
 
         public async Task<SubCommentDTO> GetSubCommentByIdAsync(int id)
@@ -37,21 +49,40 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (subCommentEntity == null) return null;
 
-            return _mapper.Map<SubCommentDTO>(subCommentEntity);
+            var subCommentDTO = _mapper.Map<SubCommentDTO>(subCommentEntity);
+
+            await BindUserInfoDetailDTOAsync(subCommentDTO);
+
+            return subCommentDTO;
         }
 
         public async Task<List<MainCommentDTO>> GetMainCommentsByBlogIdAsync(int id)
         {
             var mainCommentEntities = await _commentRepository.GetMainCommentsByBlogIdAsync(id);
 
-            return _mapper.Map<List<MainCommentDTO>>(mainCommentEntities.ToList());
+            var mainCommentDTOs = _mapper.Map<List<MainCommentDTO>>(mainCommentEntities.ToList());
+
+            foreach (var mainCommentDTO in mainCommentDTOs)
+            {
+                await BindUserInfoDetailDTOAsync(mainCommentDTO);
+                await BindUserInfoDetailDTOsAsync(mainCommentDTO.SubCommentDTOs);
+            }
+            // mainCommentDTOs.ForEach(async s => await BindUserInfoDetailDTOAsync(s));
+
+            return mainCommentDTOs;
         }
 
         public async Task<List<SubCommentDTO>> GetSubCommentsByBlogIdAsync(int id)
         {
             var subCommentEntities = await _commentRepository.GetSubCommentsByBlogIdAsync(id);
 
-            return _mapper.Map<List<SubCommentDTO>>(subCommentEntities.ToList());
+            var subCommentDTOs = _mapper.Map<List<SubCommentDTO>>(subCommentEntities.ToList());
+
+            subCommentDTOs.ForEach(async s => await BindUserInfoDetailDTOAsync(s));
+
+            await BindUserInfoDetailDTOsAsync(subCommentDTOs);
+
+            return subCommentDTOs;
         }
 
         public async Task<MainCommentDTO> InsertMainCommentAsync(CommentCreationDTO commentCreationDTO)
@@ -64,6 +95,8 @@ namespace BlogEngine.Server.Services.Implementations
             }
 
             var mainCommentEntity = _mapper.Map<MainComment>(commentCreationDTO);
+
+            mainCommentEntity.ApplicationUserID = await _currentUserProvider.GetCurrentUserIDAsync();
 
             var insertedMainComment = await _commentRepository.InsertMainCommentAsync(mainCommentEntity);
 
@@ -81,6 +114,8 @@ namespace BlogEngine.Server.Services.Implementations
 
             var subCommentEntity = _mapper.Map<SubComment>(commentCreationDTO);
 
+            subCommentEntity.ApplicationUserID = await _currentUserProvider.GetCurrentUserIDAsync();
+
             var insertedSubComment = await _commentRepository.InsertSubCommentAsync(subCommentEntity);
 
             return _mapper.Map<SubCommentDTO>(insertedSubComment);
@@ -94,6 +129,20 @@ namespace BlogEngine.Server.Services.Implementations
         public async Task<bool> DeleteSubCommentAsync(int id)
         {
             return await _commentRepository.DeleteSubCommentAsync(id);
+        }
+
+        private async Task BindUserInfoDetailDTOsAsync(IEnumerable<CommentDTOBase> commentDTOBases)
+        {
+            foreach (var commentDTOBase in commentDTOBases)
+            {
+                await BindUserInfoDetailDTOAsync(commentDTOBase);
+            }
+        }
+
+        private async Task BindUserInfoDetailDTOAsync(CommentDTOBase commentDTOBase)
+        {
+            commentDTOBase.UserInfoDetailDTO = await _accountService
+                .GetUserInfoDetailDTOAsync(commentDTOBase.ApplicationUserID);
         }
     }
 }

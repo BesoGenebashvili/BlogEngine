@@ -38,7 +38,7 @@ namespace BlogEngine.Server.Controllers
         {
             var categoryDTO = await _categoryService.GetByIdAsync(id);
 
-            if (categoryDTO == null) return NotFound();
+            if (categoryDTO is null) return NotFound();
 
             return categoryDTO;
         }
@@ -50,7 +50,7 @@ namespace BlogEngine.Server.Controllers
         {
             var editPageDTO = await _categoryService.GetEditPageDTOAsync(id);
 
-            if (editPageDTO == null) return NotFound();
+            if (editPageDTO is null) return NotFound();
 
             return editPageDTO;
         }
@@ -73,7 +73,7 @@ namespace BlogEngine.Server.Controllers
         {
             var categoryDTO = await _categoryService.UpdateAsync(id, categoryUpdateDTO);
 
-            if (categoryDTO == null) return NotFound();
+            if (categoryDTO is null) return NotFound();
 
             return categoryDTO;
         }

@@ -3,8 +3,8 @@
 <CommentCreateForm BlogID="BlogID"
                    ValidSubmit="OnValidSubmit"
                    CommentToReply="_commentToReply"
-                   CancelReply="OnCancelReply" 
-                   WrapperCss="my-4"/>
+                   CancelReply="OnCancelReply"
+                   WrapperCss="my-4" />
 
 <GenericList Collection="_mainCommentDTOs">
     <EmptyTemplateFragment>
@@ -27,9 +27,19 @@
     </WholeCollectionTemplate>
 </GenericList>
 
+<ConfirmationModal @ref="_confirmationModal"
+                   Confirm="(() => _confirmationModal.Hide())"
+                   ConfirmOnly="true">
+    <ModalBodyTemplate>
+        Login to comment
+    </ModalBodyTemplate>
+</ConfirmationModal>
+
 @code{
     [Parameter] public int BlogID { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
+    private ConfirmationModal _confirmationModal;
     private List<MainCommentDTO> _mainCommentDTOs;
     private MainCommentDTO _commentToReply;
 
@@ -45,6 +55,15 @@
 
     private async Task OnValidSubmit(CommentCreationDTO commentCreationDTO)
     {
+        var isAuthenticated = (await AuthenticationStateTask).User.Identity.IsAuthenticated;
+
+        if (!isAuthenticated)
+        {
+            _confirmationModal.Show();
+            _commentToReply = null;
+            return;
+        }
+
         if (commentCreationDTO.IsMain) await CommentClient.InsertMainCommentAsync(commentCreationDTO);
         else await CommentClient.InsertSubCommentAsync(commentCreationDTO);
 

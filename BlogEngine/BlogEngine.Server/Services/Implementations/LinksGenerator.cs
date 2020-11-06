@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BlogEngine.Server.Services.Abstractions;
-using BlogEngine.Shared.DTOs.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogEngine.Shared.Helpers;
+using BlogEngine.Shared.DTOs.Abstractions;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -28,7 +28,7 @@ namespace BlogEngine.Server.Services.Implementations
             var objectResult = context.Result as ObjectResult;
             var model = objectResult.Value as T;
 
-            if (model == null)
+            if (model is null)
             {
                 var listOfModels = objectResult.Value as List<T>;
 

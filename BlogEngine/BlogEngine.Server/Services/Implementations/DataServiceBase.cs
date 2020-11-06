@@ -5,7 +5,6 @@ using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Services.Abstractions;
 using AutoMapper;
 using BlogEngine.Shared.Helpers;
-using Microsoft.AspNetCore.Connections;
 using BlogEngine.Core.Data.Entities.Common;
 
 namespace BlogEngine.Server.Services.Implementations
@@ -30,7 +29,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var entity = await _repository.GetByIdAsync(id);
 
-            if (entity == null) return null;
+            if (entity is null) return null;
 
             return ToDTO(entity);
         }
@@ -39,7 +38,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var entity = await _repository.GetByIdAsync(id);
 
-            if (entity == null) return null;
+            if (entity is null) return null;
 
             return ToUpdateDTO(entity);
         }
@@ -68,7 +67,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var entity = await _repository.GetByIdAsync(id);
 
-            if (entity == null) return null;
+            if (entity is null) return null;
 
             _mapper.Map(updateDTO, entity);
 
@@ -81,7 +80,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var entity = await _repository.GetByIdAsync(id);
 
-            if (entity == null) return false;
+            if (entity is null) return false;
 
             return await _repository.DeleteAsync(entity.ID);
         }

@@ -33,7 +33,7 @@ namespace BlogEngine.Server.Controllers
         {
             var notificationReceiverDTO = await _notificationReceiverService.GetByIdAsync(id);
 
-            if (notificationReceiverDTO == null) return NotFound();
+            if (notificationReceiverDTO is null) return NotFound();
 
             return notificationReceiverDTO;
         }

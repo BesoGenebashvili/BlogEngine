@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace BlogEngine.Shared.DTOs
+namespace BlogEngine.Shared.DTOs.Common
 {
-    public class ReadDataDTOBase
+    public abstract class ReadDataDTOBase
     {
         public DateTime? DateCreated { get; set; }
         public string CreatedBy { get; set; }

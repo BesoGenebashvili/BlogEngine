@@ -1,10 +1,28 @@
 ﻿<div class="@MainCommentWrapperCss">
-    <img class="d-flex mr-3 rounded-circle user-thumbnail" src="css/Images/user_template_128px.png" alt="user icon">
+
+    @if (MainCommentDTO.UserInfoDetailDTO?.ProfilePicture is null)
+    {
+        <img class="d-flex mr-3 rounded-circle user-thumbnail"
+             src="css/Images/user_template_128px.png" alt="user icon">
+    }
+    else
+    {
+        <img class="d-flex mr-3 rounded-circle user-thumbnail"
+             src="data:image/jpeg;base64,@(Convert.ToBase64String(MainCommentDTO.UserInfoDetailDTO.ProfilePicture))" alt="user icon">
+    }
+
     <div class="media-body">
         <h5 class="mt-0">
-            Unknown
+
+            <a href="account/view/@MainCommentDTO.ApplicationUserID/@MainCommentDTO.CreatedBy">@MainCommentDTO.UserInfoDetailDTO?.FullName</a>
+
             <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
-            <span @onclick="(async() => await MainCommentDelete.InvokeAsync(MainCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+
+            <AuthorizeView>
+                <Authorized>
+                    <span @onclick="(async() => await MainCommentDelete.InvokeAsync(MainCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                </Authorized>
+            </AuthorizeView>
         </h5>
         @MainCommentDTO.Body
 
@@ -12,12 +30,29 @@
         {
             <!-- SubComment  -->
             <div class="@SubCommentWrapperCss">
-                <img class="d-flex mr-3 rounded-circle user-thumbnail" src="css/Images/user_template_128px.png" alt="user icon">
+
+                @if (subCommentDTO.UserInfoDetailDTO?.ProfilePicture is null)
+                {
+                    <img class="d-flex mr-3 rounded-circle user-thumbnail"
+                         src="css/Images/user_template_128px.png" alt="user icon">
+                }
+                else
+                {
+                    <img class="d-flex mr-3 rounded-circle user-thumbnail"
+                         src="data:image/jpeg;base64,@(Convert.ToBase64String(subCommentDTO.UserInfoDetailDTO.ProfilePicture))" alt="user icon">
+                }
+
                 <div class="media-body">
                     <h5 class="mt-0">
-                        Unknown
+
+                        <a href="account/view/@subCommentDTO.ApplicationUserID/@subCommentDTO.CreatedBy">@subCommentDTO.UserInfoDetailDTO?.FullName</a>
+
                         <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
-                        <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                        <AuthorizeView>
+                            <Authorized>
+                                <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                            </Authorized>
+                        </AuthorizeView>
                     </h5>
                     @subCommentDTO.Body
                 </div>

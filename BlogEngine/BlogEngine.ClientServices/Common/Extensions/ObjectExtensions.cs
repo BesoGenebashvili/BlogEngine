@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlogEngine.Shared.Helpers;
+using System;
 using System.Linq;
 using System.Web;
 
@@ -8,10 +9,7 @@ namespace BlogEngine.ClientServices.Common.Extensions
     {
         public static string ToQueryString(this object obj)
         {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
+            Preconditions.NotNull(obj, nameof(obj));
 
             var properties = obj.GetType().GetProperties()
                 .Where(p => p.GetValue(obj, null) != null)

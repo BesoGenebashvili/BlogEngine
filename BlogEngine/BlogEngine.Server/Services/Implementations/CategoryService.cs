@@ -37,7 +37,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var categoryEntity = await _categoryRepository.GetByIdAsync(id);
 
-            if (categoryEntity == null) return null;
+            if (categoryEntity is null) return null;
 
             _mapper.Map(categoryUpdateDTO, categoryEntity);
 
@@ -50,7 +50,7 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var categoryEntity = await _categoryRepository.GetByIdAsync(id);
 
-            if (categoryEntity == null) return null;
+            if (categoryEntity is null) return null;
 
             return _mapper.Map<CategoryEditPageDTO>(categoryEntity);
         }

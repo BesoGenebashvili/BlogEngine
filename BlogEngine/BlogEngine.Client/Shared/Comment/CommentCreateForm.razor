@@ -1,7 +1,7 @@
 ﻿<div class="card @WrapperCss">
     @if (CommentToReply != null)
     {
-        <h5 class="card-header">Reply to @($"{CommentToReply.CreatedBy ?? "Unknown"}'s") Comment:</h5>
+        <h5 class="card-header">Reply to @($"{CommentToReply.UserInfoDetailDTO?.FullName ?? "Unknown"}'s") Comment:</h5>
     }
     else
     {

@@ -51,13 +51,8 @@ namespace BlogEngine.Core.Services.Implementations
         {
             Preconditions.NotNull(mainComment, nameof(mainComment));
 
-            var blogExists = await _context.Blogs
-                .AnyAsync(b => b.ID.Equals(mainComment.BlogID));
-
-            if (!blogExists)
-            {
-                throw new EntityNotFoundException(nameof(Blog));
-            }
+            await BlogMustExist(mainComment.BlogID);
+            await ApplicationUserMustExist(mainComment.ApplicationUserID);
 
             await _context.MainComments.AddAsync(mainComment);
             await SaveChangesAsync();
@@ -69,21 +64,9 @@ namespace BlogEngine.Core.Services.Implementations
         {
             Preconditions.NotNull(subComment, nameof(subComment));
 
-            var blogExists = await _context.Blogs
-                .AnyAsync(b => b.ID.Equals(subComment.BlogID));
-
-            if (!blogExists)
-            {
-                throw new EntityNotFoundException(nameof(Blog));
-            }
-
-            var mainCommentExists = await _context.MainComments
-                .AnyAsync(m => m.ID.Equals(subComment.MainCommentID));
-
-            if (!mainCommentExists)
-            {
-                throw new EntityNotFoundException(nameof(MainComment));
-            }
+            await BlogMustExist(subComment.BlogID);
+            await MainCommentMustExit(subComment.MainCommentID);
+            await ApplicationUserMustExist(subComment.ApplicationUserID);
 
             await _context.SubComments.AddAsync(subComment);
             await SaveChangesAsync();
@@ -93,9 +76,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<bool> DeleteMainCommentAsync(int id)
         {
-            var entityFromDb = await _context.MainComments
-                .Include(mc => mc.SubComments)
-                .FirstOrDefaultAsync(e => e.ID.Equals(id));
+            var entityFromDb = await GetMainCommentByIdAsync(id);
 
             if (entityFromDb is null)
             {
@@ -108,8 +89,7 @@ namespace BlogEngine.Core.Services.Implementations
 
         public virtual async Task<bool> DeleteSubCommentAsync(int id)
         {
-            var entityFromDb = await _context.SubComments
-                .FirstOrDefaultAsync(sc => sc.ID.Equals(id));
+            var entityFromDb = await GetSubCommentByIdAsync(id);
 
             if (entityFromDb is null)
             {
@@ -118,6 +98,27 @@ namespace BlogEngine.Core.Services.Implementations
 
             _context.SubComments.Remove(entityFromDb);
             return await SaveChangesAsync();
+        }
+
+        protected async Task MainCommentMustExit(int id)
+        {
+            var mainCommentExists = await _context.MainComments.AnyAsync(m => m.ID.Equals(id));
+
+            if (!mainCommentExists) throw new EntityNotFoundException(nameof(MainComment));
+        }
+
+        protected async Task BlogMustExist(int id)
+        {
+            var blogExists = await _context.Blogs.AnyAsync(b => b.ID.Equals(id));
+
+            if (!blogExists) throw new EntityNotFoundException(nameof(Blog));
+        }
+
+        protected async Task ApplicationUserMustExist(int id)
+        {
+            bool userExists = await _context.Users.AnyAsync(u => u.Id.Equals(id));
+
+            if (!userExists) throw new EntityNotFoundException(nameof(ApplicationUser));
         }
 
         protected async Task<bool> SaveChangesAsync()

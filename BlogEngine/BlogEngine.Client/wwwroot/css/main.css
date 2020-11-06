@@ -8,6 +8,8 @@ body {
 
 .user-thumbnail {
     width: 64px;
+    height: 64px;
+    object-fit: cover;
 }
 
 .file-input-image {
@@ -63,4 +65,5 @@ body {
     height: 200px;
     overflow: hidden;
     border-radius: 50%;
+    object-fit: cover;
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using BlogEngine.Shared.DTOs.Common;
 using BlogEngine.Shared.DTOs.Abstractions;
 
 namespace BlogEngine.Shared.DTOs.Category

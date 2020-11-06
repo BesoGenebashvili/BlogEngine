@@ -6,7 +6,7 @@ namespace BlogEngine.Server.Common.Extensions
     {
         public static bool IsSuccessfulResponse(this ObjectResult objectResult)
         {
-            if (objectResult == null || objectResult.Value == null)
+            if (objectResult is null || objectResult.Value is null)
             {
                 return false;
             }
