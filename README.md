@@ -26,10 +26,11 @@ The project based on modern front edge technologies:
  - Search page with sort functionality
  - Pagination
  - Blog rating system
+ - Blog article content PDF converter
  - Real-Time commenting system with replies
  - Register/Login system
  - JWT authentication
- - User’s personal account with the ability to edit user information and personal data (upcoming)
+ - User’s personal account with the ability to edit user information and personal data
  - Administration through the admin panel  
  - Swagger API documentation
  - HATEOAS
