@@ -18,6 +18,7 @@
         {
             <IndividualComment MainCommentDTO="mainCommentDTO"
                                CommentClickedForReply="OnCommentClickedForReply"
+                               CommentClickedForUpdate="OnCommentClickedForUpdate"
                                MainCommentDelete="OnMainCommentDelete"
                                SubCommentDelete="OnSubCommentDelete"
                                MainCommentWrapperCss="media mb-4 d-flex align-items-start text-break"
@@ -26,6 +27,25 @@
 
     </WholeCollectionTemplate>
 </GenericList>
+
+<ConfirmationModal @ref="_commentUpdateModal"
+                   Confirm="(()=>_commentUpdateModal.Hide())"
+                   Cancel="OnCancelUpdate"
+                   Centered="true"
+                   WithoutButtons="true"
+                   ModalTitle="Update comment">
+    <ModalBodyTemplate>
+
+        @if (_commentToUpdate != null)
+        {
+            <CommentUpdateForm @ref="_commentUpdateForm"
+                               ValidSubmit="OnCommentUpdateValidSubmit"
+                               CommentUpdateDTO="_commentToUpdate" />
+        }
+
+    </ModalBodyTemplate>
+</ConfirmationModal>
+
 
 <ConfirmationModal @ref="_confirmationModal"
                    Confirm="(() => _confirmationModal.Hide())"
@@ -40,8 +60,13 @@
     [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
     private ConfirmationModal _confirmationModal;
+    private ConfirmationModal _commentUpdateModal;
+    private CommentUpdateForm _commentUpdateForm;
+
     private List<MainCommentDTO> _mainCommentDTOs;
+
     private MainCommentDTO _commentToReply;
+    private CommentUpdateDTO _commentToUpdate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,6 +105,34 @@
     private void OnCancelReply()
     {
         _commentToReply = null;
+    }
+
+    private void OnCommentClickedForUpdate(CommentUpdateDTO commentUpdateDTO)
+    {
+        _commentToUpdate = commentUpdateDTO;
+        _commentUpdateModal.Show();
+    }
+
+    private void OnCancelUpdate()
+    {
+        _commentUpdateModal.Hide();
+        _commentToUpdate = default;
+    }
+
+    private async Task OnCommentUpdateValidSubmit(CommentUpdateDTO commentUpdateDTO)
+    {
+        var updateResult = await CommentClient.UpdateCommentAsync(commentUpdateDTO);
+
+        if (!updateResult)
+        {
+            _commentUpdateForm.ShowErrorMessage = true;
+            return;
+        }
+
+        commentUpdateDTO = default;
+        _commentUpdateModal.Hide();
+
+        await LoadComponent();
     }
 
     private async Task OnMainCommentDelete(int id)

@@ -46,6 +46,11 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.PostHelperAsync<CommentCreationDTO, SubCommentDTO>(CommentClientEndpoints.SubBase, commentCreationDTO);
         }
 
+        public async Task<bool> UpdateCommentAsync(CommentUpdateDTO commentUpdateDTO)
+        {
+            return await _httpService.PutHelperAsync<CommentUpdateDTO, bool>(CommentClientEndpoints.Update, commentUpdateDTO);
+        }
+
         public async Task<bool> DeleteMainCommentAsync(int id)
         {
             return await _httpService.DeleteHelperAsync<bool>($"{CommentClientEndpoints.MainBase}/{id}");

@@ -87,6 +87,14 @@ namespace BlogEngine.Server.Controllers
             return new CreatedAtRouteResult("getSub", new { subCommentDTO.ID }, subCommentDTO);
         }
 
+        [HttpPut("update")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        public async Task<ActionResult<bool>> Put([FromBody] CommentUpdateDTO commentUpdateDTO)
+        {
+            return await _commentService.UpdateCommentAsync(commentUpdateDTO);
+        }
+
         [HttpDelete("main/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         public async Task<ActionResult<bool>> DeleteMain(int id)

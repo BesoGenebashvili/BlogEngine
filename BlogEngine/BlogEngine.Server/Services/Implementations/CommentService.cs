@@ -121,6 +121,15 @@ namespace BlogEngine.Server.Services.Implementations
             return _mapper.Map<SubCommentDTO>(insertedSubComment);
         }
 
+        public async Task<bool> UpdateCommentAsync(CommentUpdateDTO commentUpdateDTO)
+        {
+            Preconditions.NotNull(commentUpdateDTO, nameof(commentUpdateDTO));
+
+            return commentUpdateDTO.IsMain ?
+                await UpdateMainCommentAsync(commentUpdateDTO)
+                : await UpdateSubCommentAsync(commentUpdateDTO);
+        }
+
         public async Task<bool> DeleteMainCommentAsync(int id)
         {
             return await _commentRepository.DeleteMainCommentAsync(id);
@@ -129,6 +138,36 @@ namespace BlogEngine.Server.Services.Implementations
         public async Task<bool> DeleteSubCommentAsync(int id)
         {
             return await _commentRepository.DeleteSubCommentAsync(id);
+        }
+
+        private async Task<bool> UpdateMainCommentAsync(CommentUpdateDTO commentUpdateDTO)
+        {
+            var mainCommentEntity = await _commentRepository.GetMainCommentByIdAsync(commentUpdateDTO.ID);
+
+            if (mainCommentEntity is null) return false;
+
+            if (mainCommentEntity.ApplicationUserID != (await _currentUserProvider.GetCurrentUserIDAsync())) return false;
+
+            _mapper.Map(commentUpdateDTO, mainCommentEntity);
+
+            var updatedMainComment = await _commentRepository.UpdateMainCommentAsync(mainCommentEntity);
+
+            return updatedMainComment != null;
+        }
+
+        private async Task<bool> UpdateSubCommentAsync(CommentUpdateDTO commentUpdateDTO)
+        {
+            var subCommentEntity = await _commentRepository.GetSubCommentByIdAsync(commentUpdateDTO.ID);
+
+            if (subCommentEntity is null) return false;
+
+            if (subCommentEntity.ApplicationUserID != (await _currentUserProvider.GetCurrentUserIDAsync())) return false;
+
+            _mapper.Map(commentUpdateDTO, subCommentEntity);
+
+            var updatedSubComment = await _commentRepository.UpdateSubCommentAsync(subCommentEntity);
+
+            return updatedSubComment != null;
         }
 
         private async Task BindUserInfoDetailDTOsAsync(IEnumerable<CommentDTOBase> commentDTOBases)

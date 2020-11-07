@@ -56,6 +56,15 @@ namespace BlogEngine.Server.Common.Mappings
 
             CreateMap<SubComment, SubCommentDTO>();
 
+            CreateMap<CommentUpdateDTO, MainComment>()
+                .ForMember(mc => mc.ApplicationUserID, opt => opt.Ignore())
+                .ForMember(mc => mc.BlogID, opt => opt.Ignore())
+                .ForMember(mc => mc.SubComments, opt => opt.Ignore());
+
+            CreateMap<CommentUpdateDTO, SubComment>()
+                .ForMember(mc => mc.ApplicationUserID, opt => opt.Ignore())
+                .ForMember(mc => mc.BlogID, opt => opt.Ignore());
+
             #endregion
 
             #region Notification

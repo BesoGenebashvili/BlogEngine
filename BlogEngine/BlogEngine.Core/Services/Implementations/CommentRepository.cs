@@ -74,6 +74,28 @@ namespace BlogEngine.Core.Services.Implementations
             return subComment;
         }
 
+        public virtual async Task<MainComment> UpdateMainCommentAsync(MainComment mainComment)
+        {
+            Preconditions.NotNull(mainComment, nameof(mainComment));
+
+            _context.MainComments.Update(mainComment);
+
+            await SaveChangesAsync();
+
+            return mainComment;
+        }
+
+        public virtual async Task<SubComment> UpdateSubCommentAsync(SubComment subComment)
+        {
+            Preconditions.NotNull(subComment, nameof(subComment));
+
+            _context.SubComments.Update(subComment);
+
+            await SaveChangesAsync();
+
+            return subComment;
+        }
+
         public virtual async Task<bool> DeleteMainCommentAsync(int id)
         {
             var entityFromDb = await GetMainCommentByIdAsync(id);

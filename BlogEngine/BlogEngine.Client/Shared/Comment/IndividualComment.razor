@@ -16,7 +16,8 @@
 
             <a href="account/view/@MainCommentDTO.ApplicationUserID/@MainCommentDTO.CreatedBy">@MainCommentDTO.UserInfoDetailDTO?.FullName</a>
 
-            <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
+            <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">Reply</span>
+            <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(MainCommentDTO.Body,true,MainCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
 
             <AuthorizeView>
                 <Authorized>
@@ -47,7 +48,9 @@
 
                         <a href="account/view/@subCommentDTO.ApplicationUserID/@subCommentDTO.CreatedBy">@subCommentDTO.UserInfoDetailDTO?.FullName</a>
 
-                        <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">reply</span>
+                        <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">Reply</span>
+                        <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(subCommentDTO.Body,false,subCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
+
                         <AuthorizeView>
                             <Authorized>
                                 <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
@@ -69,4 +72,5 @@
     [Parameter] public EventCallback<MainCommentDTO> CommentClickedForReply { get; set; }
     [Parameter] public EventCallback<int> MainCommentDelete { get; set; }
     [Parameter] public EventCallback<int> SubCommentDelete { get; set; }
+    [Parameter] public EventCallback<CommentUpdateDTO> CommentClickedForUpdate { get; set; }
 }

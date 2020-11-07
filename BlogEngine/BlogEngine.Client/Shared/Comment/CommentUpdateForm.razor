@@ -1,0 +1,33 @@
+﻿<div class="container d-flex align-items-center flex-column">
+    <EditForm Model="CommentUpdateDTO" OnValidSubmit="DataAnnotationsValidated">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <textarea @bind="CommentUpdateDTO.Body" class="form-control mb-3" cols="35" rows="5"></textarea>
+            <ValidationMessage For="(() => CommentUpdateDTO.Body)" />
+        </div>
+
+        @if (ShowErrorMessage)
+        {
+            <div class="validation-message">Sorry, something went wrong</div>
+        }
+
+        <button disabled="@(ShowErrorMessage ? false : _actionsDisabled)" type="submit" class="btn btn-success w-100">Update</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public EventCallback<CommentUpdateDTO> ValidSubmit { get; set; }
+    [Parameter] public CommentUpdateDTO CommentUpdateDTO { get; set; }
+
+    public bool ShowErrorMessage { get; set; }
+    private bool _actionsDisabled = false;
+
+    private async Task DataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(CommentUpdateDTO);
+    }
+}

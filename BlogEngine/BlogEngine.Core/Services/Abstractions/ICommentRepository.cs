@@ -12,6 +12,8 @@ namespace BlogEngine.Core.Services.Abstractions
         Task<IEnumerable<SubComment>> GetSubCommentsByBlogIdAsync(int id);
         Task<MainComment> InsertMainCommentAsync(MainComment mainComment);
         Task<SubComment> InsertSubCommentAsync(SubComment subComment);
+        Task<MainComment> UpdateMainCommentAsync(MainComment mainComment);
+        Task<SubComment> UpdateSubCommentAsync(SubComment subComment);
         Task<bool> DeleteMainCommentAsync(int id);
         Task<bool> DeleteSubCommentAsync(int id);
     }

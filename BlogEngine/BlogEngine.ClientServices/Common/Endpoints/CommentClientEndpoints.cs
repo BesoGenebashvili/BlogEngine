@@ -6,5 +6,6 @@
         public const string SubBase = "api/comments/sub";
         public const string MainWithBlog = "api/comments/main/blog";
         public const string SubWithBlog = "api/comments/sub/blog";
+        public const string Update = "api/comments/update";
     }
 }
