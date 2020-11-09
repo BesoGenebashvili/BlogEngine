@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using BlogEngine.Server.Services.Abstractions;
 using TheArtOfDev.HtmlRenderer.PdfSharp;
 using System.IO;
 using BlogEngine.Shared.Helpers;
+using BlogEngine.Server.Services.Abstractions.Utilities;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Utilities
 {
     public class PDFGenerator : IPDFGenerator
     {

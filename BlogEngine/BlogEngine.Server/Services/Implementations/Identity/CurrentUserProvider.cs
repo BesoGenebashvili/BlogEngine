@@ -1,5 +1,7 @@
 ﻿using BlogEngine.Core.Data.Entities;
 using BlogEngine.Core.Services.Abstractions;
+using BlogEngine.Server.Services.Abstractions.Identity;
+using BlogEngine.Shared.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +9,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Identity
 {
     public class CurrentUserProvider : ICurrentUserProvider
     {
@@ -48,6 +50,19 @@ namespace BlogEngine.Server.Services.Implementations
             var currentUser = await GetCurrentUserAsync();
 
             return currentUser is null ? default : currentUser.Id;
+        }
+
+        public async Task<bool> IsCurrentUserAdmin()
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            // Do not use a constructor injection for IRoleManager because of circular dependency
+            var roleManager = _httpContextAccessor.HttpContext.RequestServices
+                .GetService<IRoleManager>();
+
+            var currentUserRoles = await roleManager.GetUserRolesAsync(currentUser);
+
+            return currentUserRoles.Contains(UserRole.Admin);
         }
     }
 }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using BlogEngine.Core.Services.Abstractions;
-using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Core.Data.Entities;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Shared.DTOs.Comment;
+using BlogEngine.Server.Services.Abstractions.Identity;
+using BlogEngine.Server.Services.Abstractions;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -132,11 +133,23 @@ namespace BlogEngine.Server.Services.Implementations
 
         public async Task<bool> DeleteMainCommentAsync(int id)
         {
+            var mainCommentEntity = await _commentRepository.GetMainCommentByIdAsync(id);
+
+            if (mainCommentEntity is null) return false;
+
+            if (!(await HasPermissionForUpdateOrDelete(mainCommentEntity.ApplicationUserID))) return false;
+
             return await _commentRepository.DeleteMainCommentAsync(id);
         }
 
         public async Task<bool> DeleteSubCommentAsync(int id)
         {
+            var subCommentEntity = await _commentRepository.GetSubCommentByIdAsync(id);
+
+            if (subCommentEntity is null) return false;
+
+            if (!(await HasPermissionForUpdateOrDelete(subCommentEntity.ApplicationUserID))) return false;
+
             return await _commentRepository.DeleteSubCommentAsync(id);
         }
 
@@ -146,7 +159,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (mainCommentEntity is null) return false;
 
-            if (mainCommentEntity.ApplicationUserID != (await _currentUserProvider.GetCurrentUserIDAsync())) return false;
+            if (!(await HasPermissionForUpdateOrDelete(mainCommentEntity.ApplicationUserID))) return false;
 
             _mapper.Map(commentUpdateDTO, mainCommentEntity);
 
@@ -161,13 +174,19 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (subCommentEntity is null) return false;
 
-            if (subCommentEntity.ApplicationUserID != (await _currentUserProvider.GetCurrentUserIDAsync())) return false;
+            if (!(await HasPermissionForUpdateOrDelete(subCommentEntity.ApplicationUserID))) return false;
 
             _mapper.Map(commentUpdateDTO, subCommentEntity);
 
             var updatedSubComment = await _commentRepository.UpdateSubCommentAsync(subCommentEntity);
 
             return updatedSubComment != null;
+        }
+
+        private async Task<bool> HasPermissionForUpdateOrDelete(int applicationUserID)
+        {
+            return applicationUserID == (await _currentUserProvider.GetCurrentUserIDAsync())
+                || (await _currentUserProvider.IsCurrentUserAdmin());
         }
 
         private async Task BindUserInfoDetailDTOsAsync(IEnumerable<CommentDTOBase> commentDTOBases)

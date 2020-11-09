@@ -5,14 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Server.Services.Abstractions;
+using BlogEngine.Server.Services.Abstractions.Identity;
 using BlogEngine.Shared.DTOs.Identity;
 using BlogEngine.Shared.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Identity
 {
     public class JWTTokenService : ITokenService
     {

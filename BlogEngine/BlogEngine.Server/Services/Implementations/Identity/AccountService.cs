@@ -1,55 +1,36 @@
 ﻿using System;
-using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Core.Services.Abstractions;
 using BlogEngine.Server.Common.Models;
 using BlogEngine.Shared.DTOs.Identity;
 using BlogEngine.Core.Common.Exceptions;
+using BlogEngine.Server.Services.Abstractions.Identity;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Identity
 {
     public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ICurrentUserProvider _currentUserProvider;
+        private readonly IRoleManager _roleManager;
         private readonly IMapper _mapper;
 
         public AccountService(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
             ICurrentUserProvider currentUserProvider,
+            IRoleManager roleManager,
             IMapper mapper)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _mapper = mapper;
             _currentUserProvider = currentUserProvider;
-        }
-
-        public async Task<IdentityResult> RegisterAsync(UserRegisterDTO userRegisterDTO)
-        {
-            Preconditions.NotNull(userRegisterDTO, nameof(userRegisterDTO));
-
-            var applicationUser = _mapper.Map<ApplicationUser>(userRegisterDTO);
-
-            return await _userManager.CreateAsync(applicationUser, userRegisterDTO.Password);
-        }
-
-        public async Task<SignInResult> LoginAsync(UserLoginDTO userLoginDTO)
-        {
-            Preconditions.NotNull(userLoginDTO, nameof(userLoginDTO));
-
-            return await _signInManager
-                .PasswordSignInAsync(userLoginDTO.EmailAddress, userLoginDTO.Password, false, false);
+            _roleManager = roleManager;
         }
 
         public async Task<UserProfileDTO> GetUserProfileDTOAsync(int id)
@@ -60,7 +41,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
-            userProfileDTO.Roles = await GetUserRoles(applicationUser);
+            userProfileDTO.Roles = await _roleManager.GetUserRolesAsync(applicationUser);
 
             return userProfileDTO;
         }
@@ -75,7 +56,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
-            userProfileDTO.Roles = await GetUserRoles(applicationUser);
+            userProfileDTO.Roles = await _roleManager.GetUserRolesAsync(applicationUser);
 
             return userProfileDTO;
         }
@@ -88,7 +69,7 @@ namespace BlogEngine.Server.Services.Implementations
 
             var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(applicationUser);
 
-            userInfoDetailDTO.Roles = await GetUserRoles(applicationUser);
+            userInfoDetailDTO.Roles = await _roleManager.GetUserRolesAsync(applicationUser);
 
             return userInfoDetailDTO;
         }
@@ -134,57 +115,9 @@ namespace BlogEngine.Server.Services.Implementations
 
             var userProfileDTO = _mapper.Map<UserProfileDTO>(applicationUser);
 
-            userProfileDTO.Roles = await GetUserRoles(applicationUser);
+            userProfileDTO.Roles = await _roleManager.GetUserRolesAsync(applicationUser);
 
             return userProfileDTO;
-        }
-
-        public async Task<AccountOperationResult> AssignRoleAsync(UserRoleDTO userRoleDTO)
-        {
-            Preconditions.NotNull(userRoleDTO, nameof(userRoleDTO));
-
-            var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
-
-            if (user is null)
-            {
-                return new AccountOperationResult()
-                {
-                    UserNotFound = true,
-                    Errors = $"User with a ID = '{userRoleDTO.UserID}' was not found in the Database"
-                };
-            }
-
-            var identityResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, userRoleDTO.RoleName));
-
-            return new AccountOperationResult()
-            {
-                Successed = identityResult.Succeeded,
-                Errors = string.Join(", ", identityResult.Errors)
-            };
-        }
-
-        public async Task<AccountOperationResult> RemoveRoleAsync(UserRoleDTO userRoleDTO)
-        {
-            Preconditions.NotNull(userRoleDTO, nameof(userRoleDTO));
-
-            var user = await _userManager.FindByIdAsync(userRoleDTO.UserID.ToString());
-
-            if (user is null)
-            {
-                return new AccountOperationResult()
-                {
-                    UserNotFound = true,
-                    Errors = $"User with a ID = '{userRoleDTO.UserID}' was not found in the Database"
-                };
-            }
-
-            var identityResult = await _userManager.RemoveClaimAsync(user, new Claim(ClaimTypes.Role, userRoleDTO.RoleName));
-
-            return new AccountOperationResult()
-            {
-                Successed = identityResult.Succeeded,
-                Errors = string.Join(", ", identityResult.Errors)
-            };
         }
 
         public async Task<AccountOperationResult> DeleteAsync(int id)
@@ -213,21 +146,9 @@ namespace BlogEngine.Server.Services.Implementations
         {
             var userInfoDetailDTO = _mapper.Map<UserInfoDetailDTO>(applicationUser);
 
-            userInfoDetailDTO.Roles = await GetUserRoles(applicationUser);
+            userInfoDetailDTO.Roles = await _roleManager.GetUserRolesAsync(applicationUser);
 
             return userInfoDetailDTO;
-        }
-
-        protected async Task<List<string>> GetUserRoles(ApplicationUser applicationUser)
-        {
-            var claims = await _userManager.GetClaimsAsync(applicationUser);
-
-            var roles = claims
-                .Where(c => c.Type.Equals(ClaimTypes.Role))
-                .Select(c => c.Value)
-                .ToList();
-
-            return roles;
         }
     }
 }

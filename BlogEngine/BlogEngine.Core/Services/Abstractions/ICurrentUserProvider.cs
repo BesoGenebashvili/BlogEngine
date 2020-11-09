@@ -7,5 +7,6 @@ namespace BlogEngine.Core.Services.Abstractions
     {
         Task<ApplicationUser> GetCurrentUserAsync();
         Task<int> GetCurrentUserIDAsync() => Task.FromResult(GetCurrentUserAsync().GetAwaiter().GetResult().Id);
+        Task<bool> IsCurrentUserAdmin();
     }
 }

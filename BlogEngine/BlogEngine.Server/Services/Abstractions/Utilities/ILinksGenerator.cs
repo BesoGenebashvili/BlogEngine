@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;
 
-namespace BlogEngine.Server.Services.Abstractions
+namespace BlogEngine.Server.Services.Abstractions.Utilities
 {
     public interface ILinksGenerator
     {
-        Task Generate<T>(ResultExecutingContext context, ResultExecutionDelegate next) 
+        Task Generate<T>(ResultExecutingContext context, ResultExecutionDelegate next)
             where T : class, IGenerateHATEOASLinks, new();
     }
 }

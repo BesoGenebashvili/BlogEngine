@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BlogEngine.Server.Services.Abstractions
+namespace BlogEngine.Server.Services.Abstractions.Utilities
 {
     public interface IPDFGenerator
     {

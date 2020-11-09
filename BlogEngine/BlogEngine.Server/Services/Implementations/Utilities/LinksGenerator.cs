@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -7,8 +6,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Shared.DTOs.Abstractions;
+using BlogEngine.Server.Services.Abstractions.Utilities;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Utilities
 {
     public class LinksGenerator : ILinksGenerator
     {

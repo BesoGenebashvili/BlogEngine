@@ -17,11 +17,14 @@
             <a href="account/view/@MainCommentDTO.ApplicationUserID/@MainCommentDTO.CreatedBy">@MainCommentDTO.UserInfoDetailDTO?.FullName</a>
 
             <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">Reply</span>
-            <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(MainCommentDTO.Body,true,MainCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
 
             <AuthorizeView>
                 <Authorized>
-                    <span @onclick="(async() => await MainCommentDelete.InvokeAsync(MainCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                    @if (_loggedUserEmail.Equals(MainCommentDTO.UserInfoDetailDTO.EmailAddress, StringComparison.OrdinalIgnoreCase) || _loggedUserIsAdmin)
+                    {
+                        <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(MainCommentDTO.Body,true,MainCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
+                        <span @onclick="(async() => await MainCommentDelete.InvokeAsync(MainCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                    }
                 </Authorized>
             </AuthorizeView>
         </h5>
@@ -49,11 +52,15 @@
                         <a href="account/view/@subCommentDTO.ApplicationUserID/@subCommentDTO.CreatedBy">@subCommentDTO.UserInfoDetailDTO?.FullName</a>
 
                         <span @onclick="(async() => await CommentClickedForReply.InvokeAsync(MainCommentDTO))" class="pl-2 btn btn-link">Reply</span>
-                        <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(subCommentDTO.Body,false,subCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
 
                         <AuthorizeView>
                             <Authorized>
-                                <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+
+                                @if (_loggedUserEmail.Equals(subCommentDTO.UserInfoDetailDTO.EmailAddress, StringComparison.OrdinalIgnoreCase) || _loggedUserIsAdmin)
+                                {
+                                    <span @onclick="(async() => await CommentClickedForUpdate.InvokeAsync(new CommentUpdateDTO(subCommentDTO.Body,false,subCommentDTO.ID)))" class="pl-2 btn btn-link text-warning">Update</span>
+                                    <span @onclick="(async() => await SubCommentDelete.InvokeAsync(subCommentDTO.ID))" class="pl-2 btn btn-link text-danger">Delete</span>
+                                }
                             </Authorized>
                         </AuthorizeView>
                     </h5>
@@ -73,4 +80,16 @@
     [Parameter] public EventCallback<int> MainCommentDelete { get; set; }
     [Parameter] public EventCallback<int> SubCommentDelete { get; set; }
     [Parameter] public EventCallback<CommentUpdateDTO> CommentClickedForUpdate { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private string _loggedUserEmail;
+    private bool _loggedUserIsAdmin;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticationState = await AuthenticationStateTask;
+
+        _loggedUserEmail = authenticationState.GetClaimValue(ClaimTypes.Email);
+        _loggedUserIsAdmin = authenticationState.IsCurrentUserAdmin();
+    }
 }

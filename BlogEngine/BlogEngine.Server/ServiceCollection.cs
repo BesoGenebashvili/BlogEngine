@@ -20,6 +20,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BlogEngine.Server.Common.Attributes;
 using BlogEngine.Core;
+using BlogEngine.Server.Services.Abstractions.Identity;
+using BlogEngine.Server.Services.Abstractions.Utilities;
+using BlogEngine.Server.Services.Implementations.Identity;
+using BlogEngine.Server.Services.Implementations.Utilities;
 
 namespace BlogEngine.Server
 {
@@ -37,7 +41,7 @@ namespace BlogEngine.Server
 
             services.AddJWTServices();
 
-            services.AddBLLServices();
+            services.AddApplicationServices();
 
             services.AddJson();
 
@@ -94,7 +98,7 @@ namespace BlogEngine.Server
             services.AddScoped<ITokenService, JWTTokenService>();
         }
 
-        private static void AddBLLServices(this IServiceCollection services)
+        private static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IReadingTimeEstimator, ReadingTimeEstimator>();
 
@@ -110,10 +114,13 @@ namespace BlogEngine.Server
 
             services.AddScoped<INotificationReceiverService, NotificationReceiverService>();
 
-            // Should it be here?
+            services.AddScoped<IBlogRatingService, BlogRatingService>();
+
             services.AddScoped<IAccountService, AccountService>();
 
-            services.AddScoped<IBlogRatingService, BlogRatingService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+            services.AddScoped<IRoleManager, RoleManager>();
         }
 
         private static void AddJson(this IServiceCollection services)

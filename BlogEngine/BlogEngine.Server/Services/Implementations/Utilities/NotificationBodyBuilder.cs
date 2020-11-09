@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
 using BlogEngine.Core.Data.Entities;
-using BlogEngine.Server.Services.Abstractions;
+using BlogEngine.Server.Services.Abstractions.Utilities;
 using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.Helpers;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Utilities
 {
     public class NotificationBodyBuilder : INotificationBodyBuilder
     {

@@ -1,24 +1,32 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using BlogEngine.Server.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Collections.Generic;
 using BlogEngine.Shared.Helpers;
 using BlogEngine.Shared.DTOs.Identity;
+using BlogEngine.Server.Services.Abstractions.Identity;
 
 namespace BlogEngine.Server.Controllers
 {
-    public class AccountsController : BaseController
+    public class AccountsController : BaseController // TODO: Separate this
     {
-        private readonly ITokenService _tokenService;
         private readonly IAccountService _accountService;
+        private readonly IRoleManager _roleManager;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly ITokenService _tokenService;
 
-        public AccountsController(IAccountService accountService, ITokenService tokenService)
+        public AccountsController(
+            IAccountService accountService,
+            IAuthenticationService authenticationService,
+            IRoleManager roleManager,
+            ITokenService tokenService)
         {
-            _tokenService = tokenService;
             _accountService = accountService;
+            _authenticationService = authenticationService;
+            _roleManager = roleManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -26,7 +34,7 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserTokenDTO>> Register([FromBody] UserRegisterDTO userRegisterDTO)
         {
-            var identityResult = await _accountService.RegisterAsync(userRegisterDTO);
+            var identityResult = await _authenticationService.RegisterAsync(userRegisterDTO);
 
             if (!identityResult.Succeeded) return BadRequest(identityResult.Errors);
 
@@ -38,7 +46,7 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(typeof(UserTokenDTO), StatusCodes.Status200OK)]
         public async Task<ActionResult<UserTokenDTO>> Login([FromBody] UserLoginDTO userLoginDTO)
         {
-            var signInResult = await _accountService.LoginAsync(userLoginDTO);
+            var signInResult = await _authenticationService.LoginAsync(userLoginDTO);
 
             if (!signInResult.Succeeded) return BadRequest("Invalid Login attempt");
 
@@ -92,7 +100,7 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> AssignRole([FromBody] UserRoleDTO userRoleDTO)
         {
-            var assignmentResult = await _accountService.AssignRoleAsync(userRoleDTO);
+            var assignmentResult = await _roleManager.AssignRoleAsync(userRoleDTO);
 
             if (assignmentResult.UserNotFound) return NotFound();
 
@@ -105,7 +113,7 @@ namespace BlogEngine.Server.Controllers
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> RemoveRole([FromBody] UserRoleDTO userRoleDTO)
         {
-            var assignationResult = await _accountService.RemoveRoleAsync(userRoleDTO);
+            var assignationResult = await _roleManager.RemoveRoleAsync(userRoleDTO);
 
             if (assignationResult.UserNotFound) return NotFound();
 

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using BlogEngine.Server.Services.Abstractions;
 using BlogEngine.Shared.Models;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using BlogEngine.Shared.Helpers;
+using BlogEngine.Server.Services.Abstractions.Utilities;
 
-namespace BlogEngine.Server.Services.Implementations
+namespace BlogEngine.Server.Services.Implementations.Utilities
 {
     public class MailService : IMailService
     {
