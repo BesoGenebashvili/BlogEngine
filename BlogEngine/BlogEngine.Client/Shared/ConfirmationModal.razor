@@ -12,7 +12,7 @@
                     <h5 class="modal-title">
                         @ModalTitle
                     </h5>
-                    @if (!ConfirmOnly)
+                    @if (!ConfirmOnly || !WithoutButtons)
                     {
                         <button disabled="@_actionsDisabled" @onclick="Cancel" class="close">
                             <span aria-hidden="true">&times;</span>

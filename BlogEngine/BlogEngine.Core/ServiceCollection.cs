@@ -38,6 +38,8 @@ namespace BlogEngine.Core
             services.AddScoped<INotificationReceiverRepository, NotificationReceiverRepository>();
 
             services.AddScoped<IBlogRatingRepository, BlogRatingRepository>();
+
+            services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
         }
     }
 }

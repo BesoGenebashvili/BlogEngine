@@ -1,0 +1,61 @@
+﻿@page "/customerreviews/view"
+@layout NavigationLayout
+@inject ICustomerReviewClient CustomerReviewClient
+@attribute [Authorize(Roles = UserRole.Admin)]
+
+<TextCenter Text="Customer Reviews"/>
+
+<CustomerReviewList CustomerReviewDTOs="_customerReviewDTOs"
+                    ViewFullCustomerReview="OnViewFullCustomerReview"
+                    CustomerReviewDelete="OnCustomerReviewDelete" />
+
+<ConfirmationModal @ref="_viewFullCustomerReviewModal"
+                   ModalTitle="Full Message View"
+                   Centered="true"
+                   WithoutButtons="true"
+                   Confirm="(() => _viewFullCustomerReviewModal.Hide())">
+    <ModalBodyTemplate>
+        @if (_customerReviewToView != null)
+        {
+            <h6>Name: @(string.IsNullOrWhiteSpace(_customerReviewToView.CustomerName) ? "Unknown" : _customerReviewToView.CustomerName)</h6>
+            <h6>Email: @_customerReviewToView.CustomerEmail</h6>
+            <h6>Sent @_customerReviewToView.DateCreated.Value.GetRelativeTime() Ago</h6>
+            <p class="my-3">Message: @_customerReviewToView.Message</p>
+            <button @onclick="(() => _viewFullCustomerReviewModal.Hide())" class="btn btn-warning">Close</button>
+        }
+        else
+        {
+            <h3>Sorry, something went wrong </h3>
+            <button @onclick="(() => _viewFullCustomerReviewModal.Hide())" class="btn btn-warning">Close</button>
+        }
+    </ModalBodyTemplate>
+</ConfirmationModal>
+
+@code {
+    private ConfirmationModal _viewFullCustomerReviewModal;
+    private List<CustomerReviewDTO> _customerReviewDTOs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private CustomerReviewDTO _customerReviewToView;
+    private void OnViewFullCustomerReview(CustomerReviewDTO customerReviewDTO)
+    {
+        _customerReviewToView = customerReviewDTO;
+        _viewFullCustomerReviewModal.Show();
+    }
+
+    private async void OnCustomerReviewDelete(CustomerReviewDTO customerReviewDTO)
+    {
+        await CustomerReviewClient.DeleteAsync(customerReviewDTO.ID);
+        await LoadPage();
+        StateHasChanged();
+    }
+
+    private async Task LoadPage()
+    {
+        _customerReviewDTOs = await CustomerReviewClient.GetAllAsync();
+    }
+}

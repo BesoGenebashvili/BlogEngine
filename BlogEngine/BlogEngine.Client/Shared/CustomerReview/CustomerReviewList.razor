@@ -1,0 +1,28 @@
+﻿<GenericList Collection="CustomerReviewDTOs">
+    <EmptyTemplateFragment>
+        <TextCenter Text="Customer reviews not available" />
+    </EmptyTemplateFragment>
+    <WholeCollectionTemplate>
+
+        <div class="container">
+            <div class="row">
+                <!-- Customer Reviews -->
+                @foreach (var customerReviewDTO in CustomerReviewDTOs)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6 my-2">
+                        <IndividualCustomerReview CustomerReviewDTO="customerReviewDTO"
+                                                  ViewFullCustomerReview="ViewFullCustomerReview"
+                                                  CustomerReviewDelete="CustomerReviewDelete" />
+                    </div>
+                }
+            </div>
+        </div>
+
+    </WholeCollectionTemplate>
+</GenericList>
+
+@code {
+    [Parameter] public List<CustomerReviewDTO> CustomerReviewDTOs { get; set; }
+    [Parameter] public EventCallback<CustomerReviewDTO> ViewFullCustomerReview { get; set; }
+    [Parameter] public EventCallback<CustomerReviewDTO> CustomerReviewDelete { get; set; }
+}

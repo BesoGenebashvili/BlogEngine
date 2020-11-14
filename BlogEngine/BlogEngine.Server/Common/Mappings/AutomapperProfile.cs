@@ -4,6 +4,7 @@ using BlogEngine.Core.Data.Entities.JoiningEntities;
 using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.DTOs.Category;
 using BlogEngine.Shared.DTOs.Comment;
+using BlogEngine.Shared.DTOs.CustomerReview;
 using BlogEngine.Shared.DTOs.Identity;
 using BlogEngine.Shared.DTOs.Notification;
 using System.Collections.Generic;
@@ -99,6 +100,13 @@ namespace BlogEngine.Server.Common.Mappings
             #region BlogRating
 
             CreateMap<BlogRatingDTO, BlogRating>();
+
+            #endregion
+
+            #region CustomerReview
+
+            CreateMap<CustomerReviewCreationDTO, CustomerReview>();
+            CreateMap<CustomerReview, CustomerReviewDTO>();
 
             #endregion
         }

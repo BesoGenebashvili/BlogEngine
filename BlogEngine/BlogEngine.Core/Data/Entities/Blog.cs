@@ -12,7 +12,7 @@ namespace BlogEngine.Core.Data.Entities
         public int ApplicationUserID { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]
-        [StringLength(50, ErrorMessage = "{0} should not be more than 100 Characters")]
+        [StringLength(50, ErrorMessage = "{0} should not be more than 50 Characters")]
         [DataType(DataType.Text)]
         public string Title { get; set; }
 

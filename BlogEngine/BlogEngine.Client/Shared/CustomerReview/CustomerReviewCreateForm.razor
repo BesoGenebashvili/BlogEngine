@@ -1,0 +1,71 @@
+﻿<div class="container d-flex align-items-center flex-column">
+    <EditForm Model="_customerReviewCreationDTO" OnValidSubmit="DataAnnotationsValidated">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label class="form-label">Please give us a star rating: </label>
+           <RatingComponent Maximum="5"
+                             RatingSelected="((selectedRate) => _customerReviewCreationDTO.Rate = selectedRate)"
+                             Selected="_customerReviewCreationDTO.Rate" />
+        </div>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input @bind-value="_customerReviewCreationDTO.CustomerName" type="text" id="name" class="form-control">
+                <ValidationMessage For="(() => _customerReviewCreationDTO.CustomerName)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">E-Mail Address</label>
+                <input @bind-value="_customerReviewCreationDTO.CustomerEmail" type="text" id="email" class="form-control">
+                <ValidationMessage For="(() => _customerReviewCreationDTO.CustomerEmail)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea @bind="_customerReviewCreationDTO.Message" class="form-control mb-3" id="message" cols="35" rows="5"></textarea>
+                <ValidationMessage For="(() => _customerReviewCreationDTO.Message)" />
+            </div>
+
+            @if (ShowErrorMessage)
+            {
+                <div class="validation-message">Sorry, something went wrong</div>
+            }
+
+            <button disabled="@(ShowErrorMessage ? false : _actionsDisabled)" type="submit" class="btn btn-success w-100">Submit</button>
+</EditForm>
+</div>
+
+@code {
+    [Parameter] public EventCallback<CustomerReviewCreationDTO> ValidSubmit { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    private CustomerReviewCreationDTO _customerReviewCreationDTO = new CustomerReviewCreationDTO();
+
+    public bool ShowErrorMessage { get; set; }
+    private bool _actionsDisabled = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authenticationState = await AuthenticationStateTask;
+
+            string name = authenticationState.GetClaimValue(ClaimTypes.Name);
+            string surname = authenticationState.GetClaimValue(ClaimTypes.Surname);
+            string email = authenticationState.GetClaimValue(ClaimTypes.Email);
+
+            _customerReviewCreationDTO.CustomerName = $"{name} {surname}";
+            _customerReviewCreationDTO.CustomerEmail = email;
+        }
+        catch (Exception)
+        { }
+    }
+
+    private async Task DataAnnotationsValidated()
+    {
+        _actionsDisabled = true;
+        StateHasChanged();
+
+        await ValidSubmit.InvokeAsync(_customerReviewCreationDTO);
+    }
+}

@@ -121,6 +121,8 @@ namespace BlogEngine.Server
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IRoleManager, RoleManager>();
+
+            services.AddScoped<ICustomerReviewService, CustomerReviewService>();
         }
 
         private static void AddJson(this IServiceCollection services)

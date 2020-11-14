@@ -1,0 +1,32 @@
+﻿@page "/about"
+@inject ICustomerReviewClient CustomerReviewClient
+@inject NavigationManager NavigationManager
+
+<TextCenter Text="About Page" />
+
+<TextCenter Text="Feedback" />
+
+<CustomerReviewCreateForm @ref="_customerReviewCreateForm" ValidSubmit="OnValidSubmit" />
+
+<ConfirmationModal @ref="_confirmationModal" ModalTitle="Successfully Send" Centered="true" ConfirmOnly="true" Confirm="OnModalConfirm">
+    <ModalBodyTemplate>Thanks for your feedback!</ModalBodyTemplate>
+</ConfirmationModal>
+
+@code {
+    private CustomerReviewCreateForm _customerReviewCreateForm;
+    private ConfirmationModal _confirmationModal;
+
+    private async Task OnValidSubmit(CustomerReviewCreationDTO customerReviewCreationDTO)
+    {
+        bool success = await CustomerReviewClient.CreateAsync(customerReviewCreationDTO);
+
+        if (success) _confirmationModal.Show();
+        else _customerReviewCreateForm.ShowErrorMessage = !success;
+    }
+
+    private void OnModalConfirm()
+    {
+        _confirmationModal.Hide();
+        NavigationManager.NavigateTo("/");
+    }
+}

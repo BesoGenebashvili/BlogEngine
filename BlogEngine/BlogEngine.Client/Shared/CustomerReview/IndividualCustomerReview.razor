@@ -1,0 +1,30 @@
+﻿<div class="card" style="width: 18rem;">
+    <div class="card-body">
+
+        @for (int i = 1; i <= 5; i++)
+        {
+            @if (CustomerReviewDTO.Rate >= i)
+            {
+                <span class="fa fa-star star-checked"></span>
+            }
+            else
+            {
+                <span class="fa fa-star"></span>
+            }
+        }
+
+        <h6 class="card-title">From: @(string.IsNullOrWhiteSpace(CustomerReviewDTO.CustomerName) ? "Unknown" : CustomerReviewDTO.CustomerName.GetStringBrief(19))</h6>
+        <h6 class="card-title">Contact Email: @CustomerReviewDTO.CustomerEmail.GetStringBrief(10)</h6>
+
+        <p class="card-text my-2">@CustomerReviewDTO.Message.GetStringBrief(25)</p>
+
+        <button @onclick="(async() => await ViewFullCustomerReview.InvokeAsync(CustomerReviewDTO))" href="#" class="btn btn-primary">View full review</button>
+        <button @onclick="(async() => await CustomerReviewDelete.InvokeAsync(CustomerReviewDTO))" href="#" class="btn btn-warning">Delete</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public CustomerReviewDTO CustomerReviewDTO { get; set; }
+    [Parameter] public EventCallback<CustomerReviewDTO> ViewFullCustomerReview { get; set; }
+    [Parameter] public EventCallback<CustomerReviewDTO> CustomerReviewDelete { get; set; }
+}

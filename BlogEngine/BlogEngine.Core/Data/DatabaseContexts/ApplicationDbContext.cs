@@ -24,6 +24,7 @@ namespace BlogEngine.Core.Data.DatabaseContexts
         public DbSet<SubComment> SubComments { get; set; }
         public DbSet<NotificationReceiver> NotificationReceivers { get; set; }
         public DbSet<BlogRating> BlogRatings { get; set; }
+        public DbSet<CustomerReview> CustomerReviews { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,
             ICurrentUserProvider currentUserProvider) : base(options)

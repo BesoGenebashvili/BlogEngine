@@ -51,6 +51,8 @@ namespace BlogEngine.ClientServices
             services.AddScoped<IAccountClient, AccountClient>();
 
             services.AddScoped<IBlogRatingClient, BlogRatingClient>();
+
+            services.AddScoped<ICustomerReviewClient, CustomerReviewClient>();
         }
 
         private static void AddJSInteropServices(this IServiceCollection services)
