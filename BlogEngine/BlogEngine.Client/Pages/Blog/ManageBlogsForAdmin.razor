@@ -1,17 +1,9 @@
-﻿@page "/blog/manage/user/{UserID:int}"
-@page "/blog/manage/user/{UserID:int}/{UserName}"
+﻿@page "/blog/manage/admin/{UserID:int}/{UserName}"
 @layout NavigationLayout
 @inject IBlogClient BlogClient
-@attribute [Authorize]
+@attribute [Authorize(Roles = UserRole.Admin)]
 
-@if (string.IsNullOrWhiteSpace(UserName))
-{
-    <TextCenter Text="@($"Manage Blogs")" />
-}
-else
-{
-    <TextCenter Text="@($"Hello {UserName} Manage your Blogs")" />
-}
+<TextCenter Text="@($"Hello {UserName} Manage All Blogs")" />
 
 <BlogsDataGrid BlogDTOs="_blogDTOs" BlogDelete="OnBlogDelete" />
 
@@ -46,7 +38,7 @@ else
 
     private async Task LoadPage()
     {
-        var paginatedResponse = await BlogClient.GetAllByUserIdPaginatedAsync(UserID, _paginationDTO);
+        var paginatedResponse = await BlogClient.GetAllPaginatedAsync(_paginationDTO);
 
         _blogDTOs = paginatedResponse.Response;
         _totalAmountPages = paginatedResponse.TotalAmountPages;

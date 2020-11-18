@@ -26,10 +26,12 @@ else
             <h1 class="my-2">Hello @_userProfileDTO.FullName</h1>
 
             <button @onclick="OnUserUpdateButtonClick" class="my-2 btn btn-success">Edit Information</button>
+            <a class="my-2 btn btn-primary" href="blog/manage/user/@_userProfileDTO.ID/@_userProfileDTO.FullName">Manage Blogs</a>
 
             <AuthorizeView Roles="@UserRole.Admin">
                 <Authorized>
                     <a class="my-2 btn btn-primary" href="accounts/manage">Manage Accounts</a>
+                    <a class="my-2 btn btn-primary" href="blog/manage/admin/@_userProfileDTO.ID/@_userProfileDTO.FullName">All Published Blogs</a>
                     <a class="my-2 btn btn-primary" href="customerreviews/view">Check Customer Reviews</a>
                 </Authorized>
             </AuthorizeView>
@@ -63,7 +65,6 @@ else
 
     private UserProfileDTO _userProfileDTO;
     private UserUpdateDTO _userUpdateDTO;
-
 
     protected override async Task OnInitializedAsync()
     {

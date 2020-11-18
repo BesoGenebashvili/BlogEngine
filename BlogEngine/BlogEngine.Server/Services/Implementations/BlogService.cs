@@ -9,6 +9,7 @@ using BlogEngine.Shared.Helpers;
 using BlogEngine.Shared.DTOs.Blog;
 using BlogEngine.Shared.DTOs.Category;
 using BlogEngine.Server.Services.Abstractions;
+using BlogEngine.Core.Common.Exceptions;
 
 namespace BlogEngine.Server.Services.Implementations
 {
@@ -131,11 +132,11 @@ namespace BlogEngine.Server.Services.Implementations
 
             if (blogEntity is null) return null;
 
+            await CheckManageAccess(blogEntity.ApplicationUserID);
+
             _mapper.Map(blogUpdateDTO, blogEntity);
 
             blogEntity.EstimatedReadingTimeInMinutes = _readingTimeEstimator.GetEstimatedReadingTime(blogUpdateDTO.HTMLContent);
-
-            await AssignUserID(blogEntity);
 
             var updatedEntity = await _blogRepository.UpdateAsync(blogEntity);
 
@@ -145,6 +146,8 @@ namespace BlogEngine.Server.Services.Implementations
         public async Task<bool> DeleteAsync(int id)
         {
             var blogEntity = await _blogRepository.GetByIdAsync(id);
+
+            await CheckManageAccess(blogEntity.ApplicationUserID);
 
             if (blogEntity is null) return false;
 
@@ -164,6 +167,17 @@ namespace BlogEngine.Server.Services.Implementations
             else
             {
                 blog.ApplicationUserID = currentUser.Id;
+            }
+        }
+
+        public async Task CheckManageAccess(int blogApplicationUserID)
+        {
+            bool isAdmin = await _currentUserProvider.IsCurrentUserAdmin();
+            int currentUserID = await _currentUserProvider.GetCurrentUserIDAsync();
+
+            if (!isAdmin && currentUserID != blogApplicationUserID)
+            {
+                throw new UserAccessException("Only admins or authors can manage blogs");
             }
         }
 

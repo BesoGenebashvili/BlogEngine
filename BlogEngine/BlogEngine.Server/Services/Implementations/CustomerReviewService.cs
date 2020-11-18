@@ -26,23 +26,23 @@ namespace BlogEngine.Server.Services.Implementations
 
         public override async Task<List<CustomerReviewDTO>> GetAllAsync()
         {
-            await CheckForAccess();
+            await CheckManageAccess();
             return await base.GetAllAsync();
         }
 
         public override async Task<CustomerReviewDTO> GetByIdAsync(int id)
         {
-            await CheckForAccess();
+            await CheckManageAccess();
             return await base.GetByIdAsync(id);
         }
 
         public override async Task<bool> DeleteAsync(int id)
         {
-            await CheckForAccess();
+            await CheckManageAccess();
             return await base.DeleteAsync(id);
         }
 
-        public async Task CheckForAccess()
+        public async Task CheckManageAccess()
         {
             if (!(await _currentUserProvider.IsCurrentUserAdmin()))
             {
