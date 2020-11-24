@@ -31,6 +31,11 @@ namespace BlogEngine.ClientServices.Services.Implementations
             return await _httpService.GetHelperAsync<List<CategoryDTO>>(CategoryClientEndpoints.Base);
         }
 
+        public async Task<List<CategoryDTO>> SearchAsync(CategorySearchDTO categorySearchDTO)
+        {
+            return await _httpService.GetHelperAsync<List<CategoryDTO>>($"{CategoryClientEndpoints.Search}?{categorySearchDTO.ToQueryString()}");
+        }
+
         public async Task<CategoryDTO> CreateAsync(CategoryCreationDTO categoryCreationDTO)
         {
             return await _httpService.PostHelperAsync<CategoryCreationDTO, CategoryDTO>(CategoryClientEndpoints.Base, categoryCreationDTO);

@@ -1,0 +1,51 @@
+﻿<div class="container">
+    <EditForm Model="CategorySearchDTO" OnValidSubmit="ValidSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="row d-flex justify-content-center align-items-center">
+
+            <div class="col-lg-3">
+                <label for="name">Category Name</label>
+                <input @bind-value="CategorySearchDTO.Name" id="name" class="form-control">
+                <ValidationMessage For="(() => CategorySearchDTO.Name)" />
+            </div>
+
+            <div class="col-lg-2">
+                <label for="sort">Sort By</label>
+                <select @bind="CategorySearchDTO.SortOrder" id="sort" class="form-select">
+
+                    @foreach (var sort in Enum.GetValues(CategorySearchDTO.SortOrder.GetType()))
+                    {
+                        <option value="@sort">@sort</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-lg-2">
+                <label for="order">Order By</label>
+                <select @bind="CategorySearchDTO.CategoryOrderBy" id="order" class="form-select">
+
+                    @foreach (var order in Enum.GetValues(CategorySearchDTO.CategoryOrderBy.GetType()))
+                    {
+                        <option value="@order">@(((Enum)order).GetDisplayName())</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="col-lg-3">
+                <br>
+                <div @onclick="FormClear" class="btn btn-light">Clear</div>
+                <button class="btn btn-success">Search</button>
+            </div>
+
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public CategorySearchDTO CategorySearchDTO { get; set; }
+    [Parameter] public EventCallback ValidSubmit { get; set; }
+    [Parameter] public EventCallback FormClear { get; set; }
+}

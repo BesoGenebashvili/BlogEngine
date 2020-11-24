@@ -30,8 +30,16 @@ else
 
             <AuthorizeView Roles="@UserRole.Admin">
                 <Authorized>
+                    <h6 class="mt-4">Content and Account Management Section</h6>
+
                     <a class="my-2 btn btn-primary" href="accounts/manage">Manage Accounts</a>
                     <a class="my-2 btn btn-primary" href="blog/manage/admin/@_userProfileDTO.ID/@_userProfileDTO.FullName">All Published Blogs</a>
+                    <a class="my-2 btn btn-success" href="category/create">Create Category</a>
+                    <a class="my-2 btn btn-primary" href="category/manage">All Categories</a>
+
+                    <h6 class="mt-4">Notifications and Reviews Management Section</h6>
+
+                    <a class="my-2 btn btn-primary" href="notificationReceivers/manage">Manage Notification Receivers</a>
                     <a class="my-2 btn btn-primary" href="customerreviews/view">Check Customer Reviews</a>
                 </Authorized>
             </AuthorizeView>

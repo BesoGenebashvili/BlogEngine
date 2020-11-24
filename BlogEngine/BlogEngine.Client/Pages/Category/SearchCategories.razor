@@ -1,0 +1,35 @@
+﻿@page "/category/search"
+@layout NavigationLayout
+@inject ICategoryClient CategoryClient
+
+<TextCenter Text="Search Categories" />
+
+<SearchCategoryForm CategorySearchDTO="_categorySearchDTO" ValidSubmit="OnValidSubmit" FormClear="OnFormClear" />
+
+<CategorySearchResultList CategoryDTOs="_categoryDTOs" />
+
+@code {
+    private List<CategoryDTO> _categoryDTOs;
+    private CategorySearchDTO _categorySearchDTO = new CategorySearchDTO();
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadPage();
+    }
+
+    private async Task LoadPage()
+    {
+        _categoryDTOs = await CategoryClient.SearchAsync(_categorySearchDTO);
+    }
+
+    private async Task OnValidSubmit()
+    {
+        await LoadPage();
+    }
+
+    private async Task OnFormClear()
+    {
+        _categorySearchDTO = new CategorySearchDTO();
+        await LoadPage();
+    }
+}

@@ -67,3 +67,7 @@ body {
     border-radius: 50%;
     object-fit: cover;
 }
+
+.category-search-card:hover {
+    background-color: #f8f9fa;
+}

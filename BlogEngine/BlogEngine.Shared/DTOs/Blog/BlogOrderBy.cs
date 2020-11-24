@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlogEngine.Shared.Helpers
+namespace BlogEngine.Shared.DTOs.Blog
 {
     public enum BlogOrderBy
     {

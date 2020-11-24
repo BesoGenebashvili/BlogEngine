@@ -25,6 +25,7 @@ else
             <h1 class="my-2">@_categoryDTO.Name</h1>
             <h3> Author is @_categoryDTO.CreatedBy</h3>
             <h3>Last updated by @_categoryDTO.LastUpdateBy <span class="half-font-size">(@_categoryDTO.LastUpdateDate.Value.GetRelativeTime() ago)</span></h3>
+            <a href="blog/search/@_categoryDTO.ID" class="btn btn-primary">Blogs With '@_categoryDTO.Name' Category</a>
         </div>
     </div>
 }

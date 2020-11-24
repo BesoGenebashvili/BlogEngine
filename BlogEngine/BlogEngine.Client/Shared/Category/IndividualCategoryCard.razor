@@ -9,12 +9,12 @@
         <img src="css/Images/image_not_available_template.png" class="card-img-top" alt="category-image">
     }
 
-    <div class="card-body">
+    <div class="card-body text-center">
         <h5 class="card-title">@CategoryDTO.Name</h5>
 
         <a href="category/view/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-primary">Details</a>
-        
-        <AuthorizeView> @*Roles="@UserRole.Admin"*@
+
+        <AuthorizeView Roles="@UserRole.Admin">
             <Authorized>
                 <a href="category/edit/@CategoryDTO.ID/@CategoryDTO.Name" class="btn btn-warning">Edit</a>
                 <button @onclick="(async() => await CategoryDelete.InvokeAsync(CategoryDTO))" class="btn btn-danger">Delete</button>

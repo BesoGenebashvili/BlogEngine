@@ -1,0 +1,21 @@
+﻿<GenericList Collection="CategoryDTOs">
+    <EmptyTemplateFragment>
+        <TextCenter Text="No Categories Found" />
+    </EmptyTemplateFragment>
+    <WholeCollectionTemplate>
+
+        <div class="container mt-3">
+
+            @foreach (var categoryDTO in CategoryDTOs)
+            {
+                <IndividualCategorySearchPageCard CategoryDTO="categoryDTO"/>
+            }
+
+        </div>
+
+    </WholeCollectionTemplate>
+</GenericList>
+
+@code {
+    [Parameter] public List<CategoryDTO> CategoryDTOs { get; set; }
+}

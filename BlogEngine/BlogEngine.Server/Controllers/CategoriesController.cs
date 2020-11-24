@@ -14,10 +14,12 @@ namespace BlogEngine.Server.Controllers
     public class CategoriesController : BaseController
     {
         private readonly ICategoryService _categoryService;
+        private readonly ICategorySearchService _categorySearchService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoryService categoryService, ICategorySearchService categorySearchService)
         {
             _categoryService = categoryService;
+            _categorySearchService = categorySearchService;
         }
 
         [HttpGet(Name = "getCategories")]
@@ -53,6 +55,14 @@ namespace BlogEngine.Server.Controllers
             if (editPageDTO is null) return NotFound();
 
             return editPageDTO;
+        }
+
+        [HttpGet("search")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDTO>))]
+        public async Task<ActionResult<List<CategoryDTO>>> Search([FromQuery] CategorySearchDTO categorySearchDTO)
+        {
+            return await _categorySearchService.SearchAsync(categorySearchDTO);
         }
 
         [HttpPost(Name = "createCategory")]

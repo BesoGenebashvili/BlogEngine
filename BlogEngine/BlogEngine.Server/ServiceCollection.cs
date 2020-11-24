@@ -108,6 +108,8 @@ namespace BlogEngine.Server
 
             services.AddScoped<ICategoryService, CategoryService>();
 
+            services.AddScoped<ICategorySearchService, CategorySearchService>();
+
             services.AddScoped<ICommentService, CommentService>();
 
             services.AddScoped<IPageService, PageService>();

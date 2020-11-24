@@ -1,5 +1,6 @@
 ﻿@page "/blog/search"
-@page "/blog/search/{SearchString}"
+@page "/blog/search/{Title}"
+@page "/blog/search/{CategoryID:int}"
 @layout NavigationLayout
 @inject IBlogClient BlogClient
 @inject ICategoryClient CategoryClient
@@ -11,7 +12,8 @@
 <BlogPostList BlogDTOs="_blogDTOs" />
 
 @code {
-    [Parameter] public string SearchString { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public int? CategoryID { get; set; }
 
     private List<BlogDTO> _blogDTOs;
     private List<CategoryDTO> _categoryDTOs;
@@ -19,7 +21,10 @@
 
     protected async override Task OnInitializedAsync()
     {
-        _blogSearchDTO.Title = SearchString ?? default;
+        _blogSearchDTO.Title = Title ?? default;
+
+        if (CategoryID.HasValue) _blogSearchDTO.CategoryID = CategoryID.Value;
+
         await LoadPage();
     }
 

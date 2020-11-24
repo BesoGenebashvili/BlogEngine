@@ -1,0 +1,20 @@
+﻿<div class="card border-0 @CardCss">
+    <a href="category/view/@CategoryDTO.ID/@CategoryDTO.Name" class="category-search-card text-decoration-none text-dark">
+        <div class="card-body">
+
+            <a href="category/view/@CategoryDTO.ID/@CategoryDTO.Name">
+                <h5 class="card-title mb-3">@CategoryDTO.Name</h5>
+            </a>
+
+            <h6>Posted @CategoryDTO.DateCreated.Value.GetRelativeTime() ago</h6>
+
+            <a href="blog/search/@CategoryDTO.ID" class="btn btn-primary">Blogs With '@CategoryDTO.Name' Category</a>
+        </div>
+    </a>
+    <hr>
+</div>
+
+@code {
+    [Parameter] public CategoryDTO CategoryDTO { get; set; }
+    [Parameter] public string CardCss { get; set; }
+}

@@ -4,5 +4,6 @@
     {
         public const string Base = "api/categories";
         public const string Edit = "api/categories/edit";
+        public const string Search = "api/categories/search";
     }
 }
