@@ -21,7 +21,9 @@ The project based on modern front edge technologies:
    - Blog
    - Category
    - Subscriber
+   - Review
  - Email notification system
+ - Website review functionality for collecting customer feedback
  - Mobile friendly UI
  - Search page with sort functionality
  - Pagination
